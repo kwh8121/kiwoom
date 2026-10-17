@@ -1,0 +1,3015 @@
+{
+  "env": {
+    "script_version": "0.2",
+    "started_at_kst": "2026-10-17T13:59:43.263607+09:00",
+    "weekday_kst": "Saturday",
+    "python": "3.13.13",
+    "system": "Linux",
+    "profiles": [
+      "kiwoom-real-vibe",
+      "kiwoom-demo"
+    ],
+    "modes": {
+      "kiwoom-real-vibe": "real",
+      "kiwoom-demo": "demo"
+    },
+    "finished_at_kst": "2026-10-17T14:02:03.441561+09:00"
+  },
+  "tests": {
+    "sweep[kiwoom-real-vibe]": {
+      "status": "ok",
+      "result": {
+        "conditions": [
+          {
+            "seq": "0",
+            "name": "급등주포착검색"
+          },
+          {
+            "seq": "1",
+            "name": "눌림후반등자리"
+          },
+          {
+            "seq": "2",
+            "name": "급등주단타검색식2"
+          },
+          {
+            "seq": "3",
+            "name": "전고돌파조건식"
+          },
+          {
+            "seq": "4",
+            "name": "전일고가돌파"
+          },
+          {
+            "seq": "5",
+            "name": "오후장검색"
+          },
+          {
+            "seq": "6",
+            "name": "눌림목"
+          },
+          {
+            "seq": "7",
+            "name": "신고거래_량"
+          },
+          {
+            "seq": "8",
+            "name": "기개외(순매수)"
+          },
+          {
+            "seq": "9",
+            "name": "기본종목"
+          },
+          {
+            "seq": "10",
+            "name": "전고돌파+적3병"
+          },
+          {
+            "seq": "11",
+            "name": "기관매수+재무"
+          },
+          {
+            "seq": "12",
+            "name": "양음양봉"
+          },
+          {
+            "seq": "13",
+            "name": "볼린저밴드"
+          },
+          {
+            "seq": "14",
+            "name": "RSI"
+          },
+          {
+            "seq": "15",
+            "name": "Envelope"
+          },
+          {
+            "seq": "16",
+            "name": "Demark"
+          },
+          {
+            "seq": "17",
+            "name": "정배열+돌파"
+          },
+          {
+            "seq": "18",
+            "name": "캔들연속발생"
+          },
+          {
+            "seq": "19",
+            "name": "골든크로스"
+          },
+          {
+            "seq": "20",
+            "name": "맥점"
+          },
+          {
+            "seq": "21",
+            "name": "수렴돌파(Future)"
+          },
+          {
+            "seq": "22",
+            "name": "5연속양봉(추세)"
+          },
+          {
+            "seq": "23",
+            "name": "2음봉장악형(개미떨기)"
+          },
+          {
+            "seq": "24",
+            "name": "단기로켓"
+          },
+          {
+            "seq": "25",
+            "name": "단타A"
+          },
+          {
+            "seq": "26",
+            "name": "단타B"
+          },
+          {
+            "seq": "27",
+            "name": "피봇돌파+ROE10"
+          },
+          {
+            "seq": "28",
+            "name": "워렛버핏"
+          },
+          {
+            "seq": "29",
+            "name": "실적주"
+          }
+        ],
+        "results": {
+          "0": {
+            "name": "급등주포착검색",
+            "seq": "0",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T13:59:56.443539+09:00",
+            "elapsed_ms": 318,
+            "pages": [
+              {
+                "rows": 0,
+                "data_type": "NoneType",
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 17
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "change_rate_lengths": {},
+            "negative_change_rate_samples": [],
+            "codes": []
+          },
+          "1": {
+            "name": "눌림후반등자리",
+            "seq": "1",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T13:59:57.262185+09:00",
+            "elapsed_ms": 312,
+            "pages": [
+              {
+                "rows": 28,
+                "data_type": "list",
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 12
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 28,
+            "unique_count": 28,
+            "duplicate_rows": 0,
+            "prefixes": {
+              "A": 28
+            },
+            "invalid_codes": [],
+            "non_digit_codes": [
+              "0010F0"
+            ],
+            "change_rate_lengths": {
+              "8": 28
+            },
+            "negative_change_rate_samples": [],
+            "codes": [
+              "0010F0",
+              "001210",
+              "002720",
+              "002990",
+              "005160",
+              "006740",
+              "009470",
+              "014100",
+              "043590",
+              "046210",
+              "053450",
+              "053800",
+              "058730",
+              "067080",
+              "083500",
+              "084990",
+              "085910",
+              "089230",
+              "091590",
+              "147760",
+              "187420",
+              "198440",
+              "228340",
+              "255440",
+              "278650",
+              "290650",
+              "317530",
+              "417840"
+            ]
+          },
+          "2": {
+            "name": "급등주단타검색식2",
+            "seq": "2",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T13:59:58.075290+09:00",
+            "elapsed_ms": 326,
+            "pages": [
+              {
+                "rows": 0,
+                "data_type": "NoneType",
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 26
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "change_rate_lengths": {},
+            "negative_change_rate_samples": [],
+            "codes": []
+          },
+          "3": {
+            "name": "전고돌파조건식",
+            "seq": "3",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T13:59:58.902309+09:00",
+            "elapsed_ms": 311,
+            "pages": [
+              {
+                "rows": 3,
+                "data_type": "list",
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 10
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 3,
+            "unique_count": 3,
+            "duplicate_rows": 0,
+            "prefixes": {
+              "A": 3
+            },
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "change_rate_lengths": {
+              "8": 3
+            },
+            "negative_change_rate_samples": [],
+            "codes": [
+              "003280",
+              "048410",
+              "456160"
+            ]
+          },
+          "4": {
+            "name": "전일고가돌파",
+            "seq": "4",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T13:59:59.714275+09:00",
+            "elapsed_ms": 316,
+            "pages": [
+              {
+                "rows": 2,
+                "data_type": "list",
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 16
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 2,
+            "unique_count": 2,
+            "duplicate_rows": 0,
+            "prefixes": {
+              "A": 2
+            },
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "change_rate_lengths": {
+              "8": 2
+            },
+            "negative_change_rate_samples": [],
+            "codes": [
+              "010140",
+              "046970"
+            ]
+          },
+          "5": {
+            "name": "오후장검색",
+            "seq": "5",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T14:00:00.531555+09:00",
+            "elapsed_ms": 335,
+            "pages": [
+              {
+                "rows": 0,
+                "data_type": "NoneType",
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 34
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "change_rate_lengths": {},
+            "negative_change_rate_samples": [],
+            "codes": []
+          },
+          "6": {
+            "name": "눌림목",
+            "seq": "6",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T14:00:01.367394+09:00",
+            "elapsed_ms": 322,
+            "pages": [
+              {
+                "rows": 3,
+                "data_type": "list",
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 21
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 3,
+            "unique_count": 3,
+            "duplicate_rows": 0,
+            "prefixes": {
+              "A": 3
+            },
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "change_rate_lengths": {
+              "8": 3
+            },
+            "negative_change_rate_samples": [
+              "-0000252"
+            ],
+            "codes": [
+              "002990",
+              "006340",
+              "252710"
+            ]
+          },
+          "7": {
+            "name": "신고거래_량",
+            "seq": "7",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T14:00:02.190566+09:00",
+            "elapsed_ms": 314,
+            "pages": [
+              {
+                "rows": 0,
+                "data_type": "NoneType",
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 14
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "change_rate_lengths": {},
+            "negative_change_rate_samples": [],
+            "codes": []
+          },
+          "8": {
+            "name": "기개외(순매수)",
+            "seq": "8",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T14:00:03.005620+09:00",
+            "elapsed_ms": 333,
+            "pages": [
+              {
+                "rows": 2,
+                "data_type": "list",
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 32
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 2,
+            "unique_count": 2,
+            "duplicate_rows": 0,
+            "prefixes": {
+              "A": 2
+            },
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "change_rate_lengths": {
+              "8": 2
+            },
+            "negative_change_rate_samples": [],
+            "codes": [
+              "272210",
+              "323410"
+            ]
+          },
+          "9": {
+            "name": "기본종목",
+            "seq": "9",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T14:00:03.841017+09:00",
+            "elapsed_ms": 320,
+            "pages": [
+              {
+                "rows": 0,
+                "data_type": "NoneType",
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 19
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "change_rate_lengths": {},
+            "negative_change_rate_samples": [],
+            "codes": []
+          },
+          "10": {
+            "name": "전고돌파+적3병",
+            "seq": "10",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T14:00:04.661571+09:00",
+            "elapsed_ms": 328,
+            "pages": [
+              {
+                "rows": 7,
+                "data_type": "list",
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 27
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 7,
+            "unique_count": 7,
+            "duplicate_rows": 0,
+            "prefixes": {
+              "A": 7
+            },
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "change_rate_lengths": {
+              "8": 7
+            },
+            "negative_change_rate_samples": [],
+            "codes": [
+              "000100",
+              "004370",
+              "008930",
+              "033780",
+              "097950",
+              "352820",
+              "445680"
+            ]
+          },
+          "11": {
+            "name": "기관매수+재무",
+            "seq": "11",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T14:00:05.489922+09:00",
+            "elapsed_ms": 323,
+            "pages": [
+              {
+                "rows": 8,
+                "data_type": "list",
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 22
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 8,
+            "unique_count": 8,
+            "duplicate_rows": 0,
+            "prefixes": {
+              "A": 8
+            },
+            "invalid_codes": [],
+            "non_digit_codes": [
+              "0197X0"
+            ],
+            "change_rate_lengths": {
+              "8": 8
+            },
+            "negative_change_rate_samples": [
+              "-0000097",
+              "-0000201",
+              "-0000196"
+            ],
+            "codes": [
+              "011200",
+              "0197X0",
+              "114800",
+              "123310",
+              "228790",
+              "252670",
+              "252710",
+              "253230"
+            ]
+          },
+          "12": {
+            "name": "양음양봉",
+            "seq": "12",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T14:00:06.313809+09:00",
+            "elapsed_ms": 314,
+            "pages": [
+              {
+                "rows": 0,
+                "data_type": "NoneType",
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 14
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "change_rate_lengths": {},
+            "negative_change_rate_samples": [],
+            "codes": []
+          },
+          "13": {
+            "name": "볼린저밴드",
+            "seq": "13",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T14:00:07.128762+09:00",
+            "elapsed_ms": 313,
+            "pages": [
+              {
+                "rows": 2,
+                "data_type": "list",
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 12
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 2,
+            "unique_count": 2,
+            "duplicate_rows": 0,
+            "prefixes": {
+              "A": 2
+            },
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "change_rate_lengths": {
+              "8": 2
+            },
+            "negative_change_rate_samples": [],
+            "codes": [
+              "068270",
+              "317240"
+            ]
+          },
+          "14": {
+            "name": "RSI",
+            "seq": "14",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T14:00:07.942916+09:00",
+            "elapsed_ms": 351,
+            "pages": [
+              {
+                "rows": 0,
+                "data_type": "NoneType",
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 51
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "change_rate_lengths": {},
+            "negative_change_rate_samples": [],
+            "codes": []
+          },
+          "15": {
+            "name": "Envelope",
+            "seq": "15",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T14:00:08.794823+09:00",
+            "elapsed_ms": 313,
+            "pages": [
+              {
+                "rows": 0,
+                "data_type": "NoneType",
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 12
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "change_rate_lengths": {},
+            "negative_change_rate_samples": [],
+            "codes": []
+          },
+          "16": {
+            "name": "Demark",
+            "seq": "16",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T14:00:09.608581+09:00",
+            "elapsed_ms": 311,
+            "pages": [
+              {
+                "rows": 2,
+                "data_type": "list",
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 11
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 2,
+            "unique_count": 2,
+            "duplicate_rows": 0,
+            "prefixes": {
+              "A": 2
+            },
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "change_rate_lengths": {
+              "8": 2
+            },
+            "negative_change_rate_samples": [],
+            "codes": [
+              "068270",
+              "317240"
+            ]
+          },
+          "17": {
+            "name": "정배열+돌파",
+            "seq": "17",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T14:00:10.420740+09:00",
+            "elapsed_ms": 314,
+            "pages": [
+              {
+                "rows": 14,
+                "data_type": "list",
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 13
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 14,
+            "unique_count": 14,
+            "duplicate_rows": 0,
+            "prefixes": {
+              "A": 14
+            },
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "change_rate_lengths": {
+              "8": 14
+            },
+            "negative_change_rate_samples": [],
+            "codes": [
+              "009190",
+              "009900",
+              "046970",
+              "068270",
+              "098460",
+              "101360",
+              "178320",
+              "198440",
+              "272210",
+              "317240",
+              "403870",
+              "471990",
+              "475300",
+              "475310"
+            ]
+          },
+          "18": {
+            "name": "캔들연속발생",
+            "seq": "18",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T14:00:11.236298+09:00",
+            "elapsed_ms": 316,
+            "pages": [
+              {
+                "rows": 3,
+                "data_type": "list",
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 15
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 3,
+            "unique_count": 3,
+            "duplicate_rows": 0,
+            "prefixes": {
+              "A": 3
+            },
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "change_rate_lengths": {
+              "8": 3
+            },
+            "negative_change_rate_samples": [
+              "-0000196",
+              "-0000252",
+              "-0000273"
+            ],
+            "codes": [
+              "123310",
+              "252710",
+              "253230"
+            ]
+          },
+          "19": {
+            "name": "골든크로스",
+            "seq": "19",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T14:00:12.053268+09:00",
+            "elapsed_ms": 319,
+            "pages": [
+              {
+                "rows": 4,
+                "data_type": "list",
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 17
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 4,
+            "unique_count": 4,
+            "duplicate_rows": 0,
+            "prefixes": {
+              "A": 4
+            },
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "change_rate_lengths": {
+              "8": 4
+            },
+            "negative_change_rate_samples": [],
+            "codes": [
+              "228790",
+              "395290",
+              "462870",
+              "475050"
+            ]
+          },
+          "20": {
+            "name": "맥점",
+            "seq": "20",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T14:00:12.873833+09:00",
+            "elapsed_ms": 318,
+            "pages": [
+              {
+                "rows": 0,
+                "data_type": "NoneType",
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 18
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "change_rate_lengths": {},
+            "negative_change_rate_samples": [],
+            "codes": []
+          },
+          "21": {
+            "name": "수렴돌파(Future)",
+            "seq": "21",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T14:00:13.693028+09:00",
+            "elapsed_ms": 317,
+            "pages": [
+              {
+                "rows": 0,
+                "data_type": "NoneType",
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 16
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "change_rate_lengths": {},
+            "negative_change_rate_samples": [],
+            "codes": []
+          },
+          "22": {
+            "name": "5연속양봉(추세)",
+            "seq": "22",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T14:00:14.510916+09:00",
+            "elapsed_ms": 312,
+            "pages": [
+              {
+                "rows": 3,
+                "data_type": "list",
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 11
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 3,
+            "unique_count": 3,
+            "duplicate_rows": 0,
+            "prefixes": {
+              "A": 3
+            },
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "change_rate_lengths": {
+              "8": 3
+            },
+            "negative_change_rate_samples": [],
+            "codes": [
+              "001780",
+              "060310",
+              "355690"
+            ]
+          },
+          "23": {
+            "name": "2음봉장악형(개미떨기)",
+            "seq": "23",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T14:00:15.324144+09:00",
+            "elapsed_ms": 310,
+            "pages": [
+              {
+                "rows": 1,
+                "data_type": "list",
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 10
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 1,
+            "unique_count": 1,
+            "duplicate_rows": 0,
+            "prefixes": {
+              "A": 1
+            },
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "change_rate_lengths": {
+              "8": 1
+            },
+            "negative_change_rate_samples": [],
+            "codes": [
+              "340360"
+            ]
+          },
+          "24": {
+            "name": "단기로켓",
+            "seq": "24",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T14:00:16.135076+09:00",
+            "elapsed_ms": 330,
+            "pages": [
+              {
+                "rows": 0,
+                "data_type": "NoneType",
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 29
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "change_rate_lengths": {},
+            "negative_change_rate_samples": [],
+            "codes": []
+          },
+          "25": {
+            "name": "단타A",
+            "seq": "25",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T14:00:16.965525+09:00",
+            "elapsed_ms": 322,
+            "pages": [
+              {
+                "rows": 3,
+                "data_type": "list",
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 21
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 3,
+            "unique_count": 3,
+            "duplicate_rows": 0,
+            "prefixes": {
+              "A": 3
+            },
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "change_rate_lengths": {
+              "8": 3
+            },
+            "negative_change_rate_samples": [],
+            "codes": [
+              "042520",
+              "460860",
+              "462860"
+            ]
+          },
+          "26": {
+            "name": "단타B",
+            "seq": "26",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T14:00:17.788191+09:00",
+            "elapsed_ms": 335,
+            "pages": [
+              {
+                "rows": 0,
+                "data_type": "NoneType",
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 35
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "change_rate_lengths": {},
+            "negative_change_rate_samples": [],
+            "codes": []
+          },
+          "27": {
+            "name": "피봇돌파+ROE10",
+            "seq": "27",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T14:00:18.624524+09:00",
+            "elapsed_ms": 322,
+            "pages": [
+              {
+                "rows": 1,
+                "data_type": "list",
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 21
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 1,
+            "unique_count": 1,
+            "duplicate_rows": 0,
+            "prefixes": {
+              "A": 1
+            },
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "change_rate_lengths": {
+              "8": 1
+            },
+            "negative_change_rate_samples": [],
+            "codes": [
+              "462860"
+            ]
+          },
+          "28": {
+            "name": "워렛버핏",
+            "seq": "28",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T14:00:19.447411+09:00",
+            "elapsed_ms": 312,
+            "pages": [
+              {
+                "rows": 0,
+                "data_type": "NoneType",
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 12
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "change_rate_lengths": {},
+            "negative_change_rate_samples": [],
+            "codes": []
+          },
+          "29": {
+            "name": "실적주",
+            "seq": "29",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T14:00:20.260643+09:00",
+            "elapsed_ms": 322,
+            "pages": [
+              {
+                "rows": 0,
+                "data_type": "NoneType",
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 22
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "change_rate_lengths": {},
+            "negative_change_rate_samples": [],
+            "codes": []
+          }
+        },
+        "requests": 31,
+        "bare_messages": 29
+      }
+    },
+    "sweep[kiwoom-demo]": {
+      "status": "ok",
+      "result": {
+        "conditions": [
+          {
+            "seq": "0",
+            "name": "급등주포착검색"
+          },
+          {
+            "seq": "1",
+            "name": "눌림후반등자리"
+          },
+          {
+            "seq": "2",
+            "name": "급등주단타검색식2"
+          },
+          {
+            "seq": "3",
+            "name": "전고돌파조건식"
+          },
+          {
+            "seq": "4",
+            "name": "전일고가돌파"
+          },
+          {
+            "seq": "5",
+            "name": "오후장검색"
+          },
+          {
+            "seq": "6",
+            "name": "눌림목"
+          },
+          {
+            "seq": "7",
+            "name": "신고거래_량"
+          },
+          {
+            "seq": "8",
+            "name": "기개외(순매수)"
+          },
+          {
+            "seq": "9",
+            "name": "기본종목"
+          },
+          {
+            "seq": "10",
+            "name": "전고돌파+적3병"
+          },
+          {
+            "seq": "11",
+            "name": "기관매수+재무"
+          },
+          {
+            "seq": "12",
+            "name": "양음양봉"
+          },
+          {
+            "seq": "13",
+            "name": "볼린저밴드"
+          },
+          {
+            "seq": "14",
+            "name": "RSI"
+          },
+          {
+            "seq": "15",
+            "name": "Envelope"
+          },
+          {
+            "seq": "16",
+            "name": "Demark"
+          },
+          {
+            "seq": "17",
+            "name": "정배열+돌파"
+          },
+          {
+            "seq": "18",
+            "name": "캔들연속발생"
+          },
+          {
+            "seq": "19",
+            "name": "골든크로스"
+          },
+          {
+            "seq": "20",
+            "name": "맥점"
+          },
+          {
+            "seq": "21",
+            "name": "수렴돌파(Future)"
+          },
+          {
+            "seq": "22",
+            "name": "5연속양봉(추세)"
+          },
+          {
+            "seq": "23",
+            "name": "2음봉장악형(개미떨기)"
+          },
+          {
+            "seq": "24",
+            "name": "단기로켓"
+          },
+          {
+            "seq": "25",
+            "name": "단타A"
+          },
+          {
+            "seq": "26",
+            "name": "단타B"
+          },
+          {
+            "seq": "27",
+            "name": "피봇돌파+ROE10"
+          },
+          {
+            "seq": "28",
+            "name": "워렛버핏"
+          },
+          {
+            "seq": "29",
+            "name": "실적주"
+          }
+        ],
+        "results": {
+          "0": {
+            "name": "급등주포착검색",
+            "seq": "0",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T14:00:22.651568+09:00",
+            "elapsed_ms": 323,
+            "pages": [
+              {
+                "rows": 0,
+                "data_type": "NoneType",
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 22
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "change_rate_lengths": {},
+            "negative_change_rate_samples": [],
+            "codes": []
+          },
+          "1": {
+            "name": "눌림후반등자리",
+            "seq": "1",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T14:00:23.475266+09:00",
+            "elapsed_ms": 317,
+            "pages": [
+              {
+                "rows": 28,
+                "data_type": "list",
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 16
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 28,
+            "unique_count": 28,
+            "duplicate_rows": 0,
+            "prefixes": {
+              "A": 28
+            },
+            "invalid_codes": [],
+            "non_digit_codes": [
+              "0010F0"
+            ],
+            "change_rate_lengths": {
+              "8": 28
+            },
+            "negative_change_rate_samples": [],
+            "codes": [
+              "0010F0",
+              "001210",
+              "002720",
+              "002990",
+              "005160",
+              "006740",
+              "009470",
+              "014100",
+              "043590",
+              "046210",
+              "053450",
+              "053800",
+              "058730",
+              "067080",
+              "083500",
+              "084990",
+              "085910",
+              "089230",
+              "091590",
+              "147760",
+              "187420",
+              "198440",
+              "228340",
+              "255440",
+              "278650",
+              "290650",
+              "317530",
+              "417840"
+            ]
+          },
+          "2": {
+            "name": "급등주단타검색식2",
+            "seq": "2",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T14:00:24.293303+09:00",
+            "elapsed_ms": 328,
+            "pages": [
+              {
+                "rows": 0,
+                "data_type": "NoneType",
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 28
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "change_rate_lengths": {},
+            "negative_change_rate_samples": [],
+            "codes": []
+          },
+          "3": {
+            "name": "전고돌파조건식",
+            "seq": "3",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T14:00:25.123711+09:00",
+            "elapsed_ms": 317,
+            "pages": [
+              {
+                "rows": 3,
+                "data_type": "list",
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 16
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 3,
+            "unique_count": 3,
+            "duplicate_rows": 0,
+            "prefixes": {
+              "A": 3
+            },
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "change_rate_lengths": {
+              "8": 3
+            },
+            "negative_change_rate_samples": [],
+            "codes": [
+              "003280",
+              "048410",
+              "456160"
+            ]
+          },
+          "4": {
+            "name": "전일고가돌파",
+            "seq": "4",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T14:00:25.941616+09:00",
+            "elapsed_ms": 322,
+            "pages": [
+              {
+                "rows": 2,
+                "data_type": "list",
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 21
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 2,
+            "unique_count": 2,
+            "duplicate_rows": 0,
+            "prefixes": {
+              "A": 2
+            },
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "change_rate_lengths": {
+              "8": 2
+            },
+            "negative_change_rate_samples": [],
+            "codes": [
+              "010140",
+              "046970"
+            ]
+          },
+          "5": {
+            "name": "오후장검색",
+            "seq": "5",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T14:00:26.764814+09:00",
+            "elapsed_ms": 356,
+            "pages": [
+              {
+                "rows": 0,
+                "data_type": "NoneType",
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 55
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "change_rate_lengths": {},
+            "negative_change_rate_samples": [],
+            "codes": []
+          },
+          "6": {
+            "name": "눌림목",
+            "seq": "6",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T14:00:27.623984+09:00",
+            "elapsed_ms": 331,
+            "pages": [
+              {
+                "rows": 3,
+                "data_type": "list",
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 30
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 3,
+            "unique_count": 3,
+            "duplicate_rows": 0,
+            "prefixes": {
+              "A": 3
+            },
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "change_rate_lengths": {
+              "8": 3
+            },
+            "negative_change_rate_samples": [
+              "-0000252"
+            ],
+            "codes": [
+              "002990",
+              "006340",
+              "252710"
+            ]
+          },
+          "7": {
+            "name": "신고거래_량",
+            "seq": "7",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T14:00:28.457085+09:00",
+            "elapsed_ms": 317,
+            "pages": [
+              {
+                "rows": 0,
+                "data_type": "NoneType",
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 16
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "change_rate_lengths": {},
+            "negative_change_rate_samples": [],
+            "codes": []
+          },
+          "8": {
+            "name": "기개외(순매수)",
+            "seq": "8",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T14:00:29.274825+09:00",
+            "elapsed_ms": 325,
+            "pages": [
+              {
+                "rows": 2,
+                "data_type": "list",
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 24
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 2,
+            "unique_count": 2,
+            "duplicate_rows": 0,
+            "prefixes": {
+              "A": 2
+            },
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "change_rate_lengths": {
+              "8": 2
+            },
+            "negative_change_rate_samples": [],
+            "codes": [
+              "272210",
+              "323410"
+            ]
+          },
+          "9": {
+            "name": "기본종목",
+            "seq": "9",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T14:00:30.100446+09:00",
+            "elapsed_ms": 314,
+            "pages": [
+              {
+                "rows": 0,
+                "data_type": "NoneType",
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 13
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "change_rate_lengths": {},
+            "negative_change_rate_samples": [],
+            "codes": []
+          },
+          "10": {
+            "name": "전고돌파+적3병",
+            "seq": "10",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T14:00:30.914810+09:00",
+            "elapsed_ms": 313,
+            "pages": [
+              {
+                "rows": 7,
+                "data_type": "list",
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 13
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 7,
+            "unique_count": 7,
+            "duplicate_rows": 0,
+            "prefixes": {
+              "A": 7
+            },
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "change_rate_lengths": {
+              "8": 7
+            },
+            "negative_change_rate_samples": [],
+            "codes": [
+              "000100",
+              "004370",
+              "008930",
+              "033780",
+              "097950",
+              "352820",
+              "445680"
+            ]
+          },
+          "11": {
+            "name": "기관매수+재무",
+            "seq": "11",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T14:00:31.729036+09:00",
+            "elapsed_ms": 325,
+            "pages": [
+              {
+                "rows": 8,
+                "data_type": "list",
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 25
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 8,
+            "unique_count": 8,
+            "duplicate_rows": 0,
+            "prefixes": {
+              "A": 8
+            },
+            "invalid_codes": [],
+            "non_digit_codes": [
+              "0197X0"
+            ],
+            "change_rate_lengths": {
+              "8": 8
+            },
+            "negative_change_rate_samples": [
+              "-0000097",
+              "-0000201",
+              "-0000196"
+            ],
+            "codes": [
+              "011200",
+              "0197X0",
+              "114800",
+              "123310",
+              "228790",
+              "252670",
+              "252710",
+              "253230"
+            ]
+          },
+          "12": {
+            "name": "양음양봉",
+            "seq": "12",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T14:00:32.554974+09:00",
+            "elapsed_ms": 313,
+            "pages": [
+              {
+                "rows": 0,
+                "data_type": "NoneType",
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 13
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "change_rate_lengths": {},
+            "negative_change_rate_samples": [],
+            "codes": []
+          },
+          "13": {
+            "name": "볼린저밴드",
+            "seq": "13",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T14:00:33.369088+09:00",
+            "elapsed_ms": 314,
+            "pages": [
+              {
+                "rows": 2,
+                "data_type": "list",
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 13
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 2,
+            "unique_count": 2,
+            "duplicate_rows": 0,
+            "prefixes": {
+              "A": 2
+            },
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "change_rate_lengths": {
+              "8": 2
+            },
+            "negative_change_rate_samples": [],
+            "codes": [
+              "068270",
+              "317240"
+            ]
+          },
+          "14": {
+            "name": "RSI",
+            "seq": "14",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T14:00:34.183815+09:00",
+            "elapsed_ms": 350,
+            "pages": [
+              {
+                "rows": 0,
+                "data_type": "NoneType",
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 50
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "change_rate_lengths": {},
+            "negative_change_rate_samples": [],
+            "codes": []
+          },
+          "15": {
+            "name": "Envelope",
+            "seq": "15",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T14:00:35.035141+09:00",
+            "elapsed_ms": 315,
+            "pages": [
+              {
+                "rows": 0,
+                "data_type": "NoneType",
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 14
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "change_rate_lengths": {},
+            "negative_change_rate_samples": [],
+            "codes": []
+          },
+          "16": {
+            "name": "Demark",
+            "seq": "16",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T14:00:35.850975+09:00",
+            "elapsed_ms": 313,
+            "pages": [
+              {
+                "rows": 2,
+                "data_type": "list",
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 12
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 2,
+            "unique_count": 2,
+            "duplicate_rows": 0,
+            "prefixes": {
+              "A": 2
+            },
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "change_rate_lengths": {
+              "8": 2
+            },
+            "negative_change_rate_samples": [],
+            "codes": [
+              "068270",
+              "317240"
+            ]
+          },
+          "17": {
+            "name": "정배열+돌파",
+            "seq": "17",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T14:00:36.665946+09:00",
+            "elapsed_ms": 317,
+            "pages": [
+              {
+                "rows": 14,
+                "data_type": "list",
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 16
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 14,
+            "unique_count": 14,
+            "duplicate_rows": 0,
+            "prefixes": {
+              "A": 14
+            },
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "change_rate_lengths": {
+              "8": 14
+            },
+            "negative_change_rate_samples": [],
+            "codes": [
+              "009190",
+              "009900",
+              "046970",
+              "068270",
+              "098460",
+              "101360",
+              "178320",
+              "198440",
+              "272210",
+              "317240",
+              "403870",
+              "471990",
+              "475300",
+              "475310"
+            ]
+          },
+          "18": {
+            "name": "캔들연속발생",
+            "seq": "18",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T14:00:37.484012+09:00",
+            "elapsed_ms": 316,
+            "pages": [
+              {
+                "rows": 3,
+                "data_type": "list",
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 15
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 3,
+            "unique_count": 3,
+            "duplicate_rows": 0,
+            "prefixes": {
+              "A": 3
+            },
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "change_rate_lengths": {
+              "8": 3
+            },
+            "negative_change_rate_samples": [
+              "-0000196",
+              "-0000252",
+              "-0000273"
+            ],
+            "codes": [
+              "123310",
+              "252710",
+              "253230"
+            ]
+          },
+          "19": {
+            "name": "골든크로스",
+            "seq": "19",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T14:00:38.301243+09:00",
+            "elapsed_ms": 315,
+            "pages": [
+              {
+                "rows": 4,
+                "data_type": "list",
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 14
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 4,
+            "unique_count": 4,
+            "duplicate_rows": 0,
+            "prefixes": {
+              "A": 4
+            },
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "change_rate_lengths": {
+              "8": 4
+            },
+            "negative_change_rate_samples": [],
+            "codes": [
+              "228790",
+              "395290",
+              "462870",
+              "475050"
+            ]
+          },
+          "20": {
+            "name": "맥점",
+            "seq": "20",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T14:00:39.117153+09:00",
+            "elapsed_ms": 316,
+            "pages": [
+              {
+                "rows": 0,
+                "data_type": "NoneType",
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 15
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "change_rate_lengths": {},
+            "negative_change_rate_samples": [],
+            "codes": []
+          },
+          "21": {
+            "name": "수렴돌파(Future)",
+            "seq": "21",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T14:00:39.934349+09:00",
+            "elapsed_ms": 316,
+            "pages": [
+              {
+                "rows": 0,
+                "data_type": "NoneType",
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 16
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "change_rate_lengths": {},
+            "negative_change_rate_samples": [],
+            "codes": []
+          },
+          "22": {
+            "name": "5연속양봉(추세)",
+            "seq": "22",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T14:00:40.751524+09:00",
+            "elapsed_ms": 316,
+            "pages": [
+              {
+                "rows": 3,
+                "data_type": "list",
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 15
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 3,
+            "unique_count": 3,
+            "duplicate_rows": 0,
+            "prefixes": {
+              "A": 3
+            },
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "change_rate_lengths": {
+              "8": 3
+            },
+            "negative_change_rate_samples": [],
+            "codes": [
+              "001780",
+              "060310",
+              "355690"
+            ]
+          },
+          "23": {
+            "name": "2음봉장악형(개미떨기)",
+            "seq": "23",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T14:00:41.568923+09:00",
+            "elapsed_ms": 315,
+            "pages": [
+              {
+                "rows": 1,
+                "data_type": "list",
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 15
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 1,
+            "unique_count": 1,
+            "duplicate_rows": 0,
+            "prefixes": {
+              "A": 1
+            },
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "change_rate_lengths": {
+              "8": 1
+            },
+            "negative_change_rate_samples": [],
+            "codes": [
+              "340360"
+            ]
+          },
+          "24": {
+            "name": "단기로켓",
+            "seq": "24",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T14:00:42.385425+09:00",
+            "elapsed_ms": 332,
+            "pages": [
+              {
+                "rows": 0,
+                "data_type": "NoneType",
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 31
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "change_rate_lengths": {},
+            "negative_change_rate_samples": [],
+            "codes": []
+          },
+          "25": {
+            "name": "단타A",
+            "seq": "25",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T14:00:43.218226+09:00",
+            "elapsed_ms": 327,
+            "pages": [
+              {
+                "rows": 3,
+                "data_type": "list",
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 26
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 3,
+            "unique_count": 3,
+            "duplicate_rows": 0,
+            "prefixes": {
+              "A": 3
+            },
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "change_rate_lengths": {
+              "8": 3
+            },
+            "negative_change_rate_samples": [],
+            "codes": [
+              "042520",
+              "460860",
+              "462860"
+            ]
+          },
+          "26": {
+            "name": "단타B",
+            "seq": "26",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T14:00:44.045889+09:00",
+            "elapsed_ms": 332,
+            "pages": [
+              {
+                "rows": 0,
+                "data_type": "NoneType",
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 32
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "change_rate_lengths": {},
+            "negative_change_rate_samples": [],
+            "codes": []
+          },
+          "27": {
+            "name": "피봇돌파+ROE10",
+            "seq": "27",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T14:00:44.879362+09:00",
+            "elapsed_ms": 327,
+            "pages": [
+              {
+                "rows": 1,
+                "data_type": "list",
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 25
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 1,
+            "unique_count": 1,
+            "duplicate_rows": 0,
+            "prefixes": {
+              "A": 1
+            },
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "change_rate_lengths": {
+              "8": 1
+            },
+            "negative_change_rate_samples": [],
+            "codes": [
+              "462860"
+            ]
+          },
+          "28": {
+            "name": "워렛버핏",
+            "seq": "28",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T14:00:45.707856+09:00",
+            "elapsed_ms": 316,
+            "pages": [
+              {
+                "rows": 0,
+                "data_type": "NoneType",
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 15
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "change_rate_lengths": {},
+            "negative_change_rate_samples": [],
+            "codes": []
+          },
+          "29": {
+            "name": "실적주",
+            "seq": "29",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T14:00:46.524707+09:00",
+            "elapsed_ms": 316,
+            "pages": [
+              {
+                "rows": 0,
+                "data_type": "NoneType",
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 15
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "change_rate_lengths": {},
+            "negative_change_rate_samples": [],
+            "codes": []
+          }
+        },
+        "requests": 31,
+        "bare_messages": 29
+      }
+    },
+    "without_list": {
+      "status": "ok",
+      "result": {
+        "without_list": "timeout: 10s 동안 CNSRREQ 응답 없음",
+        "after_list_same_connection": {
+          "seq": "1",
+          "stex_tp": "K",
+          "started_at": "2026-10-17T14:00:58.850903+09:00",
+          "elapsed_ms": 320,
+          "pages": [
+            {
+              "rows": 28,
+              "data_type": "list",
+              "cont_yn": "N",
+              "next_key_len": 0,
+              "elapsed_ms": 19
+            }
+          ],
+          "page_count": 1,
+          "complete": true,
+          "error": null,
+          "rate_limit_retries": 0,
+          "row_count": 28,
+          "unique_count": 28,
+          "duplicate_rows": 0,
+          "prefixes": {
+            "A": 28
+          },
+          "invalid_codes": [],
+          "non_digit_codes": [
+            "0010F0"
+          ],
+          "change_rate_lengths": {
+            "8": 28
+          },
+          "negative_change_rate_samples": [],
+          "codes": [
+            "0010F0",
+            "001210",
+            "002720",
+            "002990",
+            "005160",
+            "006740",
+            "009470",
+            "014100",
+            "043590",
+            "046210",
+            "053450",
+            "053800",
+            "058730",
+            "067080",
+            "083500",
+            "084990",
+            "085910",
+            "089230",
+            "091590",
+            "147760",
+            "187420",
+            "198440",
+            "228340",
+            "255440",
+            "278650",
+            "290650",
+            "317530",
+            "417840"
+          ]
+        }
+      }
+    },
+    "repeat": {
+      "status": "ok",
+      "result": {
+        "seq": "1",
+        "runs": [
+          {
+            "offset_s": 0,
+            "error": null,
+            "row_count": 28,
+            "same_as_first": true,
+            "elapsed_ms": 1023
+          },
+          {
+            "offset_s": 1,
+            "error": null,
+            "row_count": 28,
+            "same_as_first": true,
+            "elapsed_ms": 1019
+          },
+          {
+            "offset_s": 5,
+            "error": null,
+            "row_count": 28,
+            "same_as_first": true,
+            "elapsed_ms": 1019
+          },
+          {
+            "offset_s": 15,
+            "error": null,
+            "row_count": 28,
+            "same_as_first": true,
+            "elapsed_ms": 1020
+          },
+          {
+            "offset_s": 30,
+            "error": null,
+            "row_count": 28,
+            "same_as_first": true,
+            "elapsed_ms": 1019
+          }
+        ],
+        "bare_messages": 4
+      }
+    },
+    "interval": {
+      "status": "ok",
+      "result": {
+        "per_group": 10,
+        "groups": [
+          {
+            "interval_s": 0.0,
+            "requests": 10,
+            "span_s": 0.09,
+            "rate_limited_indexes": [
+              5,
+              6,
+              7,
+              8,
+              9
+            ],
+            "codes": {
+              "0": 5,
+              "105110": 5
+            },
+            "recovery_s": 1.03,
+            "bare_messages": 5
+          },
+          {
+            "interval_s": 0.1,
+            "requests": 10,
+            "span_s": 1.16,
+            "rate_limited_indexes": [
+              5
+            ],
+            "codes": {
+              "0": 9,
+              "105110": 1
+            },
+            "recovery_s": 0.52,
+            "bare_messages": 9
+          },
+          {
+            "interval_s": 0.25,
+            "requests": 10,
+            "span_s": 2.7,
+            "rate_limited_indexes": [],
+            "codes": {
+              "0": 10
+            },
+            "recovery_s": null,
+            "bare_messages": 9
+          },
+          {
+            "interval_s": 0.5,
+            "requests": 10,
+            "span_s": 5.19,
+            "rate_limited_indexes": [],
+            "codes": {
+              "0": 10
+            },
+            "recovery_s": null,
+            "bare_messages": 9
+          }
+        ]
+      }
+    },
+    "exchange": {
+      "status": "ok",
+      "result": {
+        "seq": "1",
+        "K": {
+          "error": null,
+          "row_count": 28
+        },
+        "N": {
+          "error": {
+            "return_code": 900001,
+            "resolved": 900001,
+            "return_msg": "거래소 구분값을 확인해 주세요"
+          },
+          "row_count": 0
+        },
+        "A": {
+          "error": null,
+          "row_count": 28
+        },
+        "K_subset_of_A": true,
+        "A_minus_K": 0
+      }
+    }
+  },
+  "profile_compare": {
+    "profiles": [
+      "kiwoom-real-vibe",
+      "kiwoom-demo"
+    ],
+    "rows": [
+      {
+        "seq": "0",
+        "name_equal": true,
+        "counts": [
+          0,
+          0
+        ],
+        "equal": true,
+        "jaccard": 1.0,
+        "errors": [
+          null,
+          null
+        ]
+      },
+      {
+        "seq": "1",
+        "name_equal": true,
+        "counts": [
+          28,
+          28
+        ],
+        "equal": true,
+        "jaccard": 1.0,
+        "errors": [
+          null,
+          null
+        ]
+      },
+      {
+        "seq": "2",
+        "name_equal": true,
+        "counts": [
+          0,
+          0
+        ],
+        "equal": true,
+        "jaccard": 1.0,
+        "errors": [
+          null,
+          null
+        ]
+      },
+      {
+        "seq": "3",
+        "name_equal": true,
+        "counts": [
+          3,
+          3
+        ],
+        "equal": true,
+        "jaccard": 1.0,
+        "errors": [
+          null,
+          null
+        ]
+      },
+      {
+        "seq": "4",
+        "name_equal": true,
+        "counts": [
+          2,
+          2
+        ],
+        "equal": true,
+        "jaccard": 1.0,
+        "errors": [
+          null,
+          null
+        ]
+      },
+      {
+        "seq": "5",
+        "name_equal": true,
+        "counts": [
+          0,
+          0
+        ],
+        "equal": true,
+        "jaccard": 1.0,
+        "errors": [
+          null,
+          null
+        ]
+      },
+      {
+        "seq": "6",
+        "name_equal": true,
+        "counts": [
+          3,
+          3
+        ],
+        "equal": true,
+        "jaccard": 1.0,
+        "errors": [
+          null,
+          null
+        ]
+      },
+      {
+        "seq": "7",
+        "name_equal": true,
+        "counts": [
+          0,
+          0
+        ],
+        "equal": true,
+        "jaccard": 1.0,
+        "errors": [
+          null,
+          null
+        ]
+      },
+      {
+        "seq": "8",
+        "name_equal": true,
+        "counts": [
+          2,
+          2
+        ],
+        "equal": true,
+        "jaccard": 1.0,
+        "errors": [
+          null,
+          null
+        ]
+      },
+      {
+        "seq": "9",
+        "name_equal": true,
+        "counts": [
+          0,
+          0
+        ],
+        "equal": true,
+        "jaccard": 1.0,
+        "errors": [
+          null,
+          null
+        ]
+      },
+      {
+        "seq": "10",
+        "name_equal": true,
+        "counts": [
+          7,
+          7
+        ],
+        "equal": true,
+        "jaccard": 1.0,
+        "errors": [
+          null,
+          null
+        ]
+      },
+      {
+        "seq": "11",
+        "name_equal": true,
+        "counts": [
+          8,
+          8
+        ],
+        "equal": true,
+        "jaccard": 1.0,
+        "errors": [
+          null,
+          null
+        ]
+      },
+      {
+        "seq": "12",
+        "name_equal": true,
+        "counts": [
+          0,
+          0
+        ],
+        "equal": true,
+        "jaccard": 1.0,
+        "errors": [
+          null,
+          null
+        ]
+      },
+      {
+        "seq": "13",
+        "name_equal": true,
+        "counts": [
+          2,
+          2
+        ],
+        "equal": true,
+        "jaccard": 1.0,
+        "errors": [
+          null,
+          null
+        ]
+      },
+      {
+        "seq": "14",
+        "name_equal": true,
+        "counts": [
+          0,
+          0
+        ],
+        "equal": true,
+        "jaccard": 1.0,
+        "errors": [
+          null,
+          null
+        ]
+      },
+      {
+        "seq": "15",
+        "name_equal": true,
+        "counts": [
+          0,
+          0
+        ],
+        "equal": true,
+        "jaccard": 1.0,
+        "errors": [
+          null,
+          null
+        ]
+      },
+      {
+        "seq": "16",
+        "name_equal": true,
+        "counts": [
+          2,
+          2
+        ],
+        "equal": true,
+        "jaccard": 1.0,
+        "errors": [
+          null,
+          null
+        ]
+      },
+      {
+        "seq": "17",
+        "name_equal": true,
+        "counts": [
+          14,
+          14
+        ],
+        "equal": true,
+        "jaccard": 1.0,
+        "errors": [
+          null,
+          null
+        ]
+      },
+      {
+        "seq": "18",
+        "name_equal": true,
+        "counts": [
+          3,
+          3
+        ],
+        "equal": true,
+        "jaccard": 1.0,
+        "errors": [
+          null,
+          null
+        ]
+      },
+      {
+        "seq": "19",
+        "name_equal": true,
+        "counts": [
+          4,
+          4
+        ],
+        "equal": true,
+        "jaccard": 1.0,
+        "errors": [
+          null,
+          null
+        ]
+      },
+      {
+        "seq": "20",
+        "name_equal": true,
+        "counts": [
+          0,
+          0
+        ],
+        "equal": true,
+        "jaccard": 1.0,
+        "errors": [
+          null,
+          null
+        ]
+      },
+      {
+        "seq": "21",
+        "name_equal": true,
+        "counts": [
+          0,
+          0
+        ],
+        "equal": true,
+        "jaccard": 1.0,
+        "errors": [
+          null,
+          null
+        ]
+      },
+      {
+        "seq": "22",
+        "name_equal": true,
+        "counts": [
+          3,
+          3
+        ],
+        "equal": true,
+        "jaccard": 1.0,
+        "errors": [
+          null,
+          null
+        ]
+      },
+      {
+        "seq": "23",
+        "name_equal": true,
+        "counts": [
+          1,
+          1
+        ],
+        "equal": true,
+        "jaccard": 1.0,
+        "errors": [
+          null,
+          null
+        ]
+      },
+      {
+        "seq": "24",
+        "name_equal": true,
+        "counts": [
+          0,
+          0
+        ],
+        "equal": true,
+        "jaccard": 1.0,
+        "errors": [
+          null,
+          null
+        ]
+      },
+      {
+        "seq": "25",
+        "name_equal": true,
+        "counts": [
+          3,
+          3
+        ],
+        "equal": true,
+        "jaccard": 1.0,
+        "errors": [
+          null,
+          null
+        ]
+      },
+      {
+        "seq": "26",
+        "name_equal": true,
+        "counts": [
+          0,
+          0
+        ],
+        "equal": true,
+        "jaccard": 1.0,
+        "errors": [
+          null,
+          null
+        ]
+      },
+      {
+        "seq": "27",
+        "name_equal": true,
+        "counts": [
+          1,
+          1
+        ],
+        "equal": true,
+        "jaccard": 1.0,
+        "errors": [
+          null,
+          null
+        ]
+      },
+      {
+        "seq": "28",
+        "name_equal": true,
+        "counts": [
+          0,
+          0
+        ],
+        "equal": true,
+        "jaccard": 1.0,
+        "errors": [
+          null,
+          null
+        ]
+      },
+      {
+        "seq": "29",
+        "name_equal": true,
+        "counts": [
+          0,
+          0
+        ],
+        "equal": true,
+        "jaccard": 1.0,
+        "errors": [
+          null,
+          null
+        ]
+      }
+    ],
+    "equal_sets": 30,
+    "total": 30
+  },
+  "picked": {
+    "largest_seq": "1",
+    "paginated_seqs": []
+  }
+}

@@ -1,0 +1,3096 @@
+{
+  "env": {
+    "script_version": "0.1",
+    "started_at_kst": "2026-10-17T13:48:04.288190+09:00",
+    "weekday_kst": "Saturday",
+    "platform": "Linux-6.18.33.1-microsoft-standard-WSL2-x86_64-with-glibc2.43",
+    "python": "3.13.13",
+    "profiles": [
+      "kiwoom-real-vibe",
+      "kiwoom-demo"
+    ],
+    "modes": {
+      "kiwoom-real-vibe": "real",
+      "kiwoom-demo": "demo"
+    },
+    "finished_at_kst": "2026-10-17T13:50:42.647123+09:00"
+  },
+  "tests": {
+    "list_shape[kiwoom-real-vibe]": {
+      "status": "ok",
+      "result": {
+        "elapsed_ms": 8,
+        "row_shape": "list",
+        "count": 30,
+        "cont_yn": null
+      }
+    },
+    "list_shape[kiwoom-demo]": {
+      "status": "ok",
+      "result": {
+        "elapsed_ms": 8,
+        "row_shape": "list",
+        "count": 30,
+        "cont_yn": null
+      }
+    },
+    "sweep[kiwoom-real-vibe]": {
+      "status": "ok",
+      "result": {
+        "conditions": [
+          {
+            "seq": "0",
+            "name": "급등주포착검색"
+          },
+          {
+            "seq": "1",
+            "name": "눌림후반등자리"
+          },
+          {
+            "seq": "2",
+            "name": "급등주단타검색식2"
+          },
+          {
+            "seq": "3",
+            "name": "전고돌파조건식"
+          },
+          {
+            "seq": "4",
+            "name": "전일고가돌파"
+          },
+          {
+            "seq": "5",
+            "name": "오후장검색"
+          },
+          {
+            "seq": "6",
+            "name": "눌림목"
+          },
+          {
+            "seq": "7",
+            "name": "신고거래_량"
+          },
+          {
+            "seq": "8",
+            "name": "기개외(순매수)"
+          },
+          {
+            "seq": "9",
+            "name": "기본종목"
+          },
+          {
+            "seq": "10",
+            "name": "전고돌파+적3병"
+          },
+          {
+            "seq": "11",
+            "name": "기관매수+재무"
+          },
+          {
+            "seq": "12",
+            "name": "양음양봉"
+          },
+          {
+            "seq": "13",
+            "name": "볼린저밴드"
+          },
+          {
+            "seq": "14",
+            "name": "RSI"
+          },
+          {
+            "seq": "15",
+            "name": "Envelope"
+          },
+          {
+            "seq": "16",
+            "name": "Demark"
+          },
+          {
+            "seq": "17",
+            "name": "정배열+돌파"
+          },
+          {
+            "seq": "18",
+            "name": "캔들연속발생"
+          },
+          {
+            "seq": "19",
+            "name": "골든크로스"
+          },
+          {
+            "seq": "20",
+            "name": "맥점"
+          },
+          {
+            "seq": "21",
+            "name": "수렴돌파(Future)"
+          },
+          {
+            "seq": "22",
+            "name": "5연속양봉(추세)"
+          },
+          {
+            "seq": "23",
+            "name": "2음봉장악형(개미떨기)"
+          },
+          {
+            "seq": "24",
+            "name": "단기로켓"
+          },
+          {
+            "seq": "25",
+            "name": "단타A"
+          },
+          {
+            "seq": "26",
+            "name": "단타B"
+          },
+          {
+            "seq": "27",
+            "name": "피봇돌파+ROE10"
+          },
+          {
+            "seq": "28",
+            "name": "워렛버핏"
+          },
+          {
+            "seq": "29",
+            "name": "실적주"
+          }
+        ],
+        "results": {
+          "0": {
+            "name": "급등주포착검색",
+            "seq": "0",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T13:48:16.969649+09:00",
+            "elapsed_ms": 23,
+            "pages": [
+              {
+                "rows": 0,
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 23,
+                "resp_seq": "0",
+                "return_code_missing": false
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "names_missing": 0,
+            "row_keys": [],
+            "seq_echo_mismatch": false,
+            "codes": []
+          },
+          "1": {
+            "name": "눌림후반등자리",
+            "seq": "1",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T13:48:17.293469+09:00",
+            "elapsed_ms": 6,
+            "pages": [
+              {
+                "rows": 0,
+                "cont_yn": null,
+                "next_key_len": 0,
+                "elapsed_ms": 6,
+                "resp_seq": null,
+                "return_code_missing": true
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "names_missing": 0,
+            "row_keys": [],
+            "seq_echo_mismatch": false,
+            "codes": []
+          },
+          "2": {
+            "name": "급등주단타검색식2",
+            "seq": "2",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T13:48:17.600548+09:00",
+            "elapsed_ms": 0,
+            "pages": [
+              {
+                "rows": 28,
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 0,
+                "resp_seq": "1",
+                "return_code_missing": false
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 28,
+            "unique_count": 28,
+            "duplicate_rows": 0,
+            "prefixes": {
+              "A": 28
+            },
+            "invalid_codes": [],
+            "non_digit_codes": [
+              "0010F0"
+            ],
+            "names_missing": 0,
+            "row_keys": [
+              "10",
+              "11",
+              "12",
+              "13",
+              "16",
+              "17",
+              "18",
+              "25",
+              "302",
+              "9001"
+            ],
+            "seq_echo_mismatch": true,
+            "codes": [
+              "0010F0",
+              "001210",
+              "002720",
+              "002990",
+              "005160",
+              "006740",
+              "009470",
+              "014100",
+              "043590",
+              "046210",
+              "053450",
+              "053800",
+              "058730",
+              "067080",
+              "083500",
+              "084990",
+              "085910",
+              "089230",
+              "091590",
+              "147760",
+              "187420",
+              "198440",
+              "228340",
+              "255440",
+              "278650",
+              "290650",
+              "317530",
+              "417840"
+            ]
+          },
+          "3": {
+            "name": "전고돌파조건식",
+            "seq": "3",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T13:48:17.902289+09:00",
+            "elapsed_ms": 0,
+            "pages": [
+              {
+                "rows": 0,
+                "cont_yn": null,
+                "next_key_len": 0,
+                "elapsed_ms": 0,
+                "resp_seq": null,
+                "return_code_missing": true
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "names_missing": 0,
+            "row_keys": [],
+            "seq_echo_mismatch": false,
+            "codes": []
+          },
+          "4": {
+            "name": "전일고가돌파",
+            "seq": "4",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T13:48:18.205006+09:00",
+            "elapsed_ms": 0,
+            "pages": [
+              {
+                "rows": 0,
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 0,
+                "resp_seq": "2",
+                "return_code_missing": false
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "names_missing": 0,
+            "row_keys": [],
+            "seq_echo_mismatch": true,
+            "codes": []
+          },
+          "5": {
+            "name": "오후장검색",
+            "seq": "5",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T13:48:18.506524+09:00",
+            "elapsed_ms": 0,
+            "pages": [
+              {
+                "rows": 0,
+                "cont_yn": null,
+                "next_key_len": 0,
+                "elapsed_ms": 0,
+                "resp_seq": null,
+                "return_code_missing": true
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "names_missing": 0,
+            "row_keys": [],
+            "seq_echo_mismatch": false,
+            "codes": []
+          },
+          "6": {
+            "name": "눌림목",
+            "seq": "6",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T13:48:18.808626+09:00",
+            "elapsed_ms": 0,
+            "pages": [
+              {
+                "rows": 3,
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 0,
+                "resp_seq": "3",
+                "return_code_missing": false
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 3,
+            "unique_count": 3,
+            "duplicate_rows": 0,
+            "prefixes": {
+              "A": 3
+            },
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "names_missing": 0,
+            "row_keys": [
+              "10",
+              "11",
+              "12",
+              "13",
+              "16",
+              "17",
+              "18",
+              "25",
+              "302",
+              "9001"
+            ],
+            "seq_echo_mismatch": true,
+            "codes": [
+              "003280",
+              "048410",
+              "456160"
+            ]
+          },
+          "7": {
+            "name": "신고거래_량",
+            "seq": "7",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T13:48:19.109689+09:00",
+            "elapsed_ms": 0,
+            "pages": [
+              {
+                "rows": 0,
+                "cont_yn": null,
+                "next_key_len": 0,
+                "elapsed_ms": 0,
+                "resp_seq": null,
+                "return_code_missing": true
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "names_missing": 0,
+            "row_keys": [],
+            "seq_echo_mismatch": false,
+            "codes": []
+          },
+          "8": {
+            "name": "기개외(순매수)",
+            "seq": "8",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T13:48:19.411752+09:00",
+            "elapsed_ms": 1,
+            "pages": [
+              {
+                "rows": 2,
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 1,
+                "resp_seq": "4",
+                "return_code_missing": false
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 2,
+            "unique_count": 2,
+            "duplicate_rows": 0,
+            "prefixes": {
+              "A": 2
+            },
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "names_missing": 0,
+            "row_keys": [
+              "10",
+              "11",
+              "12",
+              "13",
+              "16",
+              "17",
+              "18",
+              "25",
+              "302",
+              "9001"
+            ],
+            "seq_echo_mismatch": true,
+            "codes": [
+              "010140",
+              "046970"
+            ]
+          },
+          "9": {
+            "name": "기본종목",
+            "seq": "9",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T13:48:19.715137+09:00",
+            "elapsed_ms": 1,
+            "pages": [
+              {
+                "rows": 0,
+                "cont_yn": null,
+                "next_key_len": 0,
+                "elapsed_ms": 1,
+                "resp_seq": null,
+                "return_code_missing": true
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "names_missing": 0,
+            "row_keys": [],
+            "seq_echo_mismatch": false,
+            "codes": []
+          },
+          "10": {
+            "name": "전고돌파+적3병",
+            "seq": "10",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T13:48:20.018549+09:00",
+            "elapsed_ms": 0,
+            "pages": [
+              {
+                "rows": 0,
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 0,
+                "resp_seq": "5",
+                "return_code_missing": false
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "names_missing": 0,
+            "row_keys": [],
+            "seq_echo_mismatch": true,
+            "codes": []
+          },
+          "11": {
+            "name": "기관매수+재무",
+            "seq": "11",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T13:48:20.320823+09:00",
+            "elapsed_ms": 0,
+            "pages": [
+              {
+                "rows": 0,
+                "cont_yn": null,
+                "next_key_len": 0,
+                "elapsed_ms": 0,
+                "resp_seq": null,
+                "return_code_missing": true
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "names_missing": 0,
+            "row_keys": [],
+            "seq_echo_mismatch": false,
+            "codes": []
+          },
+          "12": {
+            "name": "양음양봉",
+            "seq": "12",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T13:48:20.622360+09:00",
+            "elapsed_ms": 1,
+            "pages": [
+              {
+                "rows": 3,
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 0,
+                "resp_seq": "6",
+                "return_code_missing": false
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 3,
+            "unique_count": 3,
+            "duplicate_rows": 0,
+            "prefixes": {
+              "A": 3
+            },
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "names_missing": 0,
+            "row_keys": [
+              "10",
+              "11",
+              "12",
+              "13",
+              "16",
+              "17",
+              "18",
+              "25",
+              "302",
+              "9001"
+            ],
+            "seq_echo_mismatch": true,
+            "codes": [
+              "002990",
+              "006340",
+              "252710"
+            ]
+          },
+          "13": {
+            "name": "볼린저밴드",
+            "seq": "13",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T13:48:20.924635+09:00",
+            "elapsed_ms": 1,
+            "pages": [
+              {
+                "rows": 0,
+                "cont_yn": null,
+                "next_key_len": 0,
+                "elapsed_ms": 0,
+                "resp_seq": null,
+                "return_code_missing": true
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "names_missing": 0,
+            "row_keys": [],
+            "seq_echo_mismatch": false,
+            "codes": []
+          },
+          "14": {
+            "name": "RSI",
+            "seq": "14",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T13:48:21.228013+09:00",
+            "elapsed_ms": 0,
+            "pages": [
+              {
+                "rows": 0,
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 0,
+                "resp_seq": "7",
+                "return_code_missing": false
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "names_missing": 0,
+            "row_keys": [],
+            "seq_echo_mismatch": true,
+            "codes": []
+          },
+          "15": {
+            "name": "Envelope",
+            "seq": "15",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T13:48:21.530405+09:00",
+            "elapsed_ms": 0,
+            "pages": [
+              {
+                "rows": 0,
+                "cont_yn": null,
+                "next_key_len": 0,
+                "elapsed_ms": 0,
+                "resp_seq": null,
+                "return_code_missing": true
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "names_missing": 0,
+            "row_keys": [],
+            "seq_echo_mismatch": false,
+            "codes": []
+          },
+          "16": {
+            "name": "Demark",
+            "seq": "16",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T13:48:21.831644+09:00",
+            "elapsed_ms": 1,
+            "pages": [
+              {
+                "rows": 2,
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 0,
+                "resp_seq": "8",
+                "return_code_missing": false
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 2,
+            "unique_count": 2,
+            "duplicate_rows": 0,
+            "prefixes": {
+              "A": 2
+            },
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "names_missing": 0,
+            "row_keys": [
+              "10",
+              "11",
+              "12",
+              "13",
+              "16",
+              "17",
+              "18",
+              "25",
+              "302",
+              "9001"
+            ],
+            "seq_echo_mismatch": true,
+            "codes": [
+              "272210",
+              "323410"
+            ]
+          },
+          "17": {
+            "name": "정배열+돌파",
+            "seq": "17",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T13:48:22.133606+09:00",
+            "elapsed_ms": 0,
+            "pages": [
+              {
+                "rows": 0,
+                "cont_yn": null,
+                "next_key_len": 0,
+                "elapsed_ms": 0,
+                "resp_seq": null,
+                "return_code_missing": true
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "names_missing": 0,
+            "row_keys": [],
+            "seq_echo_mismatch": false,
+            "codes": []
+          },
+          "18": {
+            "name": "캔들연속발생",
+            "seq": "18",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T13:48:22.435254+09:00",
+            "elapsed_ms": 1,
+            "pages": [
+              {
+                "rows": 0,
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 1,
+                "resp_seq": "9",
+                "return_code_missing": false
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "names_missing": 0,
+            "row_keys": [],
+            "seq_echo_mismatch": true,
+            "codes": []
+          },
+          "19": {
+            "name": "골든크로스",
+            "seq": "19",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T13:48:22.738585+09:00",
+            "elapsed_ms": 0,
+            "pages": [
+              {
+                "rows": 0,
+                "cont_yn": null,
+                "next_key_len": 0,
+                "elapsed_ms": 0,
+                "resp_seq": null,
+                "return_code_missing": true
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "names_missing": 0,
+            "row_keys": [],
+            "seq_echo_mismatch": false,
+            "codes": []
+          },
+          "20": {
+            "name": "맥점",
+            "seq": "20",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T13:48:23.039648+09:00",
+            "elapsed_ms": 0,
+            "pages": [
+              {
+                "rows": 7,
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 0,
+                "resp_seq": "10",
+                "return_code_missing": false
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 7,
+            "unique_count": 7,
+            "duplicate_rows": 0,
+            "prefixes": {
+              "A": 7
+            },
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "names_missing": 0,
+            "row_keys": [
+              "10",
+              "11",
+              "12",
+              "13",
+              "16",
+              "17",
+              "18",
+              "25",
+              "302",
+              "9001"
+            ],
+            "seq_echo_mismatch": true,
+            "codes": [
+              "000100",
+              "004370",
+              "008930",
+              "033780",
+              "097950",
+              "352820",
+              "445680"
+            ]
+          },
+          "21": {
+            "name": "수렴돌파(Future)",
+            "seq": "21",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T13:48:23.341268+09:00",
+            "elapsed_ms": 1,
+            "pages": [
+              {
+                "rows": 0,
+                "cont_yn": null,
+                "next_key_len": 0,
+                "elapsed_ms": 0,
+                "resp_seq": null,
+                "return_code_missing": true
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "names_missing": 0,
+            "row_keys": [],
+            "seq_echo_mismatch": false,
+            "codes": []
+          },
+          "22": {
+            "name": "5연속양봉(추세)",
+            "seq": "22",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T13:48:23.642755+09:00",
+            "elapsed_ms": 1,
+            "pages": [
+              {
+                "rows": 8,
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 0,
+                "resp_seq": "11",
+                "return_code_missing": false
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 8,
+            "unique_count": 8,
+            "duplicate_rows": 0,
+            "prefixes": {
+              "A": 8
+            },
+            "invalid_codes": [],
+            "non_digit_codes": [
+              "0197X0"
+            ],
+            "names_missing": 0,
+            "row_keys": [
+              "10",
+              "11",
+              "12",
+              "13",
+              "16",
+              "17",
+              "18",
+              "25",
+              "302",
+              "9001"
+            ],
+            "seq_echo_mismatch": true,
+            "codes": [
+              "011200",
+              "0197X0",
+              "114800",
+              "123310",
+              "228790",
+              "252670",
+              "252710",
+              "253230"
+            ]
+          },
+          "23": {
+            "name": "2음봉장악형(개미떨기)",
+            "seq": "23",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T13:48:23.945403+09:00",
+            "elapsed_ms": 0,
+            "pages": [
+              {
+                "rows": 0,
+                "cont_yn": null,
+                "next_key_len": 0,
+                "elapsed_ms": 0,
+                "resp_seq": null,
+                "return_code_missing": true
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "names_missing": 0,
+            "row_keys": [],
+            "seq_echo_mismatch": false,
+            "codes": []
+          },
+          "24": {
+            "name": "단기로켓",
+            "seq": "24",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T13:48:24.247783+09:00",
+            "elapsed_ms": 1,
+            "pages": [
+              {
+                "rows": 0,
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 0,
+                "resp_seq": "12",
+                "return_code_missing": false
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "names_missing": 0,
+            "row_keys": [],
+            "seq_echo_mismatch": true,
+            "codes": []
+          },
+          "25": {
+            "name": "단타A",
+            "seq": "25",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T13:48:24.549535+09:00",
+            "elapsed_ms": 0,
+            "pages": [
+              {
+                "rows": 0,
+                "cont_yn": null,
+                "next_key_len": 0,
+                "elapsed_ms": 0,
+                "resp_seq": null,
+                "return_code_missing": true
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "names_missing": 0,
+            "row_keys": [],
+            "seq_echo_mismatch": false,
+            "codes": []
+          },
+          "26": {
+            "name": "단타B",
+            "seq": "26",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T13:48:24.850884+09:00",
+            "elapsed_ms": 1,
+            "pages": [
+              {
+                "rows": 2,
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 0,
+                "resp_seq": "13",
+                "return_code_missing": false
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 2,
+            "unique_count": 2,
+            "duplicate_rows": 0,
+            "prefixes": {
+              "A": 2
+            },
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "names_missing": 0,
+            "row_keys": [
+              "10",
+              "11",
+              "12",
+              "13",
+              "16",
+              "17",
+              "18",
+              "25",
+              "302",
+              "9001"
+            ],
+            "seq_echo_mismatch": true,
+            "codes": [
+              "068270",
+              "317240"
+            ]
+          },
+          "27": {
+            "name": "피봇돌파+ROE10",
+            "seq": "27",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T13:48:25.152242+09:00",
+            "elapsed_ms": 0,
+            "pages": [
+              {
+                "rows": 0,
+                "cont_yn": null,
+                "next_key_len": 0,
+                "elapsed_ms": 0,
+                "resp_seq": null,
+                "return_code_missing": true
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "names_missing": 0,
+            "row_keys": [],
+            "seq_echo_mismatch": false,
+            "codes": []
+          },
+          "28": {
+            "name": "워렛버핏",
+            "seq": "28",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T13:48:25.453755+09:00",
+            "elapsed_ms": 0,
+            "pages": [
+              {
+                "rows": 0,
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 0,
+                "resp_seq": "14",
+                "return_code_missing": false
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "names_missing": 0,
+            "row_keys": [],
+            "seq_echo_mismatch": true,
+            "codes": []
+          },
+          "29": {
+            "name": "실적주",
+            "seq": "29",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T13:48:25.755179+09:00",
+            "elapsed_ms": 1,
+            "pages": [
+              {
+                "rows": 0,
+                "cont_yn": null,
+                "next_key_len": 0,
+                "elapsed_ms": 0,
+                "resp_seq": null,
+                "return_code_missing": true
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "names_missing": 0,
+            "row_keys": [],
+            "seq_echo_mismatch": false,
+            "codes": []
+          }
+        },
+        "requests": 31
+      }
+    },
+    "sweep[kiwoom-demo]": {
+      "status": "ok",
+      "result": {
+        "conditions": [
+          {
+            "seq": "0",
+            "name": "급등주포착검색"
+          },
+          {
+            "seq": "1",
+            "name": "눌림후반등자리"
+          },
+          {
+            "seq": "2",
+            "name": "급등주단타검색식2"
+          },
+          {
+            "seq": "3",
+            "name": "전고돌파조건식"
+          },
+          {
+            "seq": "4",
+            "name": "전일고가돌파"
+          },
+          {
+            "seq": "5",
+            "name": "오후장검색"
+          },
+          {
+            "seq": "6",
+            "name": "눌림목"
+          },
+          {
+            "seq": "7",
+            "name": "신고거래_량"
+          },
+          {
+            "seq": "8",
+            "name": "기개외(순매수)"
+          },
+          {
+            "seq": "9",
+            "name": "기본종목"
+          },
+          {
+            "seq": "10",
+            "name": "전고돌파+적3병"
+          },
+          {
+            "seq": "11",
+            "name": "기관매수+재무"
+          },
+          {
+            "seq": "12",
+            "name": "양음양봉"
+          },
+          {
+            "seq": "13",
+            "name": "볼린저밴드"
+          },
+          {
+            "seq": "14",
+            "name": "RSI"
+          },
+          {
+            "seq": "15",
+            "name": "Envelope"
+          },
+          {
+            "seq": "16",
+            "name": "Demark"
+          },
+          {
+            "seq": "17",
+            "name": "정배열+돌파"
+          },
+          {
+            "seq": "18",
+            "name": "캔들연속발생"
+          },
+          {
+            "seq": "19",
+            "name": "골든크로스"
+          },
+          {
+            "seq": "20",
+            "name": "맥점"
+          },
+          {
+            "seq": "21",
+            "name": "수렴돌파(Future)"
+          },
+          {
+            "seq": "22",
+            "name": "5연속양봉(추세)"
+          },
+          {
+            "seq": "23",
+            "name": "2음봉장악형(개미떨기)"
+          },
+          {
+            "seq": "24",
+            "name": "단기로켓"
+          },
+          {
+            "seq": "25",
+            "name": "단타A"
+          },
+          {
+            "seq": "26",
+            "name": "단타B"
+          },
+          {
+            "seq": "27",
+            "name": "피봇돌파+ROE10"
+          },
+          {
+            "seq": "28",
+            "name": "워렛버핏"
+          },
+          {
+            "seq": "29",
+            "name": "실적주"
+          }
+        ],
+        "results": {
+          "0": {
+            "name": "급등주포착검색",
+            "seq": "0",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T13:48:37.086236+09:00",
+            "elapsed_ms": 18,
+            "pages": [
+              {
+                "rows": 0,
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 18,
+                "resp_seq": "0",
+                "return_code_missing": false
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "names_missing": 0,
+            "row_keys": [],
+            "seq_echo_mismatch": false,
+            "codes": []
+          },
+          "1": {
+            "name": "눌림후반등자리",
+            "seq": "1",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T13:48:37.404908+09:00",
+            "elapsed_ms": 5,
+            "pages": [
+              {
+                "rows": 0,
+                "cont_yn": null,
+                "next_key_len": 0,
+                "elapsed_ms": 5,
+                "resp_seq": null,
+                "return_code_missing": true
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "names_missing": 0,
+            "row_keys": [],
+            "seq_echo_mismatch": false,
+            "codes": []
+          },
+          "2": {
+            "name": "급등주단타검색식2",
+            "seq": "2",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T13:48:37.710443+09:00",
+            "elapsed_ms": 0,
+            "pages": [
+              {
+                "rows": 28,
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 0,
+                "resp_seq": "1",
+                "return_code_missing": false
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 28,
+            "unique_count": 28,
+            "duplicate_rows": 0,
+            "prefixes": {
+              "A": 28
+            },
+            "invalid_codes": [],
+            "non_digit_codes": [
+              "0010F0"
+            ],
+            "names_missing": 0,
+            "row_keys": [
+              "10",
+              "11",
+              "12",
+              "13",
+              "16",
+              "17",
+              "18",
+              "25",
+              "302",
+              "9001"
+            ],
+            "seq_echo_mismatch": true,
+            "codes": [
+              "0010F0",
+              "001210",
+              "002720",
+              "002990",
+              "005160",
+              "006740",
+              "009470",
+              "014100",
+              "043590",
+              "046210",
+              "053450",
+              "053800",
+              "058730",
+              "067080",
+              "083500",
+              "084990",
+              "085910",
+              "089230",
+              "091590",
+              "147760",
+              "187420",
+              "198440",
+              "228340",
+              "255440",
+              "278650",
+              "290650",
+              "317530",
+              "417840"
+            ]
+          },
+          "3": {
+            "name": "전고돌파조건식",
+            "seq": "3",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T13:48:38.012140+09:00",
+            "elapsed_ms": 0,
+            "pages": [
+              {
+                "rows": 0,
+                "cont_yn": null,
+                "next_key_len": 0,
+                "elapsed_ms": 0,
+                "resp_seq": null,
+                "return_code_missing": true
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "names_missing": 0,
+            "row_keys": [],
+            "seq_echo_mismatch": false,
+            "codes": []
+          },
+          "4": {
+            "name": "전일고가돌파",
+            "seq": "4",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T13:48:38.313102+09:00",
+            "elapsed_ms": 1,
+            "pages": [
+              {
+                "rows": 0,
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 0,
+                "resp_seq": "2",
+                "return_code_missing": false
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "names_missing": 0,
+            "row_keys": [],
+            "seq_echo_mismatch": true,
+            "codes": []
+          },
+          "5": {
+            "name": "오후장검색",
+            "seq": "5",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T13:48:38.615818+09:00",
+            "elapsed_ms": 0,
+            "pages": [
+              {
+                "rows": 0,
+                "cont_yn": null,
+                "next_key_len": 0,
+                "elapsed_ms": 0,
+                "resp_seq": null,
+                "return_code_missing": true
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "names_missing": 0,
+            "row_keys": [],
+            "seq_echo_mismatch": false,
+            "codes": []
+          },
+          "6": {
+            "name": "눌림목",
+            "seq": "6",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T13:48:38.916829+09:00",
+            "elapsed_ms": 1,
+            "pages": [
+              {
+                "rows": 3,
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 0,
+                "resp_seq": "3",
+                "return_code_missing": false
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 3,
+            "unique_count": 3,
+            "duplicate_rows": 0,
+            "prefixes": {
+              "A": 3
+            },
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "names_missing": 0,
+            "row_keys": [
+              "10",
+              "11",
+              "12",
+              "13",
+              "16",
+              "17",
+              "18",
+              "25",
+              "302",
+              "9001"
+            ],
+            "seq_echo_mismatch": true,
+            "codes": [
+              "003280",
+              "048410",
+              "456160"
+            ]
+          },
+          "7": {
+            "name": "신고거래_량",
+            "seq": "7",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T13:48:39.218884+09:00",
+            "elapsed_ms": 0,
+            "pages": [
+              {
+                "rows": 0,
+                "cont_yn": null,
+                "next_key_len": 0,
+                "elapsed_ms": 0,
+                "resp_seq": null,
+                "return_code_missing": true
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "names_missing": 0,
+            "row_keys": [],
+            "seq_echo_mismatch": false,
+            "codes": []
+          },
+          "8": {
+            "name": "기개외(순매수)",
+            "seq": "8",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T13:48:39.521179+09:00",
+            "elapsed_ms": 0,
+            "pages": [
+              {
+                "rows": 2,
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 0,
+                "resp_seq": "4",
+                "return_code_missing": false
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 2,
+            "unique_count": 2,
+            "duplicate_rows": 0,
+            "prefixes": {
+              "A": 2
+            },
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "names_missing": 0,
+            "row_keys": [
+              "10",
+              "11",
+              "12",
+              "13",
+              "16",
+              "17",
+              "18",
+              "25",
+              "302",
+              "9001"
+            ],
+            "seq_echo_mismatch": true,
+            "codes": [
+              "010140",
+              "046970"
+            ]
+          },
+          "9": {
+            "name": "기본종목",
+            "seq": "9",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T13:48:39.822885+09:00",
+            "elapsed_ms": 0,
+            "pages": [
+              {
+                "rows": 0,
+                "cont_yn": null,
+                "next_key_len": 0,
+                "elapsed_ms": 0,
+                "resp_seq": null,
+                "return_code_missing": true
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "names_missing": 0,
+            "row_keys": [],
+            "seq_echo_mismatch": false,
+            "codes": []
+          },
+          "10": {
+            "name": "전고돌파+적3병",
+            "seq": "10",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T13:48:40.124256+09:00",
+            "elapsed_ms": 0,
+            "pages": [
+              {
+                "rows": 0,
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 0,
+                "resp_seq": "5",
+                "return_code_missing": false
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "names_missing": 0,
+            "row_keys": [],
+            "seq_echo_mismatch": true,
+            "codes": []
+          },
+          "11": {
+            "name": "기관매수+재무",
+            "seq": "11",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T13:48:40.426253+09:00",
+            "elapsed_ms": 0,
+            "pages": [
+              {
+                "rows": 0,
+                "cont_yn": null,
+                "next_key_len": 0,
+                "elapsed_ms": 0,
+                "resp_seq": null,
+                "return_code_missing": true
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "names_missing": 0,
+            "row_keys": [],
+            "seq_echo_mismatch": false,
+            "codes": []
+          },
+          "12": {
+            "name": "양음양봉",
+            "seq": "12",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T13:48:40.727625+09:00",
+            "elapsed_ms": 0,
+            "pages": [
+              {
+                "rows": 3,
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 0,
+                "resp_seq": "6",
+                "return_code_missing": false
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 3,
+            "unique_count": 3,
+            "duplicate_rows": 0,
+            "prefixes": {
+              "A": 3
+            },
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "names_missing": 0,
+            "row_keys": [
+              "10",
+              "11",
+              "12",
+              "13",
+              "16",
+              "17",
+              "18",
+              "25",
+              "302",
+              "9001"
+            ],
+            "seq_echo_mismatch": true,
+            "codes": [
+              "002990",
+              "006340",
+              "252710"
+            ]
+          },
+          "13": {
+            "name": "볼린저밴드",
+            "seq": "13",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T13:48:41.029190+09:00",
+            "elapsed_ms": 0,
+            "pages": [
+              {
+                "rows": 0,
+                "cont_yn": null,
+                "next_key_len": 0,
+                "elapsed_ms": 0,
+                "resp_seq": null,
+                "return_code_missing": true
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "names_missing": 0,
+            "row_keys": [],
+            "seq_echo_mismatch": false,
+            "codes": []
+          },
+          "14": {
+            "name": "RSI",
+            "seq": "14",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T13:48:41.331076+09:00",
+            "elapsed_ms": 1,
+            "pages": [
+              {
+                "rows": 0,
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 0,
+                "resp_seq": "7",
+                "return_code_missing": false
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "names_missing": 0,
+            "row_keys": [],
+            "seq_echo_mismatch": true,
+            "codes": []
+          },
+          "15": {
+            "name": "Envelope",
+            "seq": "15",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T13:48:41.632365+09:00",
+            "elapsed_ms": 0,
+            "pages": [
+              {
+                "rows": 0,
+                "cont_yn": null,
+                "next_key_len": 0,
+                "elapsed_ms": 0,
+                "resp_seq": null,
+                "return_code_missing": true
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "names_missing": 0,
+            "row_keys": [],
+            "seq_echo_mismatch": false,
+            "codes": []
+          },
+          "16": {
+            "name": "Demark",
+            "seq": "16",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T13:48:41.933409+09:00",
+            "elapsed_ms": 0,
+            "pages": [
+              {
+                "rows": 2,
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 0,
+                "resp_seq": "8",
+                "return_code_missing": false
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 2,
+            "unique_count": 2,
+            "duplicate_rows": 0,
+            "prefixes": {
+              "A": 2
+            },
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "names_missing": 0,
+            "row_keys": [
+              "10",
+              "11",
+              "12",
+              "13",
+              "16",
+              "17",
+              "18",
+              "25",
+              "302",
+              "9001"
+            ],
+            "seq_echo_mismatch": true,
+            "codes": [
+              "272210",
+              "323410"
+            ]
+          },
+          "17": {
+            "name": "정배열+돌파",
+            "seq": "17",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T13:48:42.234925+09:00",
+            "elapsed_ms": 0,
+            "pages": [
+              {
+                "rows": 0,
+                "cont_yn": null,
+                "next_key_len": 0,
+                "elapsed_ms": 0,
+                "resp_seq": null,
+                "return_code_missing": true
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "names_missing": 0,
+            "row_keys": [],
+            "seq_echo_mismatch": false,
+            "codes": []
+          },
+          "18": {
+            "name": "캔들연속발생",
+            "seq": "18",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T13:48:42.536922+09:00",
+            "elapsed_ms": 1,
+            "pages": [
+              {
+                "rows": 0,
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 1,
+                "resp_seq": "9",
+                "return_code_missing": false
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "names_missing": 0,
+            "row_keys": [],
+            "seq_echo_mismatch": true,
+            "codes": []
+          },
+          "19": {
+            "name": "골든크로스",
+            "seq": "19",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T13:48:42.838666+09:00",
+            "elapsed_ms": 0,
+            "pages": [
+              {
+                "rows": 0,
+                "cont_yn": null,
+                "next_key_len": 0,
+                "elapsed_ms": 0,
+                "resp_seq": null,
+                "return_code_missing": true
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "names_missing": 0,
+            "row_keys": [],
+            "seq_echo_mismatch": false,
+            "codes": []
+          },
+          "20": {
+            "name": "맥점",
+            "seq": "20",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T13:48:43.139758+09:00",
+            "elapsed_ms": 0,
+            "pages": [
+              {
+                "rows": 7,
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 0,
+                "resp_seq": "10",
+                "return_code_missing": false
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 7,
+            "unique_count": 7,
+            "duplicate_rows": 0,
+            "prefixes": {
+              "A": 7
+            },
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "names_missing": 0,
+            "row_keys": [
+              "10",
+              "11",
+              "12",
+              "13",
+              "16",
+              "17",
+              "18",
+              "25",
+              "302",
+              "9001"
+            ],
+            "seq_echo_mismatch": true,
+            "codes": [
+              "000100",
+              "004370",
+              "008930",
+              "033780",
+              "097950",
+              "352820",
+              "445680"
+            ]
+          },
+          "21": {
+            "name": "수렴돌파(Future)",
+            "seq": "21",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T13:48:43.442243+09:00",
+            "elapsed_ms": 1,
+            "pages": [
+              {
+                "rows": 0,
+                "cont_yn": null,
+                "next_key_len": 0,
+                "elapsed_ms": 0,
+                "resp_seq": null,
+                "return_code_missing": true
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "names_missing": 0,
+            "row_keys": [],
+            "seq_echo_mismatch": false,
+            "codes": []
+          },
+          "22": {
+            "name": "5연속양봉(추세)",
+            "seq": "22",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T13:48:43.744986+09:00",
+            "elapsed_ms": 1,
+            "pages": [
+              {
+                "rows": 8,
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 0,
+                "resp_seq": "11",
+                "return_code_missing": false
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 8,
+            "unique_count": 8,
+            "duplicate_rows": 0,
+            "prefixes": {
+              "A": 8
+            },
+            "invalid_codes": [],
+            "non_digit_codes": [
+              "0197X0"
+            ],
+            "names_missing": 0,
+            "row_keys": [
+              "10",
+              "11",
+              "12",
+              "13",
+              "16",
+              "17",
+              "18",
+              "25",
+              "302",
+              "9001"
+            ],
+            "seq_echo_mismatch": true,
+            "codes": [
+              "011200",
+              "0197X0",
+              "114800",
+              "123310",
+              "228790",
+              "252670",
+              "252710",
+              "253230"
+            ]
+          },
+          "23": {
+            "name": "2음봉장악형(개미떨기)",
+            "seq": "23",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T13:48:44.047064+09:00",
+            "elapsed_ms": 0,
+            "pages": [
+              {
+                "rows": 0,
+                "cont_yn": null,
+                "next_key_len": 0,
+                "elapsed_ms": 0,
+                "resp_seq": null,
+                "return_code_missing": true
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "names_missing": 0,
+            "row_keys": [],
+            "seq_echo_mismatch": false,
+            "codes": []
+          },
+          "24": {
+            "name": "단기로켓",
+            "seq": "24",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T13:48:44.348276+09:00",
+            "elapsed_ms": 0,
+            "pages": [
+              {
+                "rows": 0,
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 0,
+                "resp_seq": "12",
+                "return_code_missing": false
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "names_missing": 0,
+            "row_keys": [],
+            "seq_echo_mismatch": true,
+            "codes": []
+          },
+          "25": {
+            "name": "단타A",
+            "seq": "25",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T13:48:44.650162+09:00",
+            "elapsed_ms": 0,
+            "pages": [
+              {
+                "rows": 0,
+                "cont_yn": null,
+                "next_key_len": 0,
+                "elapsed_ms": 0,
+                "resp_seq": null,
+                "return_code_missing": true
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "names_missing": 0,
+            "row_keys": [],
+            "seq_echo_mismatch": false,
+            "codes": []
+          },
+          "26": {
+            "name": "단타B",
+            "seq": "26",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T13:48:44.951972+09:00",
+            "elapsed_ms": 0,
+            "pages": [
+              {
+                "rows": 2,
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 0,
+                "resp_seq": "13",
+                "return_code_missing": false
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 2,
+            "unique_count": 2,
+            "duplicate_rows": 0,
+            "prefixes": {
+              "A": 2
+            },
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "names_missing": 0,
+            "row_keys": [
+              "10",
+              "11",
+              "12",
+              "13",
+              "16",
+              "17",
+              "18",
+              "25",
+              "302",
+              "9001"
+            ],
+            "seq_echo_mismatch": true,
+            "codes": [
+              "068270",
+              "317240"
+            ]
+          },
+          "27": {
+            "name": "피봇돌파+ROE10",
+            "seq": "27",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T13:48:45.253301+09:00",
+            "elapsed_ms": 0,
+            "pages": [
+              {
+                "rows": 0,
+                "cont_yn": null,
+                "next_key_len": 0,
+                "elapsed_ms": 0,
+                "resp_seq": null,
+                "return_code_missing": true
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "names_missing": 0,
+            "row_keys": [],
+            "seq_echo_mismatch": false,
+            "codes": []
+          },
+          "28": {
+            "name": "워렛버핏",
+            "seq": "28",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T13:48:45.554729+09:00",
+            "elapsed_ms": 0,
+            "pages": [
+              {
+                "rows": 0,
+                "cont_yn": "N",
+                "next_key_len": 0,
+                "elapsed_ms": 0,
+                "resp_seq": "14",
+                "return_code_missing": false
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "names_missing": 0,
+            "row_keys": [],
+            "seq_echo_mismatch": true,
+            "codes": []
+          },
+          "29": {
+            "name": "실적주",
+            "seq": "29",
+            "stex_tp": "K",
+            "started_at": "2026-10-17T13:48:45.856550+09:00",
+            "elapsed_ms": 0,
+            "pages": [
+              {
+                "rows": 0,
+                "cont_yn": null,
+                "next_key_len": 0,
+                "elapsed_ms": 0,
+                "resp_seq": null,
+                "return_code_missing": true
+              }
+            ],
+            "page_count": 1,
+            "complete": true,
+            "error": null,
+            "rate_limit_retries": 0,
+            "row_count": 0,
+            "unique_count": 0,
+            "duplicate_rows": 0,
+            "prefixes": {},
+            "invalid_codes": [],
+            "non_digit_codes": [],
+            "names_missing": 0,
+            "row_keys": [],
+            "seq_echo_mismatch": false,
+            "codes": []
+          }
+        },
+        "requests": 31
+      }
+    },
+    "continuation": {
+      "status": "ok",
+      "result": {
+        "seq": "2",
+        "first_page": {
+          "seq": "2",
+          "stex_tp": "K",
+          "started_at": "2026-10-17T13:48:57.433767+09:00",
+          "elapsed_ms": 23,
+          "pages": [
+            {
+              "rows": 0,
+              "cont_yn": "N",
+              "next_key_len": 0,
+              "elapsed_ms": 23,
+              "resp_seq": "2",
+              "return_code_missing": false
+            }
+          ],
+          "page_count": 1,
+          "complete": true,
+          "error": null,
+          "rate_limit_retries": 0,
+          "row_count": 0,
+          "unique_count": 0,
+          "duplicate_rows": 0,
+          "prefixes": {},
+          "invalid_codes": [],
+          "non_digit_codes": [],
+          "names_missing": 0,
+          "row_keys": [],
+          "seq_echo_mismatch": false,
+          "codes": []
+        },
+        "cross_connection": "skipped: 1페이지에서 cont_yn=Y 아님"
+      }
+    },
+    "without_list": {
+      "status": "error",
+      "error_type": "TimeoutError",
+      "error": ""
+    },
+    "repeat": {
+      "status": "ok",
+      "result": {
+        "seq": "2",
+        "runs": [
+          {
+            "offset_s": 0,
+            "actual_offset_s": 0.0,
+            "error": null,
+            "row_count": 0,
+            "same_as_first": true,
+            "elapsed_ms": 28
+          },
+          {
+            "offset_s": 1,
+            "actual_offset_s": 1.0,
+            "error": null,
+            "row_count": 0,
+            "same_as_first": true,
+            "elapsed_ms": 8
+          },
+          {
+            "offset_s": 5,
+            "actual_offset_s": 5.0,
+            "error": null,
+            "row_count": 0,
+            "same_as_first": true,
+            "elapsed_ms": 0
+          },
+          {
+            "offset_s": 15,
+            "actual_offset_s": 15.0,
+            "error": null,
+            "row_count": 0,
+            "same_as_first": true,
+            "elapsed_ms": 0
+          },
+          {
+            "offset_s": 30,
+            "actual_offset_s": 30.0,
+            "error": null,
+            "row_count": 0,
+            "same_as_first": true,
+            "elapsed_ms": 0
+          },
+          {
+            "offset_s": 65,
+            "actual_offset_s": 65.0,
+            "error": null,
+            "row_count": 0,
+            "same_as_first": true,
+            "elapsed_ms": 0
+          },
+          {
+            "offset_s": "new_connection",
+            "error": null,
+            "row_count": 0
+          }
+        ]
+      }
+    },
+    "burst": {
+      "status": "ok",
+      "result": {
+        "requests": 15,
+        "total_ms": 47,
+        "errors": [
+          {
+            "seq": "6",
+            "error": {
+              "return_code": 105110,
+              "resolved": 105110,
+              "return_msg": "해당 TRNM으로 허용된 요청 건수를 초과하였습니다 (TRNM=CNSRREQ)"
+            },
+            "elapsed_ms": 1,
+            "rows": 0
+          },
+          {
+            "seq": "8",
+            "error": {
+              "return_code": 105110,
+              "resolved": 105110,
+              "return_msg": "해당 TRNM으로 허용된 요청 건수를 초과하였습니다 (TRNM=CNSRREQ)"
+            },
+            "elapsed_ms": 1,
+            "rows": 0
+          },
+          {
+            "seq": "9",
+            "error": {
+              "return_code": 105110,
+              "resolved": 105110,
+              "return_msg": "해당 TRNM으로 허용된 요청 건수를 초과하였습니다 (TRNM=CNSRREQ)"
+            },
+            "elapsed_ms": 0,
+            "rows": 0
+          },
+          {
+            "seq": "12",
+            "error": {
+              "return_code": 105110,
+              "resolved": 105110,
+              "return_msg": "해당 TRNM으로 허용된 요청 건수를 초과하였습니다 (TRNM=CNSRREQ)"
+            },
+            "elapsed_ms": 1,
+            "rows": 0
+          },
+          {
+            "seq": "13",
+            "error": {
+              "return_code": 105110,
+              "resolved": 105110,
+              "return_msg": "해당 TRNM으로 허용된 요청 건수를 초과하였습니다 (TRNM=CNSRREQ)"
+            },
+            "elapsed_ms": 1,
+            "rows": 0
+          },
+          {
+            "seq": "14",
+            "error": {
+              "return_code": 105110,
+              "resolved": 105110,
+              "return_msg": "해당 TRNM으로 허용된 요청 건수를 초과하였습니다 (TRNM=CNSRREQ)"
+            },
+            "elapsed_ms": 1,
+            "rows": 0
+          }
+        ],
+        "items": [
+          {
+            "seq": "0",
+            "error": null,
+            "elapsed_ms": 18,
+            "rows": 0
+          },
+          {
+            "seq": "1",
+            "error": null,
+            "elapsed_ms": 6,
+            "rows": 0
+          },
+          {
+            "seq": "2",
+            "error": null,
+            "elapsed_ms": 4,
+            "rows": 28
+          },
+          {
+            "seq": "3",
+            "error": null,
+            "elapsed_ms": 1,
+            "rows": 0
+          },
+          {
+            "seq": "4",
+            "error": null,
+            "elapsed_ms": 3,
+            "rows": 0
+          },
+          {
+            "seq": "5",
+            "error": null,
+            "elapsed_ms": 3,
+            "rows": 0
+          },
+          {
+            "seq": "6",
+            "error": {
+              "return_code": 105110,
+              "resolved": 105110,
+              "return_msg": "해당 TRNM으로 허용된 요청 건수를 초과하였습니다 (TRNM=CNSRREQ)"
+            },
+            "elapsed_ms": 1,
+            "rows": 0
+          },
+          {
+            "seq": "7",
+            "error": null,
+            "elapsed_ms": 4,
+            "rows": 3
+          },
+          {
+            "seq": "8",
+            "error": {
+              "return_code": 105110,
+              "resolved": 105110,
+              "return_msg": "해당 TRNM으로 허용된 요청 건수를 초과하였습니다 (TRNM=CNSRREQ)"
+            },
+            "elapsed_ms": 1,
+            "rows": 0
+          },
+          {
+            "seq": "9",
+            "error": {
+              "return_code": 105110,
+              "resolved": 105110,
+              "return_msg": "해당 TRNM으로 허용된 요청 건수를 초과하였습니다 (TRNM=CNSRREQ)"
+            },
+            "elapsed_ms": 0,
+            "rows": 0
+          },
+          {
+            "seq": "10",
+            "error": null,
+            "elapsed_ms": 1,
+            "rows": 2
+          },
+          {
+            "seq": "11",
+            "error": null,
+            "elapsed_ms": 1,
+            "rows": 0
+          },
+          {
+            "seq": "12",
+            "error": {
+              "return_code": 105110,
+              "resolved": 105110,
+              "return_msg": "해당 TRNM으로 허용된 요청 건수를 초과하였습니다 (TRNM=CNSRREQ)"
+            },
+            "elapsed_ms": 1,
+            "rows": 0
+          },
+          {
+            "seq": "13",
+            "error": {
+              "return_code": 105110,
+              "resolved": 105110,
+              "return_msg": "해당 TRNM으로 허용된 요청 건수를 초과하였습니다 (TRNM=CNSRREQ)"
+            },
+            "elapsed_ms": 1,
+            "rows": 0
+          },
+          {
+            "seq": "14",
+            "error": {
+              "return_code": 105110,
+              "resolved": 105110,
+              "return_msg": "해당 TRNM으로 허용된 요청 건수를 초과하였습니다 (TRNM=CNSRREQ)"
+            },
+            "elapsed_ms": 1,
+            "rows": 0
+          }
+        ]
+      }
+    },
+    "exchange": {
+      "status": "ok",
+      "result": {
+        "seq": "2",
+        "K": {
+          "error": null,
+          "row_count": 0,
+          "unique_count": 0
+        },
+        "N": {
+          "error": {
+            "return_code": 900001,
+            "resolved": 900001,
+            "return_msg": "거래소 구분값을 확인해 주세요"
+          },
+          "row_count": 0,
+          "unique_count": 0
+        },
+        "A": {
+          "error": null,
+          "row_count": 0,
+          "unique_count": 0
+        },
+        "K_subset_of_A": true
+      }
+    },
+    "unknown_seq": {
+      "status": "ok",
+      "result": {
+        "seq": "999",
+        "stex_tp": "K",
+        "started_at": "2026-10-17T13:50:42.639531+09:00",
+        "elapsed_ms": 4,
+        "pages": [],
+        "page_count": 0,
+        "complete": false,
+        "error": {
+          "return_code": 900004,
+          "resolved": 900004,
+          "return_msg": "존재하지 않는 일련번호입니다.(seq=999)"
+        },
+        "rate_limit_retries": 0,
+        "row_count": 0,
+        "unique_count": 0,
+        "duplicate_rows": 0,
+        "prefixes": {},
+        "invalid_codes": [],
+        "non_digit_codes": [],
+        "names_missing": 0,
+        "row_keys": [],
+        "seq_echo_mismatch": false,
+        "codes": []
+      }
+    }
+  },
+  "profile_compare": {
+    "profiles": [
+      "kiwoom-real-vibe",
+      "kiwoom-demo"
+    ],
+    "rows": [
+      {
+        "seq": "0",
+        "name_equal": true,
+        "kiwoom-real-vibe_count": 0,
+        "kiwoom-demo_count": 0,
+        "equal": true,
+        "jaccard": 1.0
+      },
+      {
+        "seq": "1",
+        "name_equal": true,
+        "kiwoom-real-vibe_count": 0,
+        "kiwoom-demo_count": 0,
+        "equal": true,
+        "jaccard": 1.0
+      },
+      {
+        "seq": "2",
+        "name_equal": true,
+        "kiwoom-real-vibe_count": 28,
+        "kiwoom-demo_count": 28,
+        "equal": true,
+        "jaccard": 1.0
+      },
+      {
+        "seq": "3",
+        "name_equal": true,
+        "kiwoom-real-vibe_count": 0,
+        "kiwoom-demo_count": 0,
+        "equal": true,
+        "jaccard": 1.0
+      },
+      {
+        "seq": "4",
+        "name_equal": true,
+        "kiwoom-real-vibe_count": 0,
+        "kiwoom-demo_count": 0,
+        "equal": true,
+        "jaccard": 1.0
+      },
+      {
+        "seq": "5",
+        "name_equal": true,
+        "kiwoom-real-vibe_count": 0,
+        "kiwoom-demo_count": 0,
+        "equal": true,
+        "jaccard": 1.0
+      },
+      {
+        "seq": "6",
+        "name_equal": true,
+        "kiwoom-real-vibe_count": 3,
+        "kiwoom-demo_count": 3,
+        "equal": true,
+        "jaccard": 1.0
+      },
+      {
+        "seq": "7",
+        "name_equal": true,
+        "kiwoom-real-vibe_count": 0,
+        "kiwoom-demo_count": 0,
+        "equal": true,
+        "jaccard": 1.0
+      },
+      {
+        "seq": "8",
+        "name_equal": true,
+        "kiwoom-real-vibe_count": 2,
+        "kiwoom-demo_count": 2,
+        "equal": true,
+        "jaccard": 1.0
+      },
+      {
+        "seq": "9",
+        "name_equal": true,
+        "kiwoom-real-vibe_count": 0,
+        "kiwoom-demo_count": 0,
+        "equal": true,
+        "jaccard": 1.0
+      },
+      {
+        "seq": "10",
+        "name_equal": true,
+        "kiwoom-real-vibe_count": 0,
+        "kiwoom-demo_count": 0,
+        "equal": true,
+        "jaccard": 1.0
+      },
+      {
+        "seq": "11",
+        "name_equal": true,
+        "kiwoom-real-vibe_count": 0,
+        "kiwoom-demo_count": 0,
+        "equal": true,
+        "jaccard": 1.0
+      },
+      {
+        "seq": "12",
+        "name_equal": true,
+        "kiwoom-real-vibe_count": 3,
+        "kiwoom-demo_count": 3,
+        "equal": true,
+        "jaccard": 1.0
+      },
+      {
+        "seq": "13",
+        "name_equal": true,
+        "kiwoom-real-vibe_count": 0,
+        "kiwoom-demo_count": 0,
+        "equal": true,
+        "jaccard": 1.0
+      },
+      {
+        "seq": "14",
+        "name_equal": true,
+        "kiwoom-real-vibe_count": 0,
+        "kiwoom-demo_count": 0,
+        "equal": true,
+        "jaccard": 1.0
+      },
+      {
+        "seq": "15",
+        "name_equal": true,
+        "kiwoom-real-vibe_count": 0,
+        "kiwoom-demo_count": 0,
+        "equal": true,
+        "jaccard": 1.0
+      },
+      {
+        "seq": "16",
+        "name_equal": true,
+        "kiwoom-real-vibe_count": 2,
+        "kiwoom-demo_count": 2,
+        "equal": true,
+        "jaccard": 1.0
+      },
+      {
+        "seq": "17",
+        "name_equal": true,
+        "kiwoom-real-vibe_count": 0,
+        "kiwoom-demo_count": 0,
+        "equal": true,
+        "jaccard": 1.0
+      },
+      {
+        "seq": "18",
+        "name_equal": true,
+        "kiwoom-real-vibe_count": 0,
+        "kiwoom-demo_count": 0,
+        "equal": true,
+        "jaccard": 1.0
+      },
+      {
+        "seq": "19",
+        "name_equal": true,
+        "kiwoom-real-vibe_count": 0,
+        "kiwoom-demo_count": 0,
+        "equal": true,
+        "jaccard": 1.0
+      },
+      {
+        "seq": "20",
+        "name_equal": true,
+        "kiwoom-real-vibe_count": 7,
+        "kiwoom-demo_count": 7,
+        "equal": true,
+        "jaccard": 1.0
+      },
+      {
+        "seq": "21",
+        "name_equal": true,
+        "kiwoom-real-vibe_count": 0,
+        "kiwoom-demo_count": 0,
+        "equal": true,
+        "jaccard": 1.0
+      },
+      {
+        "seq": "22",
+        "name_equal": true,
+        "kiwoom-real-vibe_count": 8,
+        "kiwoom-demo_count": 8,
+        "equal": true,
+        "jaccard": 1.0
+      },
+      {
+        "seq": "23",
+        "name_equal": true,
+        "kiwoom-real-vibe_count": 0,
+        "kiwoom-demo_count": 0,
+        "equal": true,
+        "jaccard": 1.0
+      },
+      {
+        "seq": "24",
+        "name_equal": true,
+        "kiwoom-real-vibe_count": 0,
+        "kiwoom-demo_count": 0,
+        "equal": true,
+        "jaccard": 1.0
+      },
+      {
+        "seq": "25",
+        "name_equal": true,
+        "kiwoom-real-vibe_count": 0,
+        "kiwoom-demo_count": 0,
+        "equal": true,
+        "jaccard": 1.0
+      },
+      {
+        "seq": "26",
+        "name_equal": true,
+        "kiwoom-real-vibe_count": 2,
+        "kiwoom-demo_count": 2,
+        "equal": true,
+        "jaccard": 1.0
+      },
+      {
+        "seq": "27",
+        "name_equal": true,
+        "kiwoom-real-vibe_count": 0,
+        "kiwoom-demo_count": 0,
+        "equal": true,
+        "jaccard": 1.0
+      },
+      {
+        "seq": "28",
+        "name_equal": true,
+        "kiwoom-real-vibe_count": 0,
+        "kiwoom-demo_count": 0,
+        "equal": true,
+        "jaccard": 1.0
+      },
+      {
+        "seq": "29",
+        "name_equal": true,
+        "kiwoom-real-vibe_count": 0,
+        "kiwoom-demo_count": 0,
+        "equal": true,
+        "jaccard": 1.0
+      }
+    ],
+    "equal_sets": 30,
+    "total": 30
+  },
+  "picked": {
+    "largest_seq": "2",
+    "paginated_seqs": []
+  }
+}
