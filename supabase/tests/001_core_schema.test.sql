@@ -1,5 +1,5 @@
 begin;
-select plan(8);
+select plan(10);
 
 select has_table('public', 'runs', 'runs table exists');
 -- Fail immediately on a missing runs relation before preparing dependent fixtures.
@@ -12,6 +12,10 @@ insert into public.broker_profiles (id, user_id, alias, mode, display_name) valu
   ('20000000-0000-0000-0000-000000000001', '10000000-0000-0000-0000-000000000001', 'demo-a', 'demo', 'A demo');
 insert into public.strategies (id, user_id, profile_id, name) values
   ('30000000-0000-0000-0000-000000000001', '10000000-0000-0000-0000-000000000001', '20000000-0000-0000-0000-000000000001', 'A strategy');
+insert into public.broker_profiles (id, user_id, alias, mode) values
+  ('20000000-0000-0000-0000-000000000002', '10000000-0000-0000-0000-000000000002', 'demo-b', 'demo');
+insert into public.strategy_versions (id, user_id, strategy_id, version, definition, condition_refs) values
+  ('50000000-0000-0000-0000-000000000001', '10000000-0000-0000-0000-000000000001', '30000000-0000-0000-0000-000000000001', 1, '{}', '[]');
 insert into public.runs (user_id, kind, profile_id, status, idempotency_key) values
   ('10000000-0000-0000-0000-000000000001', 'sync', '20000000-0000-0000-0000-000000000001', 'queued', '40000000-0000-0000-0000-000000000001');
 insert into public.conditions (user_id, profile_id, seq, name) values
@@ -19,11 +23,13 @@ insert into public.conditions (user_id, profile_id, seq, name) values
 
 set local role authenticated;
 select set_config('request.jwt.claims', '{"sub":"10000000-0000-0000-0000-000000000002","role":"authenticated"}', true);
-select is((select count(*) from public.broker_profiles), 0::bigint, 'B cannot see A profiles');
+select is((select count(*) from public.broker_profiles where alias = 'demo-a'), 0::bigint, 'B cannot see A profiles');
 select is((select count(*) from public.strategies), 0::bigint, 'B cannot see A strategies');
 select is((select count(*) from public.runs), 0::bigint, 'B cannot see A runs');
 select throws_ok($$insert into public.strategies(user_id, profile_id, name) values ('10000000-0000-0000-0000-000000000002', '20000000-0000-0000-0000-000000000001', 'x')$$, '42501', null, 'B cannot attach strategy to A profile');
 select throws_ok($$update public.conditions set name = 'x'$$, '42501', null, 'name column not updatable');
+select throws_ok($$insert into public.strategies(user_id, profile_id, name, current_version_id) values ('10000000-0000-0000-0000-000000000002', '20000000-0000-0000-0000-000000000002', 'invalid version link', '50000000-0000-0000-0000-000000000001')$$, '42501', null, 'B cannot assign A version during strategy creation');
+select lives_ok($$insert into public.strategies(user_id, profile_id, name) values ('10000000-0000-0000-0000-000000000002', '20000000-0000-0000-0000-000000000002', 'B strategy')$$, 'B can create strategy with own profile and default server fields');
 reset role;
 select throws_ok($$insert into public.conditions(user_id, profile_id, seq, name) values ('10000000-0000-0000-0000-000000000001', '20000000-0000-0000-0000-000000000001', '1', 'dup')$$, '23505', null, 'two active rows with same seq rejected');
 select lives_ok($$update public.conditions set is_active = false where seq = '1'; insert into public.conditions(user_id, profile_id, seq, name) values ('10000000-0000-0000-0000-000000000001', '20000000-0000-0000-0000-000000000001', '1', 'new')$$, 'inactive + active same seq allowed');

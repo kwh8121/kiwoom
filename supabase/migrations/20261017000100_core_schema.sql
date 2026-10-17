@@ -172,7 +172,9 @@ begin
 end;
 $$;
 
-grant insert on public.broker_profiles, public.strategies to authenticated;
+grant insert on public.broker_profiles to authenticated;
+-- Version pointers, generated identifiers and timestamps are server-managed.
+grant insert (user_id, profile_id, name) on public.strategies to authenticated;
 grant update (display_name) on public.broker_profiles to authenticated;
 grant update (name, archived_at) on public.strategies to authenticated;
 grant update (ref_description) on public.conditions to authenticated;
