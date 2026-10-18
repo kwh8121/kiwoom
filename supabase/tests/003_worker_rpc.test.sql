@@ -1,5 +1,5 @@
 begin;
-select plan(66);
+select plan(71);
 
 -- Missing the worker schema is the intended initial RED, before role setup.
 select is(worker.claim_next_run('w1', array['other'], 60), null::jsonb, 'empty queue returns null');
@@ -146,8 +146,23 @@ select throws_ok($$select worker.complete_sync_run(current_setting('test.run')::
 reset role;
 select is((select count(*) from public.conditions where is_active and profile_id='20000000-0000-0000-0000-000000000001'),2::bigint,'failed sync attempts leave active conditions intact');
 set local role kiwoom_worker;
-select is(worker.complete_sync_run(current_setting('test.run')::uuid,'w1','[]')->>'removed','2','empty sync deactivates removed conditions');
+select throws_ok($$select worker.complete_sync_run(current_setting('test.run')::uuid,'w1','[]')$$,'P0001','CONDITION_LIST_EMPTY','empty list refused while conditions are active');
 reset role;
+select is((select count(*) from public.conditions where is_active and profile_id='20000000-0000-0000-0000-000000000001'),2::bigint,'refused empty list leaves every condition active');
+-- Dropping one of two conditions is a real removal, not a wholesale wipe.
+select set_config('test.revived',(select id::text from public.conditions where profile_id='20000000-0000-0000-0000-000000000001' and seq='1' and name='B2' and is_active),true);
+set local role kiwoom_worker;
+select is(worker.complete_sync_run(current_setting('test.run')::uuid,'w1','[{"seq":"0","name":"A"}]')->>'removed','1','partial list still deactivates the dropped condition');
+reset role;
+-- A condition that comes back must regain its old id, or every strategy
+-- version referencing it stays permanently unusable.
+select set_config('test.run',pg_temp.queue_run('sync')::text,true);
+set local role kiwoom_worker;
+select worker.claim_next_run('w1',array['demo-a'],60);
+select is(worker.complete_sync_run(current_setting('test.run')::uuid,'w1','[{"seq":"0","name":"A"},{"seq":"1","name":"B2"}]')->>'added','1','a returning condition is reported as added');
+reset role;
+select is((select id::text from public.conditions where profile_id='20000000-0000-0000-0000-000000000001' and seq='1' and is_active),current_setting('test.revived'),'revived condition keeps its original identity');
+select is((select count(*) from public.conditions where profile_id='20000000-0000-0000-0000-000000000001' and seq='1'),2::bigint,'reviving does not mint another row');
 select set_config('test.run',pg_temp.queue_run()::text,true);
 set local role kiwoom_worker;
 select worker.claim_next_run('w1',array['demo-a'],60);
@@ -190,7 +205,7 @@ select worker.claim_next_run('w1',array['demo-a'],60);
 reset role;
 update public.runs set lease_expires_at=clock_timestamp()+interval '0.02 seconds' where id=current_setting('test.run')::uuid;
 set local role kiwoom_worker;
-select is(worker.complete_sync_run(current_setting('test.run')::uuid,'w1','[]'),'false'::jsonb,'profile write expiry rolls back sync settlement');
+select is(worker.complete_sync_run(current_setting('test.run')::uuid,'w1','[{"seq":"0","name":"A"},{"seq":"1","name":"B2"}]'),'false'::jsonb,'profile write expiry rolls back sync settlement');
 reset role;
 select is((select status from public.runs where id=current_setting('test.run')::uuid),'running','sync settlement expiry leaves run running');
 select is((select count(*) from public.condition_sync_events where run_id=current_setting('test.run')::uuid),0::bigint,'sync settlement expiry leaves no sync events');

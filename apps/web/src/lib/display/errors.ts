@@ -13,6 +13,8 @@ const messages: Record<string, string> = {
   INVALID_DEFINITION: "전략 정의가 유효하지 않습니다. 전략을 확인한 뒤 다시 저장해 주세요.",
   LEASE_EXPIRED: "워커의 실행 임대가 만료되었습니다. 워커 상태를 확인해 주세요.",
   RUN_TIMEOUT: "전체 실행 제한 시간을 초과했습니다. 다시 요청해 주세요.",
+  CONDITION_LIST_EMPTY: "조건식 목록이 비어 있어 동기화를 중단했습니다. HTS에서 조건식을 확인한 뒤 다시 시도해 주세요.",
+  SETTLE_REJECTED: "실행 결과를 저장하지 못했습니다. 워커 로그를 확인해 주세요.",
 };
 
 export function runErrorMessage(code: string | null): string {

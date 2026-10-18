@@ -268,6 +268,13 @@ begin
       or jsonb_typeof(e->'name') is distinct from 'string' or nullif(e->>'seq','') is null or nullif(e->>'name','') is null)
      or (select count(*) <> count(distinct e->>'seq') from jsonb_array_elements(p_items) e)
      then raise exception 'PAYLOAD_INVALID'; end if;
+  -- Deactivating every condition would leave each saved strategy version
+  -- pointing at a dead id with no way back, so refuse a wholesale wipe. A
+  -- genuinely empty broker list only syncs while nothing is active yet.
+  if jsonb_array_length(p_items) = 0 and exists(
+       select 1 from public.conditions
+       where profile_id = r.profile_id and user_id = r.user_id and is_active)
+     then raise exception 'CONDITION_LIST_EMPTY'; end if;
   for old in select * from public.conditions where profile_id = r.profile_id and user_id = r.user_id and is_active for update loop
     select value into item from jsonb_array_elements(p_items) where value->>'seq' = old.seq;
     if found and item->>'name' = old.name then
@@ -288,8 +295,20 @@ begin
   for item in select value from jsonb_array_elements(p_items) loop
     if not exists(select 1 from public.conditions where profile_id = r.profile_id and user_id = r.user_id
       and is_active and seq = item->>'seq') then
-      insert into public.conditions(user_id,profile_id,seq,name)
-        values(r.user_id,r.profile_id,item->>'seq',item->>'name') returning id into new_id;
+      new_id := null;
+      -- Revive the retired identity for this exact seq and name so strategy
+      -- versions referencing it work again after a removal or a rename back.
+      update public.conditions set is_active = true, deactivated_at = null,
+        last_synced_at = clock_timestamp()
+        where id = (select id from public.conditions
+          where profile_id = r.profile_id and user_id = r.user_id and not is_active
+            and seq = item->>'seq' and name = item->>'name'
+          order by deactivated_at desc nulls last, first_seen_at desc limit 1)
+        returning id into new_id;
+      if new_id is null then
+        insert into public.conditions(user_id,profile_id,seq,name)
+          values(r.user_id,r.profile_id,item->>'seq',item->>'name') returning id into new_id;
+      end if;
       if not (item->>'seq' = any(replaced_seqs)) then
         added := added + 1;
         insert into public.condition_sync_events(user_id,profile_id,run_id,event,seq,new_name,condition_id)
