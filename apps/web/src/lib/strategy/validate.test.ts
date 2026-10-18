@@ -5,13 +5,14 @@ import { validateDefinition } from "./validate";
 import type { ConditionInfo, StrategyDefinition, StrategyExpr, ValidationIssueCode } from "./types";
 
 const rawCases = readFileSync(new URL("../../../../../packages/contracts/cases/validate.json", import.meta.url), "utf8");
+const jsonNumberToken = /"schemaVersion"\s*:\s*(-?(?:0|[1-9]\d*)(?:\.\d+)?(?:[eE][+-]?\d+)?)/;
 const cases = JSON.parse(rawCases).cases as {
   name: string; definition: unknown; conditions: Record<string, ConditionInfo>; issues: ValidationIssueCode[];
 }[];
 const floatFixtureStart = rawCases.indexOf('"name": "schema_invalid_schema_version_float"');
 const nextFixtureStart = rawCases.indexOf('"name":', floatFixtureStart + 1);
 const floatFixtureText = rawCases.slice(floatFixtureStart, nextFixtureStart < 0 ? undefined : nextFixtureStart);
-const floatFixtureVersion = floatFixtureText.match(/"schemaVersion"\s*:\s*([0-9.]+)/)?.[1];
+const floatFixtureVersion = floatFixtureText.match(jsonNumberToken)?.[1];
 if (floatFixtureVersion !== "1.0") {
   throw new Error("schema_invalid_schema_version_float must retain its lexical 1.0 value");
 }
@@ -28,6 +29,7 @@ const conditions = new Map<string, ConditionInfo>([["A", { profileId: "p", activ
 
 test("JSON decimal schemaVersion loses lexical distinction before validation", () => {
   expect(floatFixtureVersion).toBe("1.0");
+  expect('{"schemaVersion":1.0e1}'.match(jsonNumberToken)?.[1]).toBe("1.0e1");
   expect(JSON.parse('{"schemaVersion":1.0}').schemaVersion).toBe(1);
   expect(validateDefinition(definition(leaf("A")), conditions)).toEqual([]);
 });
