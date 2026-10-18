@@ -17,13 +17,19 @@ export async function getProfiles() {
     supabase.from("worker_heartbeats").select("aliases, seen_at"),
   ]);
   if (profiles.error || heartbeats.error) throw new Error("프로필과 워커 상태를 불러오지 못했습니다.");
-  const items = await Promise.all(profiles.data.map(async (profile) => {
-    const { data, error } = await supabase.from("runs")
-      .select("id, requested_at, status, sync_summary, error_code")
-      .eq("profile_id", profile.id).eq("kind", "sync")
-      .order("requested_at", { ascending: false }).limit(1).maybeSingle();
+
+  // One query for every profile, not one per profile: this page auto-refreshes,
+  // so a per-profile lookup multiplied the round trips on each refresh.
+  const latestByProfile = new Map<string, SyncRun>();
+  if (profiles.data.length > 0) {
+    const { data, error } = await supabase.from("latest_profile_sync_runs")
+      .select("id, requested_at, status, sync_summary, error_code, profile_id");
     if (error) throw new Error("최근 동기화를 불러오지 못했습니다.");
-    return { ...profile, latestSync: data };
-  }));
+    for (const { profile_id, ...run } of data) {
+      if (profile_id !== null) latestByProfile.set(profile_id, run as SyncRun);
+    }
+  }
+
+  const items = profiles.data.map((profile) => ({ ...profile, latestSync: latestByProfile.get(profile.id) ?? null }));
   return { profiles: items, heartbeats: heartbeats.data };
 }

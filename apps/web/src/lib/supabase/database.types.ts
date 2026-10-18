@@ -61,6 +61,12 @@ isOneToOne: false
       foreignKeyName: "condition_snapshots_run_id_fkey"
       columns: ["run_id"]
 isOneToOne: false
+      referencedRelation: "latest_profile_sync_runs"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "condition_snapshots_run_id_fkey"
+      columns: ["run_id"]
+isOneToOne: false
       referencedRelation: "runs"
       referencedColumns: ["id"]
     }
@@ -88,6 +94,12 @@ isOneToOne: false
       columns: ["profile_id"]
 isOneToOne: false
       referencedRelation: "broker_profiles"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "condition_sync_events_run_id_fkey"
+      columns: ["run_id"]
+isOneToOne: false
+      referencedRelation: "latest_profile_sync_runs"
       referencedColumns: ["id"]
     },{
       foreignKeyName: "condition_sync_events_run_id_fkey"
@@ -133,6 +145,12 @@ isOneToOne: false
       foreignKeyName: "run_results_run_id_fkey"
       columns: ["run_id"]
 isOneToOne: false
+      referencedRelation: "latest_profile_sync_runs"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "run_results_run_id_fkey"
+      columns: ["run_id"]
+isOneToOne: false
       referencedRelation: "runs"
       referencedColumns: ["id"]
     }
@@ -150,6 +168,12 @@ isOneToOne: false
                   }
                   Relationships: [
                     {
+      foreignKeyName: "runs_compared_run_id_fkey"
+      columns: ["compared_run_id"]
+isOneToOne: false
+      referencedRelation: "latest_profile_sync_runs"
+      referencedColumns: ["id"]
+    },{
       foreignKeyName: "runs_compared_run_id_fkey"
       columns: ["compared_run_id"]
 isOneToOne: false
@@ -238,7 +262,21 @@ isOneToOne: false
                 }
           }
           Views: {
-            [_ in never]: never
+            "latest_profile_sync_runs": {
+                  Row: {
+                    "error_code": string | null,"id": string | null,"profile_id": string | null,"requested_at": string | null,"status": string | null,"sync_summary": Json | null
+                  }
+                  ComputedFields: never
+                  Relationships: [
+                    {
+      foreignKeyName: "runs_profile_id_fkey"
+      columns: ["profile_id"]
+isOneToOne: false
+      referencedRelation: "broker_profiles"
+      referencedColumns: ["id"]
+    }
+                  ]
+                }
           }
           Functions: {
             "cancel_run":

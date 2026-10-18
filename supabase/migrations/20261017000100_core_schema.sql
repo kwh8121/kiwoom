@@ -221,6 +221,17 @@ create index runs_strategy_id_finished_at_idx on public.runs (strategy_id, finis
 -- Cascading deletes and the diagnostics lookup both filter on run_id.
 -- condition_snapshots already has run_id as the unique (run_id, condition_id) prefix.
 create index condition_sync_events_run_id_idx on public.condition_sync_events (run_id);
+-- The profile list needs one latest sync per profile. security_invoker keeps
+-- the caller's RLS on runs, and distinct on bounds the result to one row each
+-- so no profile can be pushed out by another profile's history.
+create view public.latest_profile_sync_runs with (security_invoker = true) as
+  select distinct on (profile_id)
+    profile_id, id, requested_at, status, sync_summary, error_code
+  from public.runs
+  where kind = 'sync'
+  order by profile_id, requested_at desc, id desc;
+grant select on public.latest_profile_sync_runs to authenticated;
+
 -- Unindexed foreign keys force a sequential scan on every parent delete.
 create index condition_snapshots_condition_id_idx on public.condition_snapshots (condition_id);
 create index strategies_profile_id_idx on public.strategies (profile_id);
