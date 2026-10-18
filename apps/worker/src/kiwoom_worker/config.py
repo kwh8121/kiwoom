@@ -63,7 +63,7 @@ def load_settings(env: Mapping[str, str]) -> WorkerSettings:
     if settings.transport == "fixture":
         if settings.fixture_file is None:
             raise ConfigError("KIWOOM_WORKER_FIXTURE_FILE is required for fixture transport")
-        if not _database_is_local(settings.database_url):
+        if not _database_is_local(settings.database_url, env):
             raise ConfigError("fixture transport requires a localhost or 127.0.0.1 database URL")
     return settings
 
@@ -93,13 +93,22 @@ def load_profiles(path: Path) -> dict[str, Credentials]:
     return loaded
 
 
-def _database_is_local(database_url: str) -> bool:
+def _database_is_local(database_url: str, env: Mapping[str, str]) -> bool:
     try:
         params = conninfo_to_dict(database_url)
     except ProgrammingError:
         raise ConfigError("KIWOOM_WORKER_DATABASE_URL is invalid") from None
 
     if params.get("service"):
+        return False
+    if env.get("PGSERVICE"):
+        return False
+
+    environment_host = env.get("PGHOST")
+    if environment_host and any(host.lower() not in {"localhost", "127.0.0.1"} for host in environment_host.split(",")):
+        return False
+    environment_hostaddr = env.get("PGHOSTADDR")
+    if environment_hostaddr and any(address != "127.0.0.1" for address in environment_hostaddr.split(",")):
         return False
 
     hosts = params.get("host")

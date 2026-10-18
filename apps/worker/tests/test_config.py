@@ -55,6 +55,24 @@ def test_fixture_transport_rejects_libpq_remote_overrides(query: str) -> None:
         )
 
 
+@pytest.mark.parametrize(
+    ("name", "value"),
+    [("PGHOST", "remote.example.invalid"), ("PGHOSTADDR", "203.0.113.8"), ("PGSERVICE", "remote")],
+)
+def test_fixture_transport_rejects_remote_libpq_environment(name: str, value: str) -> None:
+    env = {
+        "KIWOOM_WORKER_DATABASE_URL": "postgresql://worker:masked@localhost/postgres",
+        "KIWOOM_WORKER_ID": "worker-1",
+        "KIWOOM_WORKER_PROFILES_FILE": "/tmp/profiles.toml",
+        "KIWOOM_WORKER_TRANSPORT": "fixture",
+        "KIWOOM_WORKER_FIXTURE_FILE": "/tmp/e2e_market.json",
+        name: value,
+    }
+
+    with pytest.raises(ConfigError, match="localhost"):
+        load_settings(env)
+
+
 def test_profiles_file_rejects_owner_execute_permissions(tmp_path: Path) -> None:
     path = tmp_path / "profiles.toml"
     path.write_text(

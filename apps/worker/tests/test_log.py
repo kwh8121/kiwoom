@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import logging
 
+import pytest
+
 from kiwoom_worker.log import RedactingFilter
 
 
@@ -44,4 +46,23 @@ def test_redacting_filter_masks_rendered_objects_keys_and_tracebacks() -> None:
     assert record.args == ()
     assert record.exc_text is not None
     assert "maskme" not in record.exc_text
+
+
+@pytest.mark.parametrize("secret", ["line1\nline2", "quote'backslash\\value"])
+def test_redacting_filter_masks_secrets_before_percent_r_escaping(secret: str) -> None:
+    record = logging.LogRecord(
+        name="kiwoom-worker",
+        level=logging.INFO,
+        pathname=__file__,
+        lineno=50,
+        msg="payload=%r",
+        args=({"sensitive-key": secret},),
+        exc_info=None,
+    )
+
+    RedactingFilter([secret]).filter(record)
+    rendered = logging.Formatter().format(record)
+
+    assert secret not in rendered
+    assert repr(secret)[1:-1] not in rendered
 
