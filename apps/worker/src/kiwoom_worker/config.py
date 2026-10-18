@@ -17,6 +17,11 @@ class ConfigError(ValueError):
     pass
 
 
+# Must match worker.max_lease_seconds() in the worker RPC migration: a lease
+# blocks its profile until it expires, so claim_next_run refuses longer ones.
+MAX_LEASE_SECONDS = 900
+
+
 @dataclass(frozen=True)
 class WorkerSettings:
     database_url: str
@@ -60,12 +65,33 @@ def load_settings(env: Mapping[str, str]) -> WorkerSettings:
         rate_limit_retries=_get_int(env, "KIWOOM_WORKER_RATE_LIMIT_RETRIES", 3),
         run_timeout_s=_get_float(env, "KIWOOM_WORKER_RUN_TIMEOUT_S", 120.0),
     )
+    _validate_bounds(settings)
     if settings.transport == "fixture":
         if settings.fixture_file is None:
             raise ConfigError("KIWOOM_WORKER_FIXTURE_FILE is required for fixture transport")
         if not _database_is_local(settings.database_url, env):
             raise ConfigError("fixture transport requires a localhost or 127.0.0.1 database URL")
     return settings
+
+
+def _validate_bounds(settings: WorkerSettings) -> None:
+    positive: tuple[tuple[str, float], ...] = (
+        ("KIWOOM_WORKER_POLL_INTERVAL_S", settings.poll_interval_s),
+        ("KIWOOM_WORKER_HEARTBEAT_INTERVAL_S", settings.heartbeat_interval_s),
+        ("KIWOOM_WORKER_LEASE_SECONDS", settings.lease_seconds),
+        ("KIWOOM_WORKER_RESPONSE_TIMEOUT_S", settings.response_timeout_s),
+        ("KIWOOM_WORKER_MAX_PAGES", settings.max_pages),
+        ("KIWOOM_WORKER_RUN_TIMEOUT_S", settings.run_timeout_s),
+    )
+    for key, value in positive:
+        if value <= 0:
+            raise ConfigError(f"{key} must be greater than 0")
+    if settings.request_interval_s < 0:
+        raise ConfigError("KIWOOM_WORKER_REQUEST_INTERVAL_S must not be negative")
+    if settings.rate_limit_retries < 0:
+        raise ConfigError("KIWOOM_WORKER_RATE_LIMIT_RETRIES must not be negative")
+    if settings.lease_seconds > MAX_LEASE_SECONDS:
+        raise ConfigError(f"KIWOOM_WORKER_LEASE_SECONDS must not exceed {MAX_LEASE_SECONDS}")
 
 
 def load_profiles(path: Path) -> dict[str, Credentials]:

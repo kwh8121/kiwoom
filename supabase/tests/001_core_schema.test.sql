@@ -1,5 +1,5 @@
 begin;
-select plan(10);
+select plan(12);
 
 select has_table('public', 'runs', 'runs table exists');
 -- Fail immediately on a missing runs relation before preparing dependent fixtures.
@@ -30,6 +30,8 @@ select throws_ok($$insert into public.strategies(user_id, profile_id, name) valu
 select throws_ok($$update public.conditions set name = 'x'$$, '42501', null, 'name column not updatable');
 select throws_ok($$insert into public.strategies(user_id, profile_id, name, current_version_id) values ('10000000-0000-0000-0000-000000000002', '20000000-0000-0000-0000-000000000002', 'invalid version link', '50000000-0000-0000-0000-000000000001')$$, '42501', null, 'B cannot assign A version during strategy creation');
 select lives_ok($$insert into public.strategies(user_id, profile_id, name) values ('10000000-0000-0000-0000-000000000002', '20000000-0000-0000-0000-000000000002', 'B strategy')$$, 'B can create strategy with own profile and default server fields');
+select throws_ok($$insert into public.broker_profiles(user_id, alias, mode, last_ok_at) values ('10000000-0000-0000-0000-000000000002', 'demo-b2', 'demo', now())$$, '42501', null, 'worker health fields not insertable by clients');
+select lives_ok($$insert into public.broker_profiles(user_id, alias, mode, display_name) values ('10000000-0000-0000-0000-000000000002', 'demo-b3', 'demo', 'B demo')$$, 'B can create profile with client-owned columns');
 reset role;
 select throws_ok($$insert into public.conditions(user_id, profile_id, seq, name) values ('10000000-0000-0000-0000-000000000001', '20000000-0000-0000-0000-000000000001', '1', 'dup')$$, '23505', null, 'two active rows with same seq rejected');
 select lives_ok($$update public.conditions set is_active = false where seq = '1'; insert into public.conditions(user_id, profile_id, seq, name) values ('10000000-0000-0000-0000-000000000001', '20000000-0000-0000-0000-000000000001', '1', 'new')$$, 'inactive + active same seq allowed');

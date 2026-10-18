@@ -4,7 +4,12 @@ from pathlib import Path
 
 import pytest
 
-from kiwoom_worker.config import ConfigError, load_profiles, load_settings
+from kiwoom_worker.config import (
+    MAX_LEASE_SECONDS,
+    ConfigError,
+    load_profiles,
+    load_settings,
+)
 
 
 def test_profiles_file_must_be_0600(tmp_path: Path) -> None:
@@ -23,6 +28,49 @@ secretkey = "demo-secret"
 
     with pytest.raises(ConfigError, match="0600"):
         load_profiles(path)
+
+
+def _live_env(**overrides: str) -> dict[str, str]:
+    env = {
+        "KIWOOM_WORKER_DATABASE_URL": "postgresql://worker:secret@db.example.invalid:5432/postgres",
+        "KIWOOM_WORKER_ID": "worker-1",
+        "KIWOOM_WORKER_PROFILES_FILE": "/tmp/profiles.toml",
+    }
+    env.update(overrides)
+    return env
+
+
+@pytest.mark.parametrize(
+    ("key", "value"),
+    [
+        ("KIWOOM_WORKER_POLL_INTERVAL_S", "0"),
+        ("KIWOOM_WORKER_HEARTBEAT_INTERVAL_S", "-1"),
+        ("KIWOOM_WORKER_LEASE_SECONDS", "0"),
+        ("KIWOOM_WORKER_RESPONSE_TIMEOUT_S", "0"),
+        ("KIWOOM_WORKER_MAX_PAGES", "0"),
+        ("KIWOOM_WORKER_RUN_TIMEOUT_S", "-5"),
+    ],
+)
+def test_non_positive_settings_are_rejected(key: str, value: str) -> None:
+    with pytest.raises(ConfigError, match="greater than 0"):
+        load_settings(_live_env(**{key: value}))
+
+
+@pytest.mark.parametrize("key", ["KIWOOM_WORKER_REQUEST_INTERVAL_S", "KIWOOM_WORKER_RATE_LIMIT_RETRIES"])
+def test_negative_settings_are_rejected(key: str) -> None:
+    with pytest.raises(ConfigError, match="must not be negative"):
+        load_settings(_live_env(**{key: "-1"}))
+
+
+def test_request_interval_may_be_zero() -> None:
+    settings = load_settings(_live_env(KIWOOM_WORKER_REQUEST_INTERVAL_S="0"))
+    assert settings.request_interval_s == 0
+
+
+def test_lease_seconds_capped_to_rpc_limit() -> None:
+    assert load_settings(_live_env(KIWOOM_WORKER_LEASE_SECONDS=str(MAX_LEASE_SECONDS))).lease_seconds == MAX_LEASE_SECONDS
+    with pytest.raises(ConfigError, match=str(MAX_LEASE_SECONDS)):
+        load_settings(_live_env(KIWOOM_WORKER_LEASE_SECONDS=str(MAX_LEASE_SECONDS + 1)))
 
 
 def test_fixture_transport_requires_local_db() -> None:

@@ -41,6 +41,10 @@ begin
       version = excluded.version, seen_at = excluded.seen_at;
 end $$;
 
+-- A lease blocks its profile until it expires, so cap how far ahead it may run.
+create function worker.max_lease_seconds() returns int language sql immutable
+set search_path = '' as $$ select 900 $$;
+
 create function worker.claim_next_run(p_worker_id text, p_aliases text[], p_lease_seconds int)
 returns jsonb language plpgsql security definer set search_path = '' as $$
 declare
@@ -49,7 +53,8 @@ declare
   result jsonb;
 begin
   if nullif(btrim(p_worker_id), '') is null or p_aliases is null
-     or p_lease_seconds is null or p_lease_seconds < 1 then raise exception 'PAYLOAD_INVALID'; end if;
+     or p_lease_seconds is null or p_lease_seconds < 1
+     or p_lease_seconds > worker.max_lease_seconds() then raise exception 'PAYLOAD_INVALID'; end if;
   for expired in select r.* from public.runs r
     where r.status = 'running' and r.lease_expires_at <= clock_timestamp()
     order by r.id for update skip locked
@@ -110,7 +115,8 @@ declare r public.runs;
 begin
   r := worker.locked_run(p_run_id, p_worker_id, null);
   if r.id is null then return false; end if;
-  if p_lease_seconds is null or p_lease_seconds < 1 then raise exception 'PAYLOAD_INVALID'; end if;
+  if p_lease_seconds is null or p_lease_seconds < 1
+     or p_lease_seconds > worker.max_lease_seconds() then raise exception 'PAYLOAD_INVALID'; end if;
   update public.runs set lease_expires_at = clock_timestamp() + make_interval(secs => p_lease_seconds)
     where id = r.id;
   return true;

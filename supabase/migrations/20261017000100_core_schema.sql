@@ -172,7 +172,8 @@ begin
 end;
 $$;
 
-grant insert on public.broker_profiles to authenticated;
+-- Health and error fields are worker-managed, so clients may not seed them.
+grant insert (user_id, alias, mode, display_name) on public.broker_profiles to authenticated;
 -- Version pointers, generated identifiers and timestamps are server-managed.
 grant insert (user_id, profile_id, name) on public.strategies to authenticated;
 grant update (display_name) on public.broker_profiles to authenticated;
@@ -206,3 +207,22 @@ create policy owner_update on public.conditions
   for update to authenticated
   using (user_id = (select auth.uid()))
   with check (user_id = (select auth.uid()));
+
+-- Run history only grows, so every ordered lookup needs its own index.
+-- Latest sync per profile, and the condition page's recent-run window.
+create index runs_profile_kind_requested_at_idx
+  on public.runs (profile_id, kind, requested_at desc);
+-- The run list reads the newest 50 rows for one owner.
+create index runs_user_id_requested_at_idx on public.runs (user_id, requested_at desc);
+drop index runs_user_id_idx;
+-- worker.complete_search_run resolves the previous successful run to diff against.
+create index runs_strategy_id_finished_at_idx on public.runs (strategy_id, finished_at desc)
+  where status = 'succeeded' and kind = 'search';
+-- Cascading deletes and the diagnostics lookup both filter on run_id.
+-- condition_snapshots already has run_id as the unique (run_id, condition_id) prefix.
+create index condition_sync_events_run_id_idx on public.condition_sync_events (run_id);
+-- Unindexed foreign keys force a sequential scan on every parent delete.
+create index condition_snapshots_condition_id_idx on public.condition_snapshots (condition_id);
+create index strategies_profile_id_idx on public.strategies (profile_id);
+create index runs_strategy_version_id_idx on public.runs (strategy_version_id);
+create index runs_compared_run_id_idx on public.runs (compared_run_id);

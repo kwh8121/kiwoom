@@ -1,5 +1,5 @@
 begin;
-select plan(63);
+select plan(66);
 
 -- Missing the worker schema is the intended initial RED, before role setup.
 select is(worker.claim_next_run('w1', array['other'], 60), null::jsonb, 'empty queue returns null');
@@ -24,6 +24,9 @@ select set_config('test.run',(public.request_run('search','20000000-0000-0000-00
 reset role;
 select set_config('test.payload', '{"window_start":"2026-10-18T00:00:00Z","window_end":"2026-10-18T00:00:01Z","market_phase":"weekend","snapshots":[{"condition_id":"40000000-0000-0000-0000-000000000001","seq":"0","name":"A","started_at":"2026-10-18T00:00:00Z","completed_at":"2026-10-18T00:00:01Z","page_count":1,"members":[{"code":"0010F0","raw_code":"A0010F0","instrument_type":"stock","name":"First","price":3195,"change_rate":"6.86"}]},{"condition_id":"40000000-0000-0000-0000-000000000002","seq":"1","name":"B","started_at":"2026-10-18T00:00:00Z","completed_at":"2026-10-18T00:00:01Z","page_count":1,"members":[{"code":"0010F0","raw_code":"A0010F0","instrument_type":"stock","name":"Second","price":3200,"change_rate":"6.90"}]}],"results":[{"code":"0010F0","matched_condition_ids":["40000000-0000-0000-0000-000000000001","40000000-0000-0000-0000-000000000002"]}],"excluded_codes":["000660"]}',true);
 set local role kiwoom_worker;
+-- A lease blocks its profile for its whole duration, so an absurd one is refused.
+select throws_ok($$select worker.claim_next_run('w1',array['demo-a'],901)$$,null,'PAYLOAD_INVALID','lease above the cap rejected at claim');
+select throws_ok($$select worker.claim_next_run('w1',array['demo-a'],0)$$,null,'PAYLOAD_INVALID','non-positive lease rejected at claim');
 select is(worker.claim_next_run('w1',array['other'],60),null::jsonb,'alias filter skips a queued run for another profile');
 select is(worker.claim_next_run('w1',array['demo-a'],60)->>'kind','search','claims queued search run');
 select is(worker.claim_next_run('w2',array['demo-a'],60),null::jsonb,'running run not double-claimed');
@@ -91,6 +94,7 @@ set local role kiwoom_worker;
 select is(worker.claim_next_run('w1',array['demo-a'],60)->'profile'->>'alias','demo-a','claim includes profile contract');
 select ok(not worker.extend_lease(current_setting('test.run')::uuid,'w2',60),'non-owner cannot extend');
 select ok(worker.extend_lease(current_setting('test.run')::uuid,'w1',60),'owner extends lease');
+select throws_ok($$select worker.extend_lease(current_setting('test.run')::uuid,'w1',901)$$,null,'PAYLOAD_INVALID','lease above the cap rejected at extend');
 select throws_ok($$select worker.complete_search_run(current_setting('test.run')::uuid,'w1',current_setting('test.payload')::jsonb #- '{snapshots,1}')$$,'P0001','PAYLOAD_INVALID','every leaf snapshot is required');
 select throws_ok($$select worker.complete_search_run(current_setting('test.run')::uuid,'w1',jsonb_set(current_setting('test.payload')::jsonb,'{results,0,code}','"000001"'))$$,'P0001','PAYLOAD_INVALID','result must exist in matched snapshots');
 select throws_ok($$select worker.complete_search_run(current_setting('test.run')::uuid,'w1',jsonb_set(current_setting('test.payload')::jsonb,'{snapshots,0,is_complete}','false'))$$,'P0001','PAYLOAD_INVALID','incomplete snapshot cannot succeed');
