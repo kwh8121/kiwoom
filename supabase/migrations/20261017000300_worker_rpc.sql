@@ -85,14 +85,22 @@ end $$;
 -- transaction start and would let old, long-lived transactions revive leases).
 create function worker.locked_run(p_run_id uuid, p_worker_id text, p_kind text)
 returns public.runs language plpgsql security definer set search_path = '' as $$
-declare r public.runs;
+declare
+  seed public.runs;
+  r public.runs;
 begin
+  if p_worker_id is null then return null; end if;
+  select * into seed from public.runs where id = p_run_id;
+  if not found then return null; end if;
+  perform 1 from public.broker_profiles
+    where id = seed.profile_id and user_id = seed.user_id
+    for update;
+  if not found then return null; end if;
   select * into r from public.runs where id = p_run_id for update;
   if not found or r.status <> 'running' or r.lease_owner is distinct from p_worker_id
-     or p_worker_id is null or r.lease_expires_at is null or r.lease_expires_at <= clock_timestamp()
+     or r.lease_expires_at is null or r.lease_expires_at <= clock_timestamp()
      or (p_kind is not null and r.kind <> p_kind) then return null; end if;
-  perform 1 from public.broker_profiles where id = r.profile_id and user_id = r.user_id;
-  if not found then return null; end if;
+  if r.profile_id <> seed.profile_id or r.user_id <> seed.user_id then return null; end if;
   return r;
 end $$;
 
@@ -138,7 +146,8 @@ begin
     seen := array_append(seen, condition_id);
     perform 1 from jsonb_array_elements(refs) ref
       join public.conditions c on c.id = condition_id and c.user_id = r.user_id and c.profile_id = r.profile_id
-      where ref->>'conditionId' = condition_id::text and ref->>'seq' = item->>'seq' and ref->>'name' = item->>'name';
+      where ref->>'conditionId' = condition_id::text and ref->>'seq' = item->>'seq' and ref->>'name' = item->>'name'
+      for share of c;
     if not found then raise exception 'PAYLOAD_INVALID'; end if;
     start_time := (item->>'started_at')::timestamptz;
     end_time := (item->>'completed_at')::timestamptz;
@@ -171,6 +180,7 @@ create function worker.complete_search_run(p_run_id uuid, p_worker_id text, p_pa
 returns boolean language plpgsql security definer set search_path = '' as $$
 declare
   r public.runs;
+  lease_deadline timestamptz;
   previous_id uuid;
   item jsonb;
   matched uuid[];
@@ -181,6 +191,7 @@ declare
 begin
   r := worker.locked_run(p_run_id,p_worker_id,'search');
   if r.id is null then return false; end if;
+  lease_deadline := r.lease_expires_at;
   if jsonb_typeof(p_payload) is distinct from 'object'
      or jsonb_typeof(p_payload->'results') is distinct from 'array'
      or jsonb_typeof(p_payload->'excluded_codes') is distinct from 'array'
@@ -216,12 +227,12 @@ begin
           then 'kept' else 'new' end,member.price,member.change_rate);
   end loop;
   -- An expiry during payload processing rolls back every write in this block.
-  if r.lease_expires_at <= clock_timestamp() then raise exception using errcode = 'PT001', message = 'LEASE_LOST'; end if;
   update public.runs set status = 'succeeded',finished_at = clock_timestamp(),lease_owner = null,lease_expires_at = null,
     window_start = start_time,window_end = end_time,market_phase = p_payload->>'market_phase',
     compared_run_id = previous_id,excluded_codes = exclusions,result_count = jsonb_array_length(p_payload->'results'),
     error_code = null,error_message = null where id = r.id;
   update public.broker_profiles set last_ok_at = clock_timestamp(),last_error_code = null,last_error_message = null where id = r.profile_id;
+  if lease_deadline <= clock_timestamp() then raise exception using errcode = 'PT001', message = 'LEASE_LOST'; end if;
   return true;
 exception
   when sqlstate 'PT001' then return false;
@@ -232,6 +243,7 @@ create function worker.complete_sync_run(p_run_id uuid, p_worker_id text, p_item
 returns jsonb language plpgsql security definer set search_path = '' as $$
 declare
   r public.runs;
+  lease_deadline timestamptz;
   old public.conditions;
   item jsonb;
   new_id uuid;
@@ -244,6 +256,7 @@ declare
 begin
   r := worker.locked_run(p_run_id,p_worker_id,'sync');
   if r.id is null then return 'false'::jsonb; end if;
+  lease_deadline := r.lease_expires_at;
   if jsonb_typeof(p_items) is distinct from 'array' then raise exception 'PAYLOAD_INVALID'; end if;
   if exists(select 1 from jsonb_array_elements(p_items) e where jsonb_typeof(e->'seq') is distinct from 'string'
       or jsonb_typeof(e->'name') is distinct from 'string' or nullif(e->>'seq','') is null or nullif(e->>'name','') is null)
@@ -278,11 +291,11 @@ begin
       end if;
     end if;
   end loop;
-  if r.lease_expires_at <= clock_timestamp() then raise exception using errcode = 'PT001', message = 'LEASE_LOST'; end if;
   summary := jsonb_build_object('added',added,'removed',removed,'replaced',replaced,'unchanged',unchanged);
   update public.runs set status = 'succeeded',finished_at = clock_timestamp(),lease_owner = null,lease_expires_at = null,
     sync_summary = summary,error_code = null,error_message = null where id = r.id;
   update public.broker_profiles set last_ok_at = clock_timestamp(),last_error_code = null,last_error_message = null where id = r.profile_id;
+  if lease_deadline <= clock_timestamp() then raise exception using errcode = 'PT001', message = 'LEASE_LOST'; end if;
   return summary;
 exception
   when sqlstate 'PT001' then return 'false'::jsonb;
@@ -291,19 +304,23 @@ end $$;
 
 create function worker.fail_run(p_run_id uuid,p_worker_id text,p_error_code text,p_error_message text,p_retryable boolean,p_partial jsonb)
 returns text language plpgsql security definer set search_path = '' as $$
-declare r public.runs; next_status text;
+declare
+  r public.runs;
+  lease_deadline timestamptz;
+  next_status text;
 begin
   r := worker.locked_run(p_run_id,p_worker_id,null);
   if r.id is null then return null; end if;
+  lease_deadline := r.lease_expires_at;
   if nullif(p_error_code,'') is null or p_retryable is null then raise exception 'PAYLOAD_INVALID'; end if;
   perform worker.store_snapshots(r.id,p_partial,false);
   next_status := case when p_retryable and r.attempt < r.max_attempts then 'queued'
     when p_error_code = 'RUN_TIMEOUT' then 'timed_out' else 'failed' end;
-  if r.lease_expires_at <= clock_timestamp() then raise exception using errcode = 'PT001', message = 'LEASE_LOST'; end if;
   update public.runs set status = next_status,error_code = p_error_code,error_message = p_error_message,
     finished_at = case when next_status = 'queued' then null else clock_timestamp() end,
     lease_owner = null,lease_expires_at = null where id = r.id;
   update public.broker_profiles set last_error_code = p_error_code,last_error_message = p_error_message where id = r.profile_id;
+  if lease_deadline <= clock_timestamp() then raise exception using errcode = 'PT001', message = 'LEASE_LOST'; end if;
   return next_status;
 exception
   when sqlstate 'PT001' then return null;
