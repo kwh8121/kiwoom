@@ -69,6 +69,7 @@ password = env.pop('E2E_ROLE_PASSWORD')
 child = None
 created = False
 stop_deadline = None
+kill_attempted = False
 def stop(*_):
     global stop_deadline
     if child is not None:
@@ -100,6 +101,7 @@ try:
             child.wait(timeout=.25)
         except subprocess.TimeoutExpired:
             if stop_deadline is not None and time.monotonic() >= stop_deadline:
+                kill_attempted = True
                 child.kill()
                 try:
                     child.wait(timeout=2)
@@ -110,13 +112,14 @@ finally:
     failures = []
     if child is not None:
         try:
-            if child.poll() is None:
+            if child.poll() is None and not kill_attempted:
                 child.terminate()
-            try:
-                child.wait(timeout=5)
-            except subprocess.TimeoutExpired:
-                child.kill()
-                child.wait(timeout=2)
+                try:
+                    child.wait(timeout=5)
+                except subprocess.TimeoutExpired:
+                    kill_attempted = True
+                    child.kill()
+                    child.wait(timeout=2)
         except Exception as exc:
             failures.append(type(exc).__name__)
     try:
