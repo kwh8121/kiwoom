@@ -4,9 +4,17 @@ import { strategyDefinitionSchema } from "./schema";
 import { validateDefinition } from "./validate";
 import type { ConditionInfo, StrategyDefinition, StrategyExpr, ValidationIssueCode } from "./types";
 
-const cases = JSON.parse(readFileSync(new URL("../../../../../packages/contracts/cases/validate.json", import.meta.url), "utf8")).cases as {
+const rawCases = readFileSync(new URL("../../../../../packages/contracts/cases/validate.json", import.meta.url), "utf8");
+const cases = JSON.parse(rawCases).cases as {
   name: string; definition: unknown; conditions: Record<string, ConditionInfo>; issues: ValidationIssueCode[];
 }[];
+const floatFixtureStart = rawCases.indexOf('"name": "schema_invalid_schema_version_float"');
+const nextFixtureStart = rawCases.indexOf('"name":', floatFixtureStart + 1);
+const floatFixtureText = rawCases.slice(floatFixtureStart, nextFixtureStart < 0 ? undefined : nextFixtureStart);
+const floatFixtureVersion = floatFixtureText.match(/"schemaVersion"\s*:\s*([0-9.]+)/)?.[1];
+if (floatFixtureVersion !== "1.0") {
+  throw new Error("schema_invalid_schema_version_float must retain its lexical 1.0 value");
+}
 
 for (const c of cases) {
   // JSON.parse erases Python's int/float distinction: both 1 and 1.0 become JS 1.
@@ -19,6 +27,7 @@ const definition = (expr: StrategyExpr): StrategyDefinition => ({ schemaVersion:
 const conditions = new Map<string, ConditionInfo>([["A", { profileId: "p", active: true }]]);
 
 test("JSON decimal schemaVersion loses lexical distinction before validation", () => {
+  expect(floatFixtureVersion).toBe("1.0");
   expect(JSON.parse('{"schemaVersion":1.0}').schemaVersion).toBe(1);
   expect(validateDefinition(definition(leaf("A")), conditions)).toEqual([]);
 });
