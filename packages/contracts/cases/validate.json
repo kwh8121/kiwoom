@@ -1,0 +1,249 @@
+{
+  "cases": [
+    {
+      "name": "valid_duplicate_leaf",
+      "definition": {
+        "schemaVersion": 1,
+        "profileId": "profile-a",
+        "exchange": "K",
+        "expr": {
+          "type": "or",
+          "children": [
+            {"type": "condition", "conditionId": "A"},
+            {
+              "type": "and",
+              "children": [
+                {"type": "condition", "conditionId": "B"},
+                {"type": "condition", "conditionId": "A"}
+              ]
+            }
+          ]
+        }
+      },
+      "conditions": {
+        "A": {"profileId": "profile-a", "active": true},
+        "B": {"profileId": "profile-a", "active": true}
+      },
+      "issues": []
+    },
+    {
+      "name": "too_few_children",
+      "definition": {
+        "schemaVersion": 1,
+        "profileId": "profile-a",
+        "exchange": "K",
+        "expr": {
+          "type": "and",
+          "children": [
+            {"type": "condition", "conditionId": "A"}
+          ]
+        }
+      },
+      "conditions": {
+        "A": {"profileId": "profile-a", "active": true}
+      },
+      "issues": ["TOO_FEW_CHILDREN"]
+    },
+    {
+      "name": "empty_subtract",
+      "definition": {
+        "schemaVersion": 1,
+        "profileId": "profile-a",
+        "exchange": "K",
+        "expr": {
+          "type": "exclude",
+          "base": {"type": "condition", "conditionId": "A"},
+          "subtract": []
+        }
+      },
+      "conditions": {
+        "A": {"profileId": "profile-a", "active": true}
+      },
+      "issues": ["EMPTY_SUBTRACT"]
+    },
+    {
+      "name": "max_depth_exceeded",
+      "definition": {
+        "schemaVersion": 1,
+        "profileId": "profile-a",
+        "exchange": "K",
+        "expr": {
+          "type": "and",
+          "children": [
+            {"type": "condition", "conditionId": "A"},
+            {
+              "type": "and",
+              "children": [
+                {"type": "condition", "conditionId": "B"},
+                {
+                  "type": "and",
+                  "children": [
+                    {"type": "condition", "conditionId": "C"},
+                    {
+                      "type": "and",
+                      "children": [
+                        {"type": "condition", "conditionId": "D"},
+                        {
+                          "type": "and",
+                          "children": [
+                            {"type": "condition", "conditionId": "E"},
+                            {
+                              "type": "and",
+                              "children": [
+                                {"type": "condition", "conditionId": "F"},
+                                {"type": "condition", "conditionId": "G"}
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "conditions": {
+        "A": {"profileId": "profile-a", "active": true},
+        "B": {"profileId": "profile-a", "active": true},
+        "C": {"profileId": "profile-a", "active": true},
+        "D": {"profileId": "profile-a", "active": true},
+        "E": {"profileId": "profile-a", "active": true},
+        "F": {"profileId": "profile-a", "active": true},
+        "G": {"profileId": "profile-a", "active": true}
+      },
+      "issues": ["MAX_DEPTH_EXCEEDED"]
+    },
+    {
+      "name": "max_leaves_exceeded",
+      "definition": {
+        "schemaVersion": 1,
+        "profileId": "profile-a",
+        "exchange": "K",
+        "expr": {
+          "type": "or",
+          "children": [
+            {"type": "condition", "conditionId": "C1"},
+            {"type": "condition", "conditionId": "C2"},
+            {"type": "condition", "conditionId": "C3"},
+            {"type": "condition", "conditionId": "C4"},
+            {"type": "condition", "conditionId": "C5"},
+            {"type": "condition", "conditionId": "C6"},
+            {"type": "condition", "conditionId": "C7"},
+            {"type": "condition", "conditionId": "C8"},
+            {"type": "condition", "conditionId": "C9"},
+            {"type": "condition", "conditionId": "C10"},
+            {"type": "condition", "conditionId": "C11"}
+          ]
+        }
+      },
+      "conditions": {
+        "C1": {"profileId": "profile-a", "active": true},
+        "C2": {"profileId": "profile-a", "active": true},
+        "C3": {"profileId": "profile-a", "active": true},
+        "C4": {"profileId": "profile-a", "active": true},
+        "C5": {"profileId": "profile-a", "active": true},
+        "C6": {"profileId": "profile-a", "active": true},
+        "C7": {"profileId": "profile-a", "active": true},
+        "C8": {"profileId": "profile-a", "active": true},
+        "C9": {"profileId": "profile-a", "active": true},
+        "C10": {"profileId": "profile-a", "active": true},
+        "C11": {"profileId": "profile-a", "active": true}
+      },
+      "issues": ["MAX_LEAVES_EXCEEDED"]
+    },
+    {
+      "name": "unknown_condition",
+      "definition": {
+        "schemaVersion": 1,
+        "profileId": "profile-a",
+        "exchange": "K",
+        "expr": {"type": "condition", "conditionId": "MISSING"}
+      },
+      "conditions": {
+        "A": {"profileId": "profile-a", "active": true}
+      },
+      "issues": ["UNKNOWN_CONDITION"]
+    },
+    {
+      "name": "inactive_condition",
+      "definition": {
+        "schemaVersion": 1,
+        "profileId": "profile-a",
+        "exchange": "K",
+        "expr": {"type": "condition", "conditionId": "A"}
+      },
+      "conditions": {
+        "A": {"profileId": "profile-a", "active": false}
+      },
+      "issues": ["INACTIVE_CONDITION"]
+    },
+    {
+      "name": "profile_mismatch",
+      "definition": {
+        "schemaVersion": 1,
+        "profileId": "profile-a",
+        "exchange": "K",
+        "expr": {"type": "condition", "conditionId": "A"}
+      },
+      "conditions": {
+        "A": {"profileId": "profile-b", "active": true}
+      },
+      "issues": ["PROFILE_MISMATCH"]
+    },
+    {
+      "name": "schema_invalid_schema_version",
+      "definition": {
+        "schemaVersion": 2,
+        "profileId": "profile-a",
+        "exchange": "K",
+        "expr": {"type": "condition", "conditionId": "A"}
+      },
+      "conditions": {
+        "A": {"profileId": "profile-a", "active": true}
+      },
+      "issues": ["SCHEMA_INVALID"]
+    },
+    {
+      "name": "schema_invalid_exchange",
+      "definition": {
+        "schemaVersion": 1,
+        "profileId": "profile-a",
+        "exchange": "A",
+        "expr": {"type": "condition", "conditionId": "A"}
+      },
+      "conditions": {
+        "A": {"profileId": "profile-a", "active": true}
+      },
+      "issues": ["SCHEMA_INVALID"]
+    },
+    {
+      "name": "schema_invalid_extra_key",
+      "definition": {
+        "schemaVersion": 1,
+        "profileId": "profile-a",
+        "exchange": "K",
+        "expr": {"type": "condition", "conditionId": "A", "extra": true}
+      },
+      "conditions": {
+        "A": {"profileId": "profile-a", "active": true}
+      },
+      "issues": ["SCHEMA_INVALID"]
+    },
+    {
+      "name": "schema_invalid_not_type",
+      "definition": {
+        "schemaVersion": 1,
+        "profileId": "profile-a",
+        "exchange": "K",
+        "expr": {"type": "not", "conditionId": "A"}
+      },
+      "conditions": {
+        "A": {"profileId": "profile-a", "active": true}
+      },
+      "issues": ["SCHEMA_INVALID"]
+    }
+  ]
+}
