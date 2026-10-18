@@ -45,7 +45,9 @@ class RedactingFilter(logging.Filter):
     def _replace_secrets(self, value: str) -> str:
         sanitized = value
         for secret in self._secrets:
-            sanitized = sanitized.replace(secret, "***")
+            escaped = repr(secret)[1:-1]
+            for form in {secret, escaped}:
+                sanitized = sanitized.replace(form, "***")
         return sanitized
 
 

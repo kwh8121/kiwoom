@@ -66,3 +66,30 @@ def test_redacting_filter_masks_secrets_before_percent_r_escaping(secret: str) -
     assert secret not in rendered
     assert repr(secret)[1:-1] not in rendered
 
+
+def test_redacting_filter_masks_escaped_custom_object_repr() -> None:
+    secret = "line1\nline2"
+
+    class SecretValue:
+        def __str__(self) -> str:
+            return secret
+
+        def __repr__(self) -> str:
+            return repr(secret)
+
+    record = logging.LogRecord(
+        name="kiwoom-worker",
+        level=logging.INFO,
+        pathname=__file__,
+        lineno=80,
+        msg="payload=%r",
+        args=({"value": SecretValue()},),
+        exc_info=None,
+    )
+
+    RedactingFilter([secret]).filter(record)
+    rendered = logging.Formatter().format(record)
+
+    assert secret not in rendered
+    assert repr(secret)[1:-1] not in rendered
+
