@@ -31,6 +31,22 @@ def test_unknown_top_level_code_without_embedded_match() -> None:
     assert resolve_return_code(42, "plain message") == 42
 
 
+def test_numeric_string_top_level_does_not_count_as_return_code() -> None:
+    assert resolve_return_code("8005", "plain message") is None
+
+
+def test_bool_top_level_does_not_count_as_return_code() -> None:
+    assert resolve_return_code(True, "plain message") is None
+
+
+def test_float_top_level_does_not_count_as_return_code() -> None:
+    assert resolve_return_code(8005.0, "plain message") is None
+
+
+def test_recognized_top_level_int_beats_conflicting_embedded_code() -> None:
+    assert resolve_return_code(900001, "[8005:Token이 유효하지 않습니다]") == 900001
+
+
 def test_kiwoom_api_error_fields() -> None:
     error = KiwoomApiError(900001, "거래소 구분값을 확인해 주세요")
 
