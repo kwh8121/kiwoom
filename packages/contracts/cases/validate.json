@@ -207,6 +207,32 @@
       "issues": ["SCHEMA_INVALID"]
     },
     {
+      "name": "schema_invalid_schema_version_bool",
+      "definition": {
+        "schemaVersion": true,
+        "profileId": "profile-a",
+        "exchange": "K",
+        "expr": {"type": "condition", "conditionId": "MISSING"}
+      },
+      "conditions": {
+        "A": {"profileId": "profile-a", "active": true}
+      },
+      "issues": ["SCHEMA_INVALID"]
+    },
+    {
+      "name": "schema_invalid_schema_version_float",
+      "definition": {
+        "schemaVersion": 1.0,
+        "profileId": "profile-a",
+        "exchange": "K",
+        "expr": {"type": "condition", "conditionId": "A"}
+      },
+      "conditions": {
+        "A": {"profileId": "profile-a", "active": true}
+      },
+      "issues": ["SCHEMA_INVALID"]
+    },
+    {
       "name": "schema_invalid_exchange",
       "definition": {
         "schemaVersion": 1,
@@ -226,6 +252,19 @@
         "profileId": "profile-a",
         "exchange": "K",
         "expr": {"type": "condition", "conditionId": "A", "extra": true}
+      },
+      "conditions": {
+        "A": {"profileId": "profile-a", "active": true}
+      },
+      "issues": ["SCHEMA_INVALID"]
+    },
+    {
+      "name": "schema_invalid_short_circuit_extra_key_unknown_condition",
+      "definition": {
+        "schemaVersion": 1,
+        "profileId": "profile-a",
+        "exchange": "K",
+        "expr": {"type": "condition", "conditionId": "MISSING", "extra": true}
       },
       "conditions": {
         "A": {"profileId": "profile-a", "active": true}

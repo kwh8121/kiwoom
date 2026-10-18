@@ -186,6 +186,35 @@
         },
         "excluded": []
       }
+    },
+    {
+      "name": "nested_exclude_reintroduced",
+      "expr": {
+        "type": "or",
+        "children": [
+          {
+            "type": "exclude",
+            "base": {"type": "condition", "conditionId": "E"},
+            "subtract": [
+              {"type": "condition", "conditionId": "F"}
+            ]
+          },
+          {"type": "condition", "conditionId": "G"}
+        ]
+      },
+      "sets": {
+        "E": ["001", "002", "003"],
+        "F": ["002", "003"],
+        "G": ["002"]
+      },
+      "expected": {
+        "codes": ["001", "002"],
+        "matches": {
+          "001": ["E"],
+          "002": ["E", "F", "G"]
+        },
+        "excluded": ["003"]
+      }
     }
   ]
 }

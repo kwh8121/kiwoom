@@ -83,7 +83,8 @@ def _is_definition_schema_valid(definition: object) -> bool:
         return False
     if set(definition) != {"schemaVersion", "profileId", "exchange", "expr"}:
         return False
-    if definition["schemaVersion"] != 1:
+    schema_version = definition["schemaVersion"]
+    if type(schema_version) is not int or schema_version != 1:
         return False
     if not isinstance(definition["profileId"], str) or not definition["profileId"]:
         return False
