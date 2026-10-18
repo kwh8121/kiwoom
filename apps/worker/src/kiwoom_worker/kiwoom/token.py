@@ -33,7 +33,7 @@ class Credentials:
     def __repr__(self) -> str:
         return (
             "Credentials("
-            f"alias={self.alias!r}, mode={self.mode!r}, appkey='[redacted]', secretkey='[redacted]'"
+            f"alias={self.alias!r}, mode={self.mode!r}, credentials='[redacted]'"
             ")"
         )
 
@@ -101,7 +101,10 @@ class TokenProvider:
 
 
 def _parse_expires_at(value: str) -> datetime:
-    parsed = datetime.strptime(value, "%Y%m%d%H%M%S")
+    try:
+        parsed = datetime.strptime(value, "%Y%m%d%H%M%S")
+    except ValueError:
+        raise ValueError("invalid token expiry format") from None
     return parsed.replace(tzinfo=KST).astimezone(UTC)
 
 

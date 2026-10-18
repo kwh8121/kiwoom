@@ -152,6 +152,31 @@ async def test_error_8001_is_config() -> None:
     assert creds.secretkey not in str(excinfo.value)
 
 
+@pytest.mark.asyncio
+async def test_invalid_expiry_format_is_sanitized() -> None:
+    marker = "probe-value-123"
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        return httpx.Response(
+            200,
+            json={
+                "token": "tok-1",
+                "expires_dt": marker,
+            },
+        )
+
+    start = datetime(2026, 10, 18, 0, 0, tzinfo=UTC)
+    async with _client(handler) as client:
+        provider = TokenProvider(client, FakeClock(start))
+        creds = Credentials("demo-alias", "demo", "demo-key", "demo-secret")
+
+        with pytest.raises(ValueError) as excinfo:
+            await provider.get(creds)
+
+    assert str(excinfo.value) == "invalid token expiry format"
+    assert marker not in str(excinfo.value)
+
+
 def test_credentials_repr_hides_keys() -> None:
     creds = Credentials("alias", "demo", "demo-key", "very-secret")
 
@@ -159,5 +184,6 @@ def test_credentials_repr_hides_keys() -> None:
 
     assert "alias" in rendered
     assert "demo" in rendered
+    assert "secret" not in rendered
     assert "demo-key" not in rendered
     assert "very-secret" not in rendered
