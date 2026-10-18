@@ -25,6 +25,13 @@ export async function updateSession(request: NextRequest): Promise<NextResponse>
     },
   );
   const { data, error } = await supabase.auth.getClaims();
+  if ((error || !data?.claims) && /^\/runs\/[^/]+\/csv$/.test(request.nextUrl.pathname)) {
+    const notFound = new NextResponse(null, { status: 404 });
+    response.cookies.getAll().forEach((cookie) => notFound.cookies.set(cookie));
+    authHeaders.forEach((value, name) => notFound.headers.set(name, value));
+    notFound.headers.set("Cache-Control", "private, no-store");
+    return notFound;
+  }
   if ((error || !data?.claims) && !isPublicPath(request.nextUrl.pathname)) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";

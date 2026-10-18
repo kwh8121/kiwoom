@@ -47,3 +47,25 @@ test.each([true, false])("refresh cookies and cache headers survive with claims=
   expect(response.headers.get("pragma")).toBe("no-cache");
   expect(response.headers.get("location") === null).toBe(signedIn);
 });
+
+test("anonymous exact CSV requests return 404 while preserving refresh headers", async () => {
+  auth.refresh = true;
+  const response = await updateSession(new NextRequest("http://localhost/runs/00000000-0000-4000-8000-000000000001/csv?download=1"));
+  expect(response.status).toBe(404);
+  expect(response.headers.get("location")).toBeNull();
+  expect(response.headers.get("cache-control")).toBe("private, no-store");
+  expect(response.cookies.get("session")?.value).toBe("test-session");
+});
+
+test.each(["/runs/id", "/runs/id/csv/extra", "/runs/id/not-csv"])("anonymous neighboring route %s still redirects", async pathname => {
+  const response = await updateSession(new NextRequest(`http://localhost${pathname}`));
+  expect(response.status).toBe(307);
+  expect(response.headers.get("location")).toContain("/login?");
+});
+
+test("authenticated CSV requests reach the owner-scoped route handler", async () => {
+  auth.claims = { sub: "test-user" };
+  const response = await updateSession(new NextRequest("http://localhost/runs/id/csv"));
+  expect(response.status).toBe(200);
+  expect(response.headers.get("location")).toBeNull();
+});
