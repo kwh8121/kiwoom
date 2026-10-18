@@ -84,6 +84,10 @@ async def process_one(
                     payload = None
                     sync_items = await execute_sync(session_opener)
         except TimeoutError:
+            # Only the run budget reaches this branch. ResponseTimeout also
+            # subclasses TimeoutError, so execute_search and execute_sync must
+            # keep converting it into a retryable RunFailure first; otherwise a
+            # single slow response is misreported as a run-wide timeout.
             await _fail_quietly(db, settings, claimed.run_id, RunFailure("RUN_TIMEOUT", False, "run exceeded timeout", []))
             return True
         except asyncio.CancelledError:

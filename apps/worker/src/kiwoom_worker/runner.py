@@ -9,6 +9,8 @@ from decimal import Decimal
 from typing import Any, Literal
 from zoneinfo import ZoneInfo
 
+from websockets.exceptions import WebSocketException
+
 from kiwoom_worker.clock import Clock
 from kiwoom_worker.core.expr import (
     ConditionInfo,
@@ -26,6 +28,7 @@ from kiwoom_worker.kiwoom.session import (
     ResponseTimeout,
     SearchResult,
 )
+from kiwoom_worker.kiwoom.token import TokenTransportError
 
 KST = ZoneInfo("Asia/Seoul")
 
@@ -88,7 +91,9 @@ def to_run_failure(exc: BaseException, partial: list[dict[str, object]]) -> RunF
         return RunFailure("INCOMPLETE_PAGINATION", True, str(exc), partial)
     if isinstance(exc, ProtocolError):
         return RunFailure("KIWOOM_PROTOCOL", False, str(exc), partial)
-    if isinstance(exc, OSError):
+    # websockets raises from plain Exception, not OSError, so a server-side
+    # disconnect or a 5xx during the handshake would otherwise look terminal.
+    if isinstance(exc, WebSocketException | TokenTransportError | OSError):
         return RunFailure("KIWOOM_TRANSIENT", True, str(exc), partial)
     return RunFailure("KIWOOM_UNKNOWN", False, str(exc), partial)
 
@@ -135,8 +140,23 @@ async def execute_search(job: SearchJob, open_session: SessionOpener, clock: Clo
 
 
 async def execute_sync(open_session: SessionOpener) -> list[dict[str, str]]:
-    async with open_session(False) as session:
-        return [{"seq": item.seq, "name": item.name} for item in await session.list_conditions()]
+    # Mirrors execute_search: a sync used to pass raw exceptions up, so a single
+    # slow response was reported as a run-wide timeout and a stale cached token
+    # failed every later sync until some search happened to refresh it.
+    for force_refresh in (False, True):
+        try:
+            async with open_session(force_refresh) as session:
+                return [{"seq": item.seq, "name": item.name} for item in await session.list_conditions()]
+        except asyncio.CancelledError:
+            raise
+        except Exception as exc:
+            if not force_refresh and _is_token_expired(exc):
+                continue
+            if isinstance(exc, RunFailure):
+                raise
+            raise to_run_failure(exc, []) from exc
+
+    raise AssertionError("unreachable")
 
 
 async def _execute_search_once(

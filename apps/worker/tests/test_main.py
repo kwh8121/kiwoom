@@ -14,7 +14,7 @@ import pytest
 from kiwoom_worker.clock import SystemClock
 from kiwoom_worker.config import WorkerSettings
 from kiwoom_worker.db import ClaimedRun, SettlementRejected
-from kiwoom_worker.kiwoom.session import ConditionItem, SearchResult
+from kiwoom_worker.kiwoom.session import ConditionItem, ResponseTimeout, SearchResult
 from kiwoom_worker.kiwoom.token import Credentials
 from kiwoom_worker.main import _open_session, process_one, run_worker
 from kiwoom_worker.runner import ConditionRefSnapshot, RunFailure
@@ -332,6 +332,24 @@ async def test_run_timeout_marks_timed_out() -> None:
     assert handled is True
     assert db.failed[0][2].code == "RUN_TIMEOUT"
     assert db.failed[0][2].retryable is False
+
+
+@pytest.mark.asyncio
+async def test_sync_response_timeout_is_not_reported_as_a_run_timeout() -> None:
+    clock = FakeClock(datetime(2026, 10, 18, 0, 0, tzinfo=UTC))
+    db = FakeDb(deque([_claimed_sync()]))
+
+    class SlowListSession(SyncSession):
+        async def list_conditions(self) -> list[ConditionItem]:
+            raise ResponseTimeout("timed out after 10.0s")
+
+    opener = _open_session_for(SlowListSession([]))
+
+    handled = await process_one(db, _settings(), _profiles(), opener, clock)
+
+    assert handled is True
+    assert db.failed[0][2].code == "RESPONSE_TIMEOUT"
+    assert db.failed[0][2].retryable is True
 
 
 @pytest.mark.asyncio

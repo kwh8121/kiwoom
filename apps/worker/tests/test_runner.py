@@ -9,14 +9,17 @@ from decimal import Decimal
 from zoneinfo import ZoneInfo
 
 import pytest
+from websockets.exceptions import ConnectionClosedError, InvalidHandshake
 
 from kiwoom_worker.kiwoom.errors import KiwoomApiError
 from kiwoom_worker.kiwoom.parse import Member
 from kiwoom_worker.kiwoom.session import (
     ConditionItem,
     IncompletePagination,
+    ResponseTimeout,
     SearchResult,
 )
+from kiwoom_worker.kiwoom.token import TokenTransportError
 from kiwoom_worker.runner import (
     ConditionRefSnapshot,
     RunFailure,
@@ -360,6 +363,78 @@ async def test_execute_sync_returns_items() -> None:
 
     assert opener.calls == [False]
     assert payload == [{"seq": "0", "name": "A"}, {"seq": "1", "name": "B"}]
+
+
+@dataclass
+class FailingListSession:
+    outcomes: list[BaseException]
+
+    def __post_init__(self) -> None:
+        self._queue = deque(self.outcomes)
+
+    async def list_conditions(self) -> list[ConditionItem]:
+        raise self._queue.popleft()
+
+    async def search(self, seq: str) -> SearchResult:
+        raise AssertionError(f"unexpected search for {seq}")
+
+
+@pytest.mark.asyncio
+async def test_execute_sync_response_timeout_is_retryable() -> None:
+    opener = SessionOpenerRecorder(FailingListSession([ResponseTimeout("timed out after 10.0s")]))
+
+    with pytest.raises(RunFailure) as caught:
+        await execute_sync(opener)
+
+    assert caught.value.code == "RESPONSE_TIMEOUT"
+    assert caught.value.retryable is True
+
+
+@pytest.mark.asyncio
+async def test_execute_sync_token_expired_retries_once_with_refresh() -> None:
+    opener = SessionOpenerRecorder(
+        FailingListSession([KiwoomApiError(8005, "token expired")]),
+        FakeSession(conditions=[ConditionItem("0", "A")], search_plan={}),
+    )
+
+    assert await execute_sync(opener) == [{"seq": "0", "name": "A"}]
+    assert opener.calls == [False, True]
+
+
+@pytest.mark.asyncio
+async def test_execute_sync_token_expired_twice_is_terminal() -> None:
+    opener = SessionOpenerRecorder(
+        FailingListSession([KiwoomApiError(8005, "token expired")]),
+        FailingListSession([KiwoomApiError(8005, "token expired")]),
+    )
+
+    with pytest.raises(RunFailure) as caught:
+        await execute_sync(opener)
+
+    assert caught.value.code == "TOKEN_INVALID"
+    assert opener.calls == [False, True]
+
+
+@pytest.mark.asyncio
+async def test_execute_sync_disconnect_is_transient() -> None:
+    opener = SessionOpenerRecorder(FailingListSession([ConnectionClosedError(None, None)]))
+
+    with pytest.raises(RunFailure) as caught:
+        await execute_sync(opener)
+
+    assert caught.value.code == "KIWOOM_TRANSIENT"
+    assert caught.value.retryable is True
+
+
+def test_connection_and_token_transport_failures_are_transient() -> None:
+    for exc in (
+        ConnectionClosedError(None, None),
+        InvalidHandshake("unexpected status"),
+        TokenTransportError("token request failed: connect error"),
+    ):
+        failure = to_run_failure(exc, [])
+        assert failure.code == "KIWOOM_TRANSIENT", exc
+        assert failure.retryable is True, exc
 
 
 @pytest.mark.asyncio

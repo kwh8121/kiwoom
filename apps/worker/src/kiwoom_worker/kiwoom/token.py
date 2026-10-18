@@ -23,6 +23,10 @@ WS_URLS = {
 }
 
 
+class TokenTransportError(RuntimeError):
+    """The token endpoint was unreachable, which is worth retrying."""
+
+
 @dataclass(frozen=True)
 class Credentials:
     alias: str
@@ -77,8 +81,15 @@ class TokenProvider:
 
         try:
             response = await self._client.post(url, headers=headers, content=body)
+        except httpx.HTTPError as exc:
+            # Keep this distinguishable: a DNS, connect or read failure is
+            # transient, while a RuntimeError would be classified as terminal.
+            message = _sanitize_message(str(exc), creds)
+            raise TokenTransportError(f"token request failed: {message}") from None
+
+        try:
             raw_payload = response.json()
-        except (httpx.HTTPError, ValueError) as exc:
+        except ValueError as exc:
             message = _sanitize_message(str(exc), creds)
             raise RuntimeError(f"token request failed: {message}") from None
 
