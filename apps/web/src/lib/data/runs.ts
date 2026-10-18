@@ -26,13 +26,18 @@ async function allRows<T>(fetchPage: (start: number, end: number) => PromiseLike
 
 export async function getRuns() {
   const supabase = await createServerClient();
-  const [runs, strategies, versions, profiles] = await Promise.all([
-    supabase.from("runs").select("*").order("requested_at", { ascending: false }).limit(50),
-    supabase.from("strategies").select("id, name"),
-    supabase.from("strategy_versions").select("id, version"),
-    supabase.from("broker_profiles").select("id, alias, display_name, mode"),
+  const runs = await supabase.from("runs").select("*").order("requested_at", { ascending: false }).limit(50);
+  if (runs.error) throw new Error("실행 이력을 불러오지 못했습니다.");
+  const strategyIds = [...new Set(runs.data.flatMap(run => run.strategy_id ? [run.strategy_id] : []))];
+  const versionIds = [...new Set(runs.data.flatMap(run => run.strategy_version_id ? [run.strategy_version_id] : []))];
+  const profileIds = [...new Set(runs.data.map(run => run.profile_id))];
+  // Each metadata query is bounded to at most fifty referenced IDs.
+  const [strategies, versions, profiles] = await Promise.all([
+    strategyIds.length ? supabase.from("strategies").select("id, name").in("id", strategyIds) : Promise.resolve({ data: [], error: null }),
+    versionIds.length ? supabase.from("strategy_versions").select("id, version").in("id", versionIds) : Promise.resolve({ data: [], error: null }),
+    profileIds.length ? supabase.from("broker_profiles").select("id, alias, display_name, mode").in("id", profileIds) : Promise.resolve({ data: [], error: null }),
   ]);
-  if (runs.error || strategies.error || versions.error || profiles.error) throw new Error("실행 이력을 불러오지 못했습니다.");
+  if (strategies.error || versions.error || profiles.error) throw new Error("실행 이력을 불러오지 못했습니다.");
   return { runs: runs.data, strategies: strategies.data, versions: versions.data, profiles: profiles.data };
 }
 
