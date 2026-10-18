@@ -13,7 +13,7 @@ import pytest
 
 from kiwoom_worker.clock import SystemClock
 from kiwoom_worker.config import WorkerSettings
-from kiwoom_worker.db import ClaimedRun
+from kiwoom_worker.db import ClaimedRun, SettlementRejected
 from kiwoom_worker.kiwoom.session import ConditionItem, SearchResult
 from kiwoom_worker.kiwoom.token import Credentials
 from kiwoom_worker.main import _open_session, process_one, run_worker
@@ -212,6 +212,95 @@ async def test_completion_database_error_is_not_reported_as_broker_failure() -> 
         await process_one(db, _settings(), _profiles(), opener, clock)
 
     assert db.failed == []
+
+
+@pytest.mark.asyncio
+async def test_rejected_search_payload_is_recorded_instead_of_retried(caplog: pytest.LogCaptureFixture) -> None:
+    class RejectingDb(FakeDb):
+        async def complete_search(self, run_id: str, worker_id: str, payload: dict[str, object]) -> bool:
+            raise SettlementRejected("complete_search_run", RuntimeError("PAYLOAD_INVALID"))
+
+    clock = FakeClock(datetime(2026, 10, 18, 0, 0, tzinfo=UTC))
+    db = RejectingDb(deque([_claimed_search()]))
+    opener = _open_session_for(SearchSession(_search_result(clock=clock)))
+
+    with caplog.at_level(logging.ERROR):
+        handled = await process_one(db, _settings(), _profiles(), opener, clock)
+
+    assert handled is True
+    assert db.failed[0][2].code == "SETTLE_REJECTED"
+    assert db.failed[0][2].retryable is False
+    assert "PAYLOAD_INVALID" in caplog.text
+
+
+@pytest.mark.asyncio
+async def test_rejected_sync_payload_is_recorded_instead_of_retried() -> None:
+    class RejectingDb(FakeDb):
+        async def complete_sync(self, run_id: str, worker_id: str, items: list[dict[str, str]]) -> dict[str, object] | None:
+            raise SettlementRejected("complete_sync_run", RuntimeError("PAYLOAD_INVALID"))
+
+    clock = FakeClock(datetime(2026, 10, 18, 0, 0, tzinfo=UTC))
+    db = RejectingDb(deque([_claimed_sync()]))
+    opener = _open_session_for(SyncSession([ConditionItem("0", "기본종목")]))
+
+    handled = await process_one(db, _settings(), _profiles(), opener, clock)
+
+    assert handled is True
+    assert db.failed[0][2].code == "SETTLE_REJECTED"
+
+
+@pytest.mark.asyncio
+async def test_rejected_failure_report_does_not_end_the_worker(caplog: pytest.LogCaptureFixture) -> None:
+    class RejectingFailDb(FakeDb):
+        async def fail(self, run_id: str, worker_id: str, failure: RunFailure) -> str:
+            raise SettlementRejected("fail_run", RuntimeError("PAYLOAD_INVALID"))
+
+    clock = FakeClock(datetime(2026, 10, 18, 0, 0, tzinfo=UTC))
+    db = RejectingFailDb(deque([_claimed_search(mode="real")]))
+
+    with caplog.at_level(logging.ERROR):
+        handled = await process_one(db, _settings(), _profiles(), _open_session_for(object()), clock)
+
+    assert handled is True
+    assert "PROFILE_CONFIG" in caplog.text
+
+
+@pytest.mark.asyncio
+async def test_heartbeat_failure_does_not_cancel_an_active_run(tmp_path: Path, caplog: pytest.LogCaptureFixture) -> None:
+    profiles_file = tmp_path / "profiles.toml"
+    profiles_file.write_text(
+        '[profiles.demo-a]\nmode = "demo"\nappkey = "demo-key"\nsecretkey = "demo-secret"\n',
+        encoding="utf-8",
+    )
+    profiles_file.chmod(0o600)
+
+    class FlakyHeartbeatDb(FakeDb):
+        async def heartbeat(self, worker_id: str, aliases: list[str], version: str) -> None:
+            self.heartbeats.append((worker_id, aliases, version))
+            raise RuntimeError("heartbeat connection reset")
+
+    clock = SystemClock()
+    db = FlakyHeartbeatDb(deque([_claimed_search(), None]))
+    settings = _settings(profiles_file=profiles_file, heartbeat_interval_s=0.01, poll_interval_s=0.01)
+    stop = asyncio.Event()
+
+    with caplog.at_level(logging.ERROR):
+        worker = asyncio.create_task(
+            run_worker(settings, db, _open_session_for(SearchSession(_search_result(clock=FakeClock(datetime(2026, 10, 18, tzinfo=UTC))))), clock, stop)
+        )
+        try:
+            await asyncio.wait_for(asyncio.shield(_wait_for_search(db)), timeout=1.0)
+        finally:
+            stop.set()
+            await asyncio.wait_for(worker, timeout=1.0)
+
+    assert db.completed_search, "the run must settle despite heartbeat failures"
+    assert "heartbeat failed" in caplog.text
+
+
+async def _wait_for_search(db: FakeDb) -> None:
+    while not db.completed_search:
+        await asyncio.sleep(0)
 
 
 @pytest.mark.asyncio

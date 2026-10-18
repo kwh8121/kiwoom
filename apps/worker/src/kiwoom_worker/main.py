@@ -17,7 +17,7 @@ import httpx
 
 from kiwoom_worker.clock import Clock, SystemClock
 from kiwoom_worker.config import WorkerSettings, load_profiles, load_settings
-from kiwoom_worker.db import PostgresWorkerDb, WorkerDb
+from kiwoom_worker.db import PostgresWorkerDb, SettlementRejected, WorkerDb
 from kiwoom_worker.kiwoom.fixture import FixtureTransport
 from kiwoom_worker.kiwoom.session import ConditionSession
 from kiwoom_worker.kiwoom.token import WS_URLS, Credentials, TokenProvider
@@ -50,12 +50,13 @@ async def process_one(
 
     creds = profiles.get(claimed.alias)
     if creds is None:
-        await db.fail(claimed.run_id, settings.worker_id, RunFailure("PROFILE_CONFIG", False, "profile alias not configured", []))
+        await _fail_quietly(db, settings, claimed.run_id, RunFailure("PROFILE_CONFIG", False, "profile alias not configured", []))
         return True
     if creds.mode != claimed.mode:
-        await db.fail(
+        await _fail_quietly(
+            db,
+            settings,
             claimed.run_id,
-            settings.worker_id,
             RunFailure("PROFILE_CONFIG", False, "profile mode does not match claimed run", []),
         )
         return True
@@ -83,27 +84,56 @@ async def process_one(
                     payload = None
                     sync_items = await execute_sync(session_opener)
         except TimeoutError:
-            await db.fail(claimed.run_id, settings.worker_id, RunFailure("RUN_TIMEOUT", False, "run exceeded timeout", []))
+            await _fail_quietly(db, settings, claimed.run_id, RunFailure("RUN_TIMEOUT", False, "run exceeded timeout", []))
             return True
         except asyncio.CancelledError:
             raise
         except RunFailure as failure:
-            await db.fail(claimed.run_id, settings.worker_id, failure)
+            await _fail_quietly(db, settings, claimed.run_id, failure)
             return True
         except Exception as exc:  # noqa: BLE001 -- classify arbitrary execution failures; DB settlement stays outside this handler.
-            await db.fail(claimed.run_id, settings.worker_id, to_run_failure(exc, []))
+            await _fail_quietly(db, settings, claimed.run_id, to_run_failure(exc, []))
             return True
 
-        if payload is not None:
-            if not await db.complete_search(claimed.run_id, settings.worker_id, payload):
-                LOGGER.warning("lease lost before search completion for run %s", claimed.run_id)
-        elif not await db.complete_sync(claimed.run_id, settings.worker_id, sync_items or []):
-            LOGGER.warning("lease lost before sync completion for run %s", claimed.run_id)
+        try:
+            if payload is not None:
+                if not await db.complete_search(claimed.run_id, settings.worker_id, payload):
+                    LOGGER.warning("lease lost before search completion for run %s", claimed.run_id)
+            elif not await db.complete_sync(claimed.run_id, settings.worker_id, sync_items or []):
+                LOGGER.warning("lease lost before sync completion for run %s", claimed.run_id)
+        except SettlementRejected as rejected:
+            # Re-sending the same payload cannot succeed, so record the real
+            # reason now instead of letting the lease expire and retry until the
+            # run ends as a misleading LEASE_EXPIRED.
+            LOGGER.error("settlement rejected for run %s: %s", claimed.run_id, rejected)
+            await _fail_quietly(
+                db,
+                settings,
+                claimed.run_id,
+                RunFailure("SETTLE_REJECTED", False, str(rejected), []),
+            )
         return True
     finally:
         keepalive_task.cancel()
-        with contextlib.suppress(asyncio.CancelledError):
+        try:
             await keepalive_task
+        except asyncio.CancelledError:
+            pass
+        except Exception:
+            # A keepalive failure must not replace this run's own outcome.
+            LOGGER.exception("lease keepalive failed for run %s", claimed.run_id)
+
+
+async def _fail_quietly(db: WorkerDb, settings: WorkerSettings, run_id: str, failure: RunFailure) -> None:
+    """Record a terminal failure without letting the report itself end the worker.
+
+    A rejected fail_run payload would otherwise crash the process, which leaves
+    the run claimed until its lease expires and burns one of its attempts.
+    """
+    try:
+        await db.fail(run_id, settings.worker_id, failure)
+    except SettlementRejected:
+        LOGGER.exception("could not record failure %s for run %s", failure.code, run_id)
 
 
 async def run_worker(
@@ -130,7 +160,14 @@ async def _heartbeat_worker(
     clock: Clock,
 ) -> None:
     while not stop.is_set():
-        await db.heartbeat(settings.worker_id, aliases, APP_VERSION)
+        try:
+            await db.heartbeat(settings.worker_id, aliases, APP_VERSION)
+        except asyncio.CancelledError:
+            raise
+        except Exception:
+            # Liveness reporting is advisory. Aborting the task group here would
+            # cancel an in-flight Kiwoom run over a transient database blip.
+            LOGGER.exception("heartbeat failed for worker %s", settings.worker_id)
         await _sleep_until_stop(stop, settings.heartbeat_interval_s, clock)
 
 

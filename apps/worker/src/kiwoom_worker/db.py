@@ -3,10 +3,25 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any, Protocol
 
-from psycopg import AsyncConnection
+from psycopg import AsyncConnection, DataError, IntegrityError
+from psycopg.errors import RaiseException
 from psycopg.types.json import Jsonb
 
 from kiwoom_worker.runner import ConditionRefSnapshot, RunFailure
+
+
+class SettlementRejected(Exception):
+    """The database refused a settlement payload.
+
+    The worker RPCs raise PAYLOAD_INVALID (SQLSTATE P0001) for a payload that
+    violates the stored contract, and convert data and constraint errors into
+    the same code. Re-sending the identical payload can never succeed, so this
+    is reported separately from a transient database failure.
+    """
+
+    def __init__(self, operation: str, cause: Exception) -> None:
+        self.operation = operation
+        super().__init__(f"{operation} rejected the payload: {cause}")
 
 
 @dataclass(frozen=True)
@@ -102,14 +117,16 @@ class PostgresWorkerDb:
         return bool(result)
 
     async def complete_search(self, run_id: str, worker_id: str, payload: dict[str, object]) -> bool:
-        result = await self._fetch_scalar(
+        result = await self._settle(
+            "complete_search_run",
             "select worker.complete_search_run(%s::uuid, %s, %s)",
             (run_id, worker_id, Jsonb(payload)),
         )
         return bool(result)
 
     async def complete_sync(self, run_id: str, worker_id: str, items: list[dict[str, str]]) -> dict[str, object] | None:
-        result = await self._fetch_scalar(
+        result = await self._settle(
+            "complete_sync_run",
             "select worker.complete_sync_run(%s::uuid, %s, %s)",
             (run_id, worker_id, Jsonb(items)),
         )
@@ -120,7 +137,8 @@ class PostgresWorkerDb:
         return result
 
     async def fail(self, run_id: str, worker_id: str, failure: RunFailure) -> str | None:
-        result = await self._fetch_scalar(
+        result = await self._settle(
+            "fail_run",
             "select worker.fail_run(%s::uuid, %s, %s, %s, %s, %s)",
             (
                 run_id,
@@ -136,6 +154,12 @@ class PostgresWorkerDb:
         if not isinstance(result, str):
             raise TypeError("worker.fail_run returned non-string payload")
         return result
+
+    async def _settle(self, operation: str, query: str, params: tuple[object, ...]) -> Any:
+        try:
+            return await self._fetch_scalar(query, params)
+        except (RaiseException, DataError, IntegrityError) as exc:
+            raise SettlementRejected(operation, exc) from exc
 
     async def _fetch_one(self, query: str, params: tuple[object, ...]) -> tuple[object, ...] | None:
         async with self._connection.cursor() as cursor:
