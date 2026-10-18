@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 from collections.abc import Callable
 from contextlib import AbstractAsyncContextManager
 from dataclasses import dataclass
@@ -121,7 +122,9 @@ async def execute_search(job: SearchJob, open_session: SessionOpener, clock: Clo
             if not force_refresh and _is_token_expired(exc.cause):
                 continue
             raise to_run_failure(exc.cause, exc.partial) from exc.cause
-        except BaseException as exc:
+        except asyncio.CancelledError:
+            raise
+        except Exception as exc:
             if not force_refresh and _is_token_expired(exc):
                 continue
             if isinstance(exc, RunFailure):
@@ -155,7 +158,9 @@ async def _execute_search_once(
             started_at = clock.now()
             try:
                 result = await session.search(ref.seq)
-            except BaseException as exc:
+            except asyncio.CancelledError:
+                raise
+            except Exception as exc:
                 partial.append(
                     _partial_entry(
                         ref,

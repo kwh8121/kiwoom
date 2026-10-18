@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 from collections import deque
 from contextlib import asynccontextmanager
 from dataclasses import dataclass
@@ -130,6 +131,24 @@ class SessionOpenerRecorder:
             yield session
 
         return _manager()
+
+
+@dataclass
+class BlockingSession:
+    block_list: asyncio.Event | None = None
+    block_search: asyncio.Event | None = None
+
+    async def list_conditions(self) -> list[ConditionItem]:
+        if self.block_list is None:
+            return []
+        await self.block_list.wait()
+        raise AssertionError("list_conditions should have been cancelled")
+
+    async def search(self, seq: str) -> SearchResult:
+        if self.block_search is None:
+            raise AssertionError(f"unexpected search call for {seq}")
+        await self.block_search.wait()
+        raise AssertionError("search should have been cancelled")
 
 
 def _clock() -> FakeClock:
@@ -341,3 +360,42 @@ async def test_execute_sync_returns_items() -> None:
 
     assert opener.calls == [False]
     assert payload == [{"seq": "0", "name": "A"}, {"seq": "1", "name": "B"}]
+
+
+@pytest.mark.asyncio
+async def test_execute_search_cancellation_during_list_conditions_propagates() -> None:
+    clock = _clock()
+    opener = SessionOpenerRecorder(BlockingSession(block_list=asyncio.Event()))
+    task = asyncio.create_task(
+        execute_search(_job(expr=_condition("A"), refs={"A": ("0", "A")}), opener, clock)
+    )
+
+    await asyncio.sleep(0)
+    task.cancel()
+
+    with pytest.raises(asyncio.CancelledError):
+        await task
+
+
+@pytest.mark.asyncio
+async def test_execute_search_cancellation_during_search_propagates() -> None:
+    clock = _clock()
+    opener = SessionOpenerRecorder(
+        BlockingSession(
+            block_search=asyncio.Event(),
+        )
+    )
+
+    async def list_conditions(self) -> list[ConditionItem]:
+        return [ConditionItem("0", "A")]
+
+    opener._sessions[0].list_conditions = list_conditions.__get__(opener._sessions[0], BlockingSession)
+    task = asyncio.create_task(
+        execute_search(_job(expr=_condition("A"), refs={"A": ("0", "A")}), opener, clock)
+    )
+
+    await asyncio.sleep(0)
+    task.cancel()
+
+    with pytest.raises(asyncio.CancelledError):
+        await task
