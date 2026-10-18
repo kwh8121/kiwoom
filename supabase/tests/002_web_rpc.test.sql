@@ -1,5 +1,5 @@
 begin;
-select plan(10);
+select plan(17);
 
 insert into auth.users (id, email) values
  ('10000000-0000-0000-0000-000000000001', 'rpc-a@example.invalid'),
@@ -34,5 +34,25 @@ set local role authenticated;
 select throws_ok($$select public.request_run('search', '20000000-0000-0000-0000-000000000001', '30000000-0000-0000-0000-000000000001', '50000000-0000-0000-0000-000000000003')$$, 'P0001', 'CONDITION_INACTIVE');
 select set_config('request.jwt.claims', '{"sub":"10000000-0000-0000-0000-000000000002","role":"authenticated"}', true);
 select throws_ok($$select public.request_run('search', '20000000-0000-0000-0000-000000000001', '30000000-0000-0000-0000-000000000001', '50000000-0000-0000-0000-000000000004')$$, 'P0001', 'NOT_FOUND');
+
+-- Denial paths. Each RPC is SECURITY DEFINER, so an ownership or state
+-- regression here would be invisible to the owner-side assertions above.
+-- Still acting as user B, who owns nothing in this fixture.
+select throws_ok($$select public.create_strategy_version('30000000-0000-0000-0000-000000000001', current_setting('test.definition')::jsonb)$$, 'P0001', 'NOT_FOUND', 'B cannot add a version to A strategy');
+select throws_ok($$select public.cancel_run((select id from public.runs where idempotency_key = '50000000-0000-0000-0000-000000000001'))$$, 'P0001', 'NOT_FOUND', 'B cannot cancel A run');
+select throws_ok($$select public.cancel_run('60000000-0000-0000-0000-00000000000f')$$, 'P0001', 'NOT_FOUND', 'cancelling an unknown run is not found');
+
+select set_config('request.jwt.claims', '{"sub":"10000000-0000-0000-0000-000000000001","role":"authenticated"}', true);
+-- An already-cancelled run is terminal, so cancelling it again must be refused.
+select throws_ok($$select public.cancel_run((select id from public.runs where idempotency_key = '50000000-0000-0000-0000-000000000001'))$$, 'P0001', 'RUN_NOT_CANCELLABLE', 'a cancelled run cannot be cancelled again');
+select throws_ok($$select public.create_strategy_version('30000000-0000-0000-0000-000000000001', jsonb_set(current_setting('test.definition')::jsonb, '{expr,children,1,conditionId}', '"40000000-0000-0000-0000-00000000000f"'))$$, 'P0001', 'CONDITION_INACTIVE', 'an unknown condition id is refused');
+-- seq 2 was deactivated above, so a version referencing it must be refused.
+select throws_ok($$select public.create_strategy_version('30000000-0000-0000-0000-000000000001', current_setting('test.definition')::jsonb)$$, 'P0001', 'CONDITION_INACTIVE', 'an inactive condition is refused');
+reset role;
+update public.strategies set archived_at = now() where id = '30000000-0000-0000-0000-000000000001';
+update public.conditions set is_active = true, deactivated_at = null where seq = '2';
+set local role authenticated;
+select throws_ok($$select public.create_strategy_version('30000000-0000-0000-0000-000000000001', current_setting('test.definition')::jsonb)$$, 'P0001', 'NOT_FOUND', 'an archived strategy takes no new version');
+
 select * from finish();
 rollback;
