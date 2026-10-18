@@ -12,9 +12,11 @@
    alter role kiwoom_worker with login password '<별도 생성한 역할 비밀번호>';
    ```
 
-4. Authentication 설정에서 공개 회원가입을 끄고, 허용된 사용자를 관리자가 생성합니다. Site URL을 배포할 웹 도메인으로 지정합니다.
+4. Authentication 설정에서 공개 회원가입을 끄고, 관리자가 단일 운영자 계정을 생성합니다. Site URL을 배포할 웹 도메인으로 지정합니다.
 5. 워커 연결에는 직접 연결이 가능하면 SSL이 적용된 Postgres 연결을 사용합니다. 네트워크가 pooler를 요구하면 **session mode**를 사용하고 사용자명은 `<role>.<project-ref>`, 포트는 `5432`로 설정합니다. Transaction mode는 지속 연결이 필요한 이 워커에 사용하지 않습니다.
 6. 서비스 키를 브라우저나 웹 환경변수에 넣지 않습니다. 웹은 publishable key를 사용하고, 워커는 제한된 Postgres 역할만 사용합니다.
+
+이 MVP는 신뢰된 단일 운영자용입니다. 별칭은 워커의 로컬 Kiwoom 자격 증명을 선택하지만 아직 사용자별로 서버에서 바인딩하지 않습니다. 두 번째 사용자나 별도 운영자를 추가하기 전에 별칭 소유권을 서버 측 worker 등록에 연결하고 heartbeat 조회 범위를 사용자별로 제한해야 합니다.
 
 ## 2. Vercel 웹
 
@@ -27,14 +29,21 @@
    ```
 
 3. 배포 후 로그인 화면이 열리는지, 비로그인 `/profiles` 접근이 `/login`으로 이동하는지 확인합니다.
-4. 공개 회원가입은 제공되지 않습니다. 허용 사용자는 Supabase Auth 관리 절차로 추가합니다.
+4. 공개 회원가입은 제공되지 않습니다. 추가 계정은 worker 별칭 소유권 경계가 구현될 때까지 만들지 않습니다.
 
 ## 3. 고정 IP 워커 호스트
 
 전용 Linux 호스트에 고정 egress IP를 준비합니다. 인바운드 포트는 열지 않습니다.
 
 1. `kiwoom` 전용 사용자/그룹을 만들고, 저장소를 `/opt/kiwoom`에 배포합니다. 예: `sudo useradd --system --user-group --home-dir /nonexistent --no-create-home --shell /usr/sbin/nologin kiwoom`. 저장소 파일에는 그 계정에 필요한 최소한의 읽기 권한만 부여합니다.
-2. 고정 경로 `/usr/local/bin/uv`에 uv를 설치하고 Python 요구사항과 lockfile을 확인합니다.
+2. 고정 경로 `/usr/local/bin/uv`에 uv를 설치하고 Python 요구사항과 lockfile을 확인합니다. 서비스 시작 전에 배포 계정(root)으로 고정 lockfile에서 가상환경을 만듭니다. `ProtectSystem=strict`가 켜진 뒤에는 서비스가 `/opt`에 쓸 수 없으므로, 런타임이 의존성을 설치하게 두지 않습니다.
+
+   ```bash
+   sudo /usr/local/bin/uv sync --project /opt/kiwoom/apps/worker --frozen
+   sudo -u kiwoom test -x /opt/kiwoom/apps/worker/.venv/bin/kiwoom-worker
+   ```
+
+   저장소와 `.venv`는 서비스 계정이 읽고 실행할 수 있어야 합니다. 의존성을 바꾸는 배포마다 서비스를 멈추고, 새 lockfile을 배치한 뒤 이 동기화와 실행 권한 확인을 다시 수행하고 서비스를 시작합니다.
 3. 키움 프로필 디렉터리와 설정 파일을 준비합니다.
 
    ```bash

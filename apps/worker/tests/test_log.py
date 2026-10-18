@@ -92,4 +92,3 @@ def test_redacting_filter_masks_escaped_custom_object_repr() -> None:
 
     assert secret not in rendered
     assert repr(secret)[1:-1] not in rendered
-

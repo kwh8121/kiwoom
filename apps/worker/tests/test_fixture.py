@@ -78,4 +78,3 @@ async def test_fixture_transport_sends_bare_before_second_single_page_search() -
     response = json.loads(await transport.recv(1.0))
     assert response["seq"] == "1"
     assert response["data"][0]["9001"] == "A035720"
-
