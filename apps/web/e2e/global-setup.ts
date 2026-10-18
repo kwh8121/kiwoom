@@ -63,14 +63,18 @@ import psycopg
 from psycopg import sql
 from psycopg.conninfo import make_conninfo
 env = os.environ.copy()
-admin = psycopg.connect(env.pop('E2E_LOCAL_DB'), host='127.0.0.1', hostaddr='127.0.0.1', autocommit=True)
+admin = psycopg.connect(env.pop('E2E_LOCAL_DB'), host='127.0.0.1', hostaddr='127.0.0.1', connect_timeout=5, options='-c statement_timeout=3000', autocommit=True)
 role = env.pop('E2E_ROLE')
 password = env.pop('E2E_ROLE_PASSWORD')
 child = None
 created = False
+stop_deadline = None
 def stop(*_):
+    global stop_deadline
     if child is not None:
-        child.terminate()
+        if child.poll() is None:
+            child.terminate()
+            stop_deadline = time.monotonic() + 5
 signal.signal(signal.SIGTERM, stop)
 signal.signal(signal.SIGINT, stop)
 try:
@@ -91,7 +95,17 @@ try:
         time.sleep(.1)
     else:
         raise RuntimeError('fixture heartbeat did not appear')
-    sys.exit(child.wait())
+    while child.poll() is None:
+        try:
+            child.wait(timeout=.25)
+        except subprocess.TimeoutExpired:
+            if stop_deadline is not None and time.monotonic() >= stop_deadline:
+                child.kill()
+                try:
+                    child.wait(timeout=2)
+                except subprocess.TimeoutExpired:
+                    raise RuntimeError('fixture worker did not stop after kill')
+    sys.exit(child.returncode)
 finally:
     failures = []
     if child is not None:
@@ -99,10 +113,10 @@ finally:
             if child.poll() is None:
                 child.terminate()
             try:
-                child.wait(timeout=15)
+                child.wait(timeout=5)
             except subprocess.TimeoutExpired:
                 child.kill()
-                child.wait(timeout=15)
+                child.wait(timeout=2)
         except Exception as exc:
             failures.append(type(exc).__name__)
     try:
