@@ -36,3 +36,32 @@ def test_fixture_transport_requires_local_db() -> None:
                 "KIWOOM_WORKER_FIXTURE_FILE": "/tmp/e2e_market.json",
             }
         )
+
+
+@pytest.mark.parametrize(
+    "query",
+    ["host=remote.example.invalid", "hostaddr=203.0.113.8", "service=remote"],
+)
+def test_fixture_transport_rejects_libpq_remote_overrides(query: str) -> None:
+    with pytest.raises(ConfigError, match="localhost"):
+        load_settings(
+            {
+                "KIWOOM_WORKER_DATABASE_URL": f"postgresql://worker:masked@localhost/postgres?{query}",
+                "KIWOOM_WORKER_ID": "worker-1",
+                "KIWOOM_WORKER_PROFILES_FILE": "/tmp/profiles.toml",
+                "KIWOOM_WORKER_TRANSPORT": "fixture",
+                "KIWOOM_WORKER_FIXTURE_FILE": "/tmp/e2e_market.json",
+            }
+        )
+
+
+def test_profiles_file_rejects_owner_execute_permissions(tmp_path: Path) -> None:
+    path = tmp_path / "profiles.toml"
+    path.write_text(
+        '[profiles.demo]\nmode = "demo"\nappkey = "key"\nsecretkey = "secret"\n',
+        encoding="utf-8",
+    )
+    path.chmod(0o700)
+
+    with pytest.raises(ConfigError, match="0600"):
+        load_profiles(path)

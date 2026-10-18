@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import logging
 from collections.abc import Iterable, Mapping
+from traceback import format_exception
 
 
 class RedactingFilter(logging.Filter):
@@ -10,8 +11,15 @@ class RedactingFilter(logging.Filter):
         self._secrets = tuple(secret for secret in secrets if secret)
 
     def filter(self, record: logging.LogRecord) -> bool:
-        record.msg = self._sanitize(record.msg)
-        record.args = self._sanitize(record.args)
+        try:
+            record.msg = self._sanitize(record.getMessage())
+        except Exception:  # noqa: BLE001 -- a broken log argument must never leak through unformatted.
+            record.msg = "[log message redacted]"
+        record.args = ()
+        if record.exc_info is not None:
+            record.exc_text = self._sanitize("".join(format_exception(*record.exc_info)))
+        elif record.exc_text is not None:
+            record.exc_text = self._sanitize(record.exc_text)
         return True
 
     def _sanitize(self, value: object) -> object:
@@ -25,5 +33,5 @@ class RedactingFilter(logging.Filter):
         if isinstance(value, list):
             return [self._sanitize(item) for item in value]
         if isinstance(value, Mapping):
-            return {key: self._sanitize(item) for key, item in value.items()}
-        return value
+            return {self._sanitize(key): self._sanitize(item) for key, item in value.items()}
+        return self._sanitize(str(value))

@@ -13,6 +13,7 @@ class FixtureTransport:
         self._results = market["results"]
         self._recv_queue: deque[str] = deque()
         self._closed = False
+        self._search_requests = 0
 
     async def send(self, text: str) -> None:
         packet = json.loads(text)
@@ -24,6 +25,9 @@ class FixtureTransport:
             self._enqueue({"trnm": "CNSRLST", "return_code": 0, "data": self._conditions})
             return
         if trnm == "CNSRREQ":
+            if self._search_requests > 0:
+                self._enqueue({"trnm": "CNSRREQ"})
+            self._search_requests += 1
             seq = packet.get("seq")
             rows = self._results.get(seq)
             if not isinstance(seq, str) or not isinstance(rows, list):
@@ -47,7 +51,6 @@ class FixtureTransport:
                 )
                 return
 
-            self._enqueue({"trnm": "CNSRREQ"})
             self._enqueue(
                 {
                     "trnm": "CNSRREQ",
