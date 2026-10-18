@@ -7,8 +7,9 @@ export function safeNextPath(path: string | undefined): string {
     return "/profiles";
   }
   const url = new URL(path, "http://app.local");
-  if (url.origin !== "http://app.local" || url.pathname === "/login" || url.pathname === "/") {
+  const normalized = `${url.pathname}${url.search}${url.hash}`;
+  if (url.origin !== "http://app.local" || normalized.startsWith("//") || url.pathname === "/login" || url.pathname === "/") {
     return "/profiles";
   }
-  return `${url.pathname}${url.search}`;
+  return normalized;
 }

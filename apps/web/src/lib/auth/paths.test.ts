@@ -11,3 +11,14 @@ test("login return paths stay within the application", () => {
   }
   expect(safeNextPath("/runs/abc?tab=results")).toBe("/runs/abc?tab=results");
 });
+
+test.each(["/a/..//evil.example", "/%2e%2e//evil.example", "/a/../\\evil.example"])(
+  "rejects normalized external redirect path %s",
+  (path) => {
+    expect(safeNextPath(path)).toBe("/profiles");
+  },
+);
+
+test("preserves normalized local pathname, query, and hash", () => {
+  expect(safeNextPath("/runs/../profiles?tab=all#saved")).toBe("/profiles?tab=all#saved");
+});
