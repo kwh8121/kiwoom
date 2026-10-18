@@ -36,8 +36,8 @@ export default async function RunPage({ params }: { params: Promise<{ runId: str
     <Tabs defaultValue="results"><TabsList><TabsTrigger value="results">결과</TabsTrigger><TabsTrigger value="diagnostics">진단</TabsTrigger></TabsList>
       <TabsContent value="results" className="space-y-4">
         {run.status === "succeeded" ? <>
-          <a className="underline" href={`/runs/${run.id}/csv`}>CSV 다운로드</a>
-          {run.kind === "search" && <><ResultsTable results={results} refs={refs} />
+          {run.kind === "search" && <><a className="underline" href={`/runs/${run.id}/csv`}>CSV 다운로드</a>
+            <ResultsTable results={results} refs={refs} />
             <section className="space-y-2"><h2 className="text-xl font-bold">이전 실행 비교</h2>
               {comparedRun ? <><Link href={`/runs/${comparedRun.id}`} className="underline">비교 대상 실행</Link>{comparedRun.strategy_version_id !== run.strategy_version_id && <Badge variant="outline">버전 다름</Badge>}<h3 className="font-semibold">이탈 목록</h3><p>{dropped.length ? dropped.join(", ") : "없음"}</p></> : <p>비교 대상이 없습니다.</p>}
             </section></>}

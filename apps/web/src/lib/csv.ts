@@ -9,9 +9,13 @@ export type RunCsvRow = {
   changeRate: string | null;
 };
 
+// Spreadsheet importers trim leading whitespace before deciding whether a cell
+// is a formula, so the trigger character has to be looked for past it too.
+const FORMULA_START = /^[\s\u00a0\u2028\u2029]*[=+\-@\t\r]/;
+
 export function escapeCsvText(value: string | null): string {
   let text = value ?? "";
-  if (/^[=+\-@\t\r]/.test(text)) text = `'${text}`;
+  if (FORMULA_START.test(text)) text = `'${text}`;
   return /[,"\r\n]/.test(text) ? `"${text.replaceAll('"', '""')}"` : text;
 }
 

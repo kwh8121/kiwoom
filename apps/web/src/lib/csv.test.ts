@@ -8,6 +8,12 @@ describe("run CSV", () => {
   it.each(["=SUM(A1)", "+1", "-x", "@a", "\tA", "\rA"])("neutralizes text formula prefix %j", value => {
     expect(escapeCsvText(value).replace(/^"/, "").startsWith("'")).toBe(true);
   });
+  it.each([" =SUM(A1)", "  @a", "\u00a0=1", "\n=1", " \t-x"])("neutralizes whitespace-prefixed formula %j", value => {
+    expect(escapeCsvText(value).replace(/^"/, "").startsWith("'")).toBe(true);
+  });
+  it("leaves ordinary leading whitespace alone", () => {
+    expect(escapeCsvText(" 삼성전자")).toBe(" 삼성전자");
+  });
   it("quotes delimiters, newlines and doubled embedded quotes", () => {
     expect(escapeCsvText('=HYPERLINK("x")')).toBe('"\'=HYPERLINK(""x"")"');
     expect(escapeCsvText("카카오, 테스트")).toBe('"카카오, 테스트"');
@@ -37,7 +43,11 @@ const requestCsv = (id = runId) => GET(new Request(`http://localhost/runs/${id}/
 describe("CSV download authorization boundary", () => {
   beforeEach(() => vi.resetAllMocks());
   it.each(["queued", "running", "failed", "timed_out", "cancelled"])("returns 404 for %s", async status => {
-    getRun.mockResolvedValue({ run: { status }, csvRows: [] });
+    getRun.mockResolvedValue({ run: { status, kind: "search" }, csvRows: [] });
+    expect((await requestCsv()).status).toBe(404);
+  });
+  it("returns 404 for a succeeded sync run, which has no result rows to export", async () => {
+    getRun.mockResolvedValue({ run: { status: "succeeded", kind: "sync" }, csvRows: [] });
     expect((await requestCsv()).status).toBe(404);
   });
   it("returns 404 for missing or RLS-hidden runs and invalid IDs", async () => {
@@ -46,7 +56,7 @@ describe("CSV download authorization boundary", () => {
     expect((await requestCsv("invalid")).status).toBe(404);
   });
   it("downloads succeeded owner-visible results with UTF8 BOM and private headers", async () => {
-    getRun.mockResolvedValue({ run: { status: "succeeded" }, csvRows: [row()] });
+    getRun.mockResolvedValue({ run: { status: "succeeded", kind: "search" }, csvRows: [row()] });
     const response = await requestCsv();
     expect(response.status).toBe(200);
     expect(response.headers.get("Content-Type")).toBe("text/csv; charset=utf-8");
