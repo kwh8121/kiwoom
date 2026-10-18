@@ -93,26 +93,57 @@ try:
         raise RuntimeError('fixture heartbeat did not appear')
     sys.exit(child.wait())
 finally:
-    if child is not None and child.poll() is None:
-        child.terminate()
-        child.wait(timeout=15)
-    admin.execute('delete from public.worker_heartbeats where worker_id=%s', (env['KIWOOM_WORKER_ID'],))
-    if created:
-        admin.execute(sql.SQL('drop role {}').format(sql.Identifier(role)))
-    admin.close()
-    shutil.rmtree(env['KIWOOM_E2E_RUNTIME'], ignore_errors=True)
+    failures = []
+    if child is not None:
+        try:
+            if child.poll() is None:
+                child.terminate()
+            try:
+                child.wait(timeout=15)
+            except subprocess.TimeoutExpired:
+                child.kill()
+                child.wait(timeout=15)
+        except Exception as exc:
+            failures.append(type(exc).__name__)
+    try:
+        admin.execute('delete from public.worker_heartbeats where worker_id=%s', (env['KIWOOM_WORKER_ID'],))
+    except Exception as exc:
+        failures.append(type(exc).__name__)
+    try:
+        if created:
+            admin.execute(sql.SQL('drop role {}').format(sql.Identifier(role)))
+    except Exception as exc:
+        failures.append(type(exc).__name__)
+    try:
+        admin.close()
+    except Exception as exc:
+        failures.append(type(exc).__name__)
+    try:
+        shutil.rmtree(env['KIWOOM_E2E_RUNTIME'], ignore_errors=False)
+    except FileNotFoundError:
+        pass
+    except Exception as exc:
+        failures.append(type(exc).__name__)
+    if failures:
+        raise RuntimeError(f'fixture worker cleanup failed ({len(failures)} operation(s)): {",".join(failures)}')
 `;
 
-function setVersionImmutability(enabled: boolean) {
-  // Auth deletion cascades through immutable versions. This local-only bracket
-  // is restored in finally; it never disables any other trigger.
-  execFileSync("uv", ["run", "--project", "apps/worker", "python", "-c", String.raw`
+function deleteOwnedStrategyVersions(userId: string) {
+  // ALTER TABLE and targeted deletion share one transaction and its table lock.
+  // Any exception rolls back, restoring the immutable trigger before other sessions proceed.
+  try {
+    execFileSync("uv", ["run", "--project", "apps/worker", "python", "-c", String.raw`
 import json, sys, psycopg
 data = json.load(sys.stdin)
-with psycopg.connect(data['database'], host='127.0.0.1', hostaddr='127.0.0.1', autocommit=True) as db:
-    action = 'enable' if data['enabled'] else 'disable'
-    db.execute('alter table public.strategy_versions ' + action + ' trigger strategy_versions_immutable')
-`], { cwd: root, input: JSON.stringify({ database: process.env.E2E_LOCAL_DB, enabled }), stdio: ["pipe", "pipe", "pipe"] });
+with psycopg.connect(data['database'], host='127.0.0.1', hostaddr='127.0.0.1') as db:
+    db.execute('alter table public.strategy_versions disable trigger strategy_versions_immutable')
+    db.execute('delete from public.runs where user_id=%s', (data['user_id'],))
+    db.execute('delete from public.strategy_versions where user_id=%s', (data['user_id'],))
+    db.execute('alter table public.strategy_versions enable trigger strategy_versions_immutable')
+`], { cwd: root, input: JSON.stringify({ database: process.env.E2E_LOCAL_DB, user_id: userId }), stdio: ["pipe", "pipe", "pipe"], env: process.env });
+  } catch {
+    throw new Error("Could not remove disposable E2E strategy versions");
+  }
 }
 
 export default async function globalSetup() {
@@ -133,13 +164,9 @@ export default async function globalSetup() {
   if (error || !data.user) throw new Error("Could not create disposable local E2E user");
   const userId = data.user.id;
   const cleanup = async () => {
-    try {
-      setVersionImmutability(false);
-      const { error } = await admin.auth.admin.deleteUser(userId);
-      if (error) throw new Error(`Could not delete disposable local E2E user (status ${error.status}, code ${error.code})`);
-    } finally {
-      setVersionImmutability(true);
-    }
+    deleteOwnedStrategyVersions(userId);
+    const { error } = await admin.auth.admin.deleteUser(userId);
+    if (error) throw new Error(`Could not delete disposable local E2E user (status ${error.status}, code ${error.code})`);
   };
   try {
     // Profile insertion uses the test user's session, not service-role table access.
