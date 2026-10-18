@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 import json
 from collections import deque
 from collections.abc import Callable
@@ -23,6 +24,7 @@ class FakeClock:
     async def sleep(self, seconds: float) -> None:
         self.slept.append(seconds)
         self._now += timedelta(seconds=seconds)
+        await asyncio.sleep(0)
 
 
 class ScriptedTransport:

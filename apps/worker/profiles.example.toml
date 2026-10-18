@@ -1,0 +1,4 @@
+[profiles.demo]
+mode = "demo"
+appkey = ""
+secretkey = ""
