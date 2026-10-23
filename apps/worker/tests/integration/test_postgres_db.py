@@ -8,7 +8,13 @@ from psycopg import AsyncConnection
 from kiwoom_worker.db import PostgresWorkerDb
 from kiwoom_worker.runner import RunFailure
 
-from .conftest import ADMIN_URL, WORKER_URL, _create_queued_search, _delete_test_user
+from .conftest import (
+    ADMIN_URL,
+    WORKER_URL,
+    _create_queued_search,
+    _delete_heartbeat,
+    _delete_test_user,
+)
 
 pytestmark = pytest.mark.db
 
@@ -123,4 +129,5 @@ async def test_heartbeat_is_not_blocked_by_a_slow_settlement() -> None:
     finally:
         await blocker.close()
         await db.close()
+        await _delete_heartbeat("integration-worker")
         await _delete_test_user(user_id)

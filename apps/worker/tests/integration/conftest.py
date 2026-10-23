@@ -99,11 +99,13 @@ async def _logout_worker_role() -> None:
 async def _delete_test_user(user_id: str) -> None:
     """Remove one disposable user and, by cascade, everything it owns.
 
-    Every public table cascades from auth.users, but the strategy_versions
+    Every table that records an owner cascades from auth.users, but the
+    strategy_versions
     immutability trigger refuses the cascade, so it is disabled for the delete
     and restored afterwards. Each test calls this: without it the local
     database accumulates the rows of every run, and a test that looks for the
-    run of a profile can pick up a leftover instead.
+    run of a profile can pick up a leftover instead. worker_heartbeats records
+    no owner, so it is not reached from here; see _delete_heartbeat.
     """
     async with (
         await AsyncConnection.connect(ADMIN_URL, autocommit=True) as admin,
@@ -114,6 +116,19 @@ async def _delete_test_user(user_id: str) -> None:
             await cursor.execute("delete from auth.users where id=%s", (user_id,))
         finally:
             await cursor.execute("alter table public.strategy_versions enable trigger strategy_versions_immutable")
+
+
+async def _delete_heartbeat(worker_id: str) -> None:
+    """Remove a heartbeat a test wrote.
+
+    worker_heartbeats has no owner column, so it is the one table that does not
+    cascade from auth.users and _delete_test_user cannot reach it. A row left
+    behind reports a worker as reachable for an alias that no longer exists.
+    """
+    async with await AsyncConnection.connect(ADMIN_URL, autocommit=True) as admin:
+        await admin.execute(
+            "delete from public.worker_heartbeats where worker_id=%s", (worker_id,)
+        )
 
 
 @pytest.fixture(autouse=True)
