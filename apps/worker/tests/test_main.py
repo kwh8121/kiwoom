@@ -456,3 +456,86 @@ async def test_open_session_closes_transport_when_login_fails() -> None:
             pytest.fail("session must not open when login fails")
 
     assert transport.closed is True
+
+
+@pytest.mark.asyncio
+async def test_lease_loss_stops_the_in_flight_broker_work(caplog: pytest.LogCaptureFixture) -> None:
+    """Losing the lease means another worker may already hold this run.
+
+    Continuing to call Kiwoom duplicates requests against a shared rate limit,
+    so the keepalive has to interrupt the work rather than only warn about it.
+    """
+    clock = FakeClock(datetime(2026, 10, 18, 0, 0, tzinfo=UTC))
+
+    class LeaseLostDb(FakeDb):
+        async def extend_lease(self, run_id: str, worker_id: str, lease_seconds: int) -> bool:
+            self.leases.append((run_id, worker_id, lease_seconds))
+            return False
+
+    db = LeaseLostDb(deque([_claimed_search()]))
+
+    @dataclass
+    class LongSearchSession:
+        result: SearchResult
+        clock: FakeClock
+        finished: bool = False
+
+        async def list_conditions(self) -> list[ConditionItem]:
+            return [ConditionItem("0", "기본종목")]
+
+        async def search(self, seq: str) -> SearchResult:
+            for _ in range(20):
+                await self.clock.sleep(1.0)
+            self.finished = True
+            return self.result
+
+    session = LongSearchSession(_search_result(clock=clock), clock)
+    opener = _open_session_for(session)
+
+    with caplog.at_level(logging.WARNING):
+        handled = await process_one(db, _settings(lease_seconds=6), _profiles(), opener, clock)
+
+    assert handled is True
+    assert session.finished is False, "the search kept running after the lease was lost"
+    # The claim is no longer ours, so neither outcome may be reported.
+    assert db.completed_search == []
+    assert db.failed == []
+    assert "lease" in caplog.text.lower()
+
+
+@pytest.mark.asyncio
+async def test_shutdown_cancellation_is_not_mistaken_for_lease_loss() -> None:
+    """A stop signal must still cancel process_one, not be swallowed."""
+    clock = SystemClock()
+    db = FakeDb(deque([_claimed_search()]))
+    search_started = asyncio.Event()
+    release_search = asyncio.Event()
+
+    class BlockingSession(SearchSession):
+        async def search(self, seq: str) -> SearchResult:
+            search_started.set()
+            await release_search.wait()
+            return self.result
+
+    session = BlockingSession(
+        SearchResult(
+            seq="0",
+            started_at=clock.now(),
+            completed_at=clock.now() + timedelta(seconds=1),
+            page_count=1,
+            members=[],
+        )
+    )
+    task = asyncio.create_task(
+        process_one(db, _settings(lease_seconds=600), _profiles(), _open_session_for(session), clock)
+    )
+    try:
+        await asyncio.wait_for(search_started.wait(), timeout=1.0)
+        task.cancel()
+        with pytest.raises(asyncio.CancelledError):
+            await task
+    finally:
+        release_search.set()
+
+    assert db.completed_search == []
+    assert db.failed == []

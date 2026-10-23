@@ -61,28 +61,40 @@ async def process_one(
         )
         return True
 
-    keepalive_task = asyncio.create_task(_keep_lease_alive(db, settings, claimed.run_id, clock))
     session_opener = lambda force_refresh: open_session_for(creds, force_refresh)
+    # Losing the lease means the database may already have handed this run to
+    # another worker. Carrying on would duplicate Kiwoom requests against a
+    # shared rate limit, so the keepalive interrupts the work it can no longer
+    # claim to own.
+    lease_lost = asyncio.Event()
+    execution: asyncio.Task[tuple[dict[str, Any] | None, list[dict[str, str]] | None]] | None = None
+
+    def abandon_run() -> None:
+        lease_lost.set()
+        if execution is not None:
+            execution.cancel()
+
+    keepalive_task = asyncio.create_task(
+        _keep_lease_alive(db, settings, claimed.run_id, clock, abandon_run)
+    )
 
     try:
         try:
             await asyncio.sleep(0)
-            async with asyncio.timeout(settings.run_timeout_s):
-                if claimed.kind == "search":
-                    payload = await execute_search(
-                        SearchJob(
-                            run_id=claimed.run_id,
-                            profile_id=claimed.profile_id,
-                            definition=claimed.definition or {},
-                            condition_refs=claimed.condition_refs,
-                        ),
-                        session_opener,
-                        clock,
-                    )
-                    sync_items = None
-                else:
-                    payload = None
-                    sync_items = await execute_sync(session_opener)
+            execution = asyncio.create_task(
+                _execute_claimed(claimed, settings, session_opener, clock)
+            )
+            if lease_lost.is_set():
+                execution.cancel()
+            payload, sync_items = await execution
+        except asyncio.CancelledError:
+            if lease_lost.is_set():
+                LOGGER.warning(
+                    "lease lost during run %s; abandoned the run without settling it",
+                    claimed.run_id,
+                )
+                return True
+            raise
         except TimeoutError:
             # Only the run budget reaches this branch. ResponseTimeout also
             # subclasses TimeoutError, so execute_search and execute_sync must
@@ -90,8 +102,6 @@ async def process_one(
             # single slow response is misreported as a run-wide timeout.
             await _fail_quietly(db, settings, claimed.run_id, RunFailure("RUN_TIMEOUT", False, "run exceeded timeout", []))
             return True
-        except asyncio.CancelledError:
-            raise
         except RunFailure as failure:
             await _fail_quietly(db, settings, claimed.run_id, failure)
             return True
@@ -126,6 +136,39 @@ async def process_one(
         except Exception:
             # A keepalive failure must not replace this run's own outcome.
             LOGGER.exception("lease keepalive failed for run %s", claimed.run_id)
+        # On the shutdown path the await above was interrupted while the
+        # execution task was still running, so it has to be stopped here too.
+        if execution is not None and not execution.done():
+            execution.cancel()
+            with contextlib.suppress(asyncio.CancelledError):
+                await execution
+
+
+async def _execute_claimed(
+    claimed: Any,
+    settings: WorkerSettings,
+    session_opener: Callable[[bool], AbstractAsyncContextManager[ConditionSession]],
+    clock: Clock,
+) -> tuple[dict[str, Any] | None, list[dict[str, str]] | None]:
+    """Run the claimed job under its own run budget.
+
+    This lives in a task of its own so the lease keepalive can cancel the
+    broker work the moment the run stops being ours.
+    """
+    async with asyncio.timeout(settings.run_timeout_s):
+        if claimed.kind == "search":
+            payload = await execute_search(
+                SearchJob(
+                    run_id=claimed.run_id,
+                    profile_id=claimed.profile_id,
+                    definition=claimed.definition or {},
+                    condition_refs=claimed.condition_refs,
+                ),
+                session_opener,
+                clock,
+            )
+            return payload, None
+        return None, await execute_sync(session_opener)
 
 
 async def _fail_quietly(db: WorkerDb, settings: WorkerSettings, run_id: str, failure: RunFailure) -> None:
@@ -268,12 +311,19 @@ def _fixture_session_opener(settings: WorkerSettings, market: dict[str, Any], cl
     return opener
 
 
-async def _keep_lease_alive(db: WorkerDb, settings: WorkerSettings, run_id: str, clock: Clock) -> None:
+async def _keep_lease_alive(
+    db: WorkerDb,
+    settings: WorkerSettings,
+    run_id: str,
+    clock: Clock,
+    on_lease_lost: Callable[[], None],
+) -> None:
     interval = max(settings.lease_seconds / 3, 0.1)
     while True:
         await clock.sleep(interval)
         if not await db.extend_lease(run_id, settings.worker_id, settings.lease_seconds):
             LOGGER.warning("lease extension rejected for run %s", run_id)
+            on_lease_lost()
             return
 
 
