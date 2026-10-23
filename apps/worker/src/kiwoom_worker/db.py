@@ -26,6 +26,9 @@ class SettlementRejected(Exception):
 
 @dataclass(frozen=True)
 class ClaimedRun:
+    # Issued by the claim and distinct per claim. Two processes can share a
+    # configured worker id, so only this value identifies the lease holder.
+    lease_owner: str
     run_id: str
     kind: str
     attempt: int
@@ -41,31 +44,46 @@ class WorkerDb(Protocol):
 
     async def claim(self, worker_id: str, aliases: list[str], lease_seconds: int) -> ClaimedRun | None: ...
 
-    async def extend_lease(self, run_id: str, worker_id: str, lease_seconds: int) -> bool: ...
+    async def extend_lease(self, run_id: str, lease_owner: str, lease_seconds: int) -> bool: ...
 
-    async def complete_search(self, run_id: str, worker_id: str, payload: dict[str, object]) -> bool: ...
+    async def complete_search(self, run_id: str, lease_owner: str, payload: dict[str, object]) -> bool: ...
 
-    async def complete_sync(self, run_id: str, worker_id: str, items: list[dict[str, str]]) -> dict[str, object] | None: ...
+    async def complete_sync(self, run_id: str, lease_owner: str, items: list[dict[str, str]]) -> dict[str, object] | None: ...
 
-    async def fail(self, run_id: str, worker_id: str, failure: RunFailure) -> str | None: ...
+    async def fail(self, run_id: str, lease_owner: str, failure: RunFailure) -> str | None: ...
 
 
 class PostgresWorkerDb:
-    def __init__(self, connection: AsyncConnection[Any]) -> None:
+    def __init__(self, connection: AsyncConnection[Any], liveness: AsyncConnection[Any]) -> None:
         self._connection = connection
+        self._liveness = liveness
 
     @classmethod
     async def connect(cls, url: str) -> PostgresWorkerDb:
         connection = await AsyncConnection.connect(url, autocommit=True)
-        return cls(connection)
+        # Settling a run writes snapshots, results and the profile's error
+        # fields. psycopg serializes statements per connection, so sharing one
+        # would make the heartbeat and the lease extension wait for that write
+        # to finish -- and the lease can expire while the work it covers is
+        # still being stored. Liveness gets a connection of its own.
+        try:
+            liveness = await AsyncConnection.connect(url, autocommit=True)
+        except BaseException:
+            await connection.close()
+            raise
+        return cls(connection, liveness)
 
     async def close(self) -> None:
-        await self._connection.close()
+        try:
+            await self._liveness.close()
+        finally:
+            await self._connection.close()
 
     async def heartbeat(self, worker_id: str, aliases: list[str], version: str) -> None:
         await self._fetch_one(
             "select worker.heartbeat(%s, %s, %s)",
             (worker_id, aliases, version),
+            liveness=True,
         )
 
     async def claim(self, worker_id: str, aliases: list[str], lease_seconds: int) -> ClaimedRun | None:
@@ -99,6 +117,7 @@ class PostgresWorkerDb:
             raise TypeError("worker.claim_next_run definition payload must be an object")
 
         return ClaimedRun(
+            lease_owner=str(payload["lease_owner"]),
             run_id=str(payload["run_id"]),
             kind=str(payload["kind"]),
             attempt=int(payload["attempt"]),
@@ -109,26 +128,27 @@ class PostgresWorkerDb:
             condition_refs=condition_refs,
         )
 
-    async def extend_lease(self, run_id: str, worker_id: str, lease_seconds: int) -> bool:
+    async def extend_lease(self, run_id: str, lease_owner: str, lease_seconds: int) -> bool:
         result = await self._fetch_scalar(
             "select worker.extend_lease(%s::uuid, %s, %s)",
-            (run_id, worker_id, lease_seconds),
+            (run_id, lease_owner, lease_seconds),
+            liveness=True,
         )
         return bool(result)
 
-    async def complete_search(self, run_id: str, worker_id: str, payload: dict[str, object]) -> bool:
+    async def complete_search(self, run_id: str, lease_owner: str, payload: dict[str, object]) -> bool:
         result = await self._settle(
             "complete_search_run",
             "select worker.complete_search_run(%s::uuid, %s, %s)",
-            (run_id, worker_id, Jsonb(payload)),
+            (run_id, lease_owner, Jsonb(payload)),
         )
         return bool(result)
 
-    async def complete_sync(self, run_id: str, worker_id: str, items: list[dict[str, str]]) -> dict[str, object] | None:
+    async def complete_sync(self, run_id: str, lease_owner: str, items: list[dict[str, str]]) -> dict[str, object] | None:
         result = await self._settle(
             "complete_sync_run",
             "select worker.complete_sync_run(%s::uuid, %s, %s)",
-            (run_id, worker_id, Jsonb(items)),
+            (run_id, lease_owner, Jsonb(items)),
         )
         if result in (None, False):
             return None
@@ -136,13 +156,13 @@ class PostgresWorkerDb:
             raise TypeError("worker.complete_sync_run returned non-object payload")
         return result
 
-    async def fail(self, run_id: str, worker_id: str, failure: RunFailure) -> str | None:
+    async def fail(self, run_id: str, lease_owner: str, failure: RunFailure) -> str | None:
         result = await self._settle(
             "fail_run",
             "select worker.fail_run(%s::uuid, %s, %s, %s, %s, %s)",
             (
                 run_id,
-                worker_id,
+                lease_owner,
                 failure.code,
                 failure.message,
                 failure.retryable,
@@ -161,13 +181,18 @@ class PostgresWorkerDb:
         except (RaiseException, DataError, IntegrityError) as exc:
             raise SettlementRejected(operation, exc) from exc
 
-    async def _fetch_one(self, query: str, params: tuple[object, ...]) -> tuple[object, ...] | None:
-        async with self._connection.cursor() as cursor:
+    async def _fetch_one(
+        self, query: str, params: tuple[object, ...], *, liveness: bool = False
+    ) -> tuple[object, ...] | None:
+        connection = self._liveness if liveness else self._connection
+        async with connection.cursor() as cursor:
             await cursor.execute(query, params)
             return await cursor.fetchone()
 
-    async def _fetch_scalar(self, query: str, params: tuple[object, ...]) -> Any:
-        row = await self._fetch_one(query, params)
+    async def _fetch_scalar(
+        self, query: str, params: tuple[object, ...], *, liveness: bool = False
+    ) -> Any:
+        row = await self._fetch_one(query, params, liveness=liveness)
         if row is None:
             return None
         return row[0]

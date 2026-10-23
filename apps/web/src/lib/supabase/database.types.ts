@@ -171,14 +171,14 @@ isOneToOne: false
                   ]
                 },"runs": {
                   Row: {
-                    "attempt": number,"compared_run_id": string | null,"error_code": string | null,"error_message": string | null,"excluded_codes": (string)[],"finished_at": string | null,"id": string,"idempotency_key": string,"kind": string,"lease_expires_at": string | null,"lease_owner": string | null,"market_phase": string | null,"max_attempts": number,"profile_id": string,"requested_at": string,"result_count": number | null,"started_at": string | null,"status": string,"strategy_id": string | null,"strategy_version_id": string | null,"sync_summary": Json | null,"user_id": string,"window_end": string | null,"window_start": string | null
+                    "attempt": number,"compared_run_id": string | null,"error_code": string | null,"error_message": string | null,"excluded_codes": (string)[],"finished_at": string | null,"id": string,"idempotency_key": string,"kind": string,"lease_expires_at": string | null,"lease_owner": string | null,"market_phase": string | null,"max_attempts": number,"profile_id": string,"requested_at": string,"result_count": number | null,"retry_after": string | null,"started_at": string | null,"status": string,"strategy_id": string | null,"strategy_version_id": string | null,"sync_summary": Json | null,"user_id": string,"window_end": string | null,"window_start": string | null
                   }
                   ComputedFields: never
                   Insert: {
-                    "attempt"?: number,"compared_run_id"?: string | null,"error_code"?: string | null,"error_message"?: string | null,"excluded_codes"?: (string)[],"finished_at"?: string | null,"id"?: string,"idempotency_key": string,"kind": string,"lease_expires_at"?: string | null,"lease_owner"?: string | null,"market_phase"?: string | null,"max_attempts"?: number,"profile_id": string,"requested_at"?: string,"result_count"?: number | null,"started_at"?: string | null,"status": string,"strategy_id"?: string | null,"strategy_version_id"?: string | null,"sync_summary"?: Json | null,"user_id": string,"window_end"?: string | null,"window_start"?: string | null
+                    "attempt"?: number,"compared_run_id"?: string | null,"error_code"?: string | null,"error_message"?: string | null,"excluded_codes"?: (string)[],"finished_at"?: string | null,"id"?: string,"idempotency_key": string,"kind": string,"lease_expires_at"?: string | null,"lease_owner"?: string | null,"market_phase"?: string | null,"max_attempts"?: number,"profile_id": string,"requested_at"?: string,"result_count"?: number | null,"retry_after"?: string | null,"started_at"?: string | null,"status": string,"strategy_id"?: string | null,"strategy_version_id"?: string | null,"sync_summary"?: Json | null,"user_id": string,"window_end"?: string | null,"window_start"?: string | null
                   }
                   Update: {
-                    "attempt"?: number,"compared_run_id"?: string | null,"error_code"?: string | null,"error_message"?: string | null,"excluded_codes"?: (string)[],"finished_at"?: string | null,"id"?: string,"idempotency_key"?: string,"kind"?: string,"lease_expires_at"?: string | null,"lease_owner"?: string | null,"market_phase"?: string | null,"max_attempts"?: number,"profile_id"?: string,"requested_at"?: string,"result_count"?: number | null,"started_at"?: string | null,"status"?: string,"strategy_id"?: string | null,"strategy_version_id"?: string | null,"sync_summary"?: Json | null,"user_id"?: string,"window_end"?: string | null,"window_start"?: string | null
+                    "attempt"?: number,"compared_run_id"?: string | null,"error_code"?: string | null,"error_message"?: string | null,"excluded_codes"?: (string)[],"finished_at"?: string | null,"id"?: string,"idempotency_key"?: string,"kind"?: string,"lease_expires_at"?: string | null,"lease_owner"?: string | null,"market_phase"?: string | null,"max_attempts"?: number,"profile_id"?: string,"requested_at"?: string,"result_count"?: number | null,"retry_after"?: string | null,"started_at"?: string | null,"status"?: string,"strategy_id"?: string | null,"strategy_version_id"?: string | null,"sync_summary"?: Json | null,"user_id"?: string,"window_end"?: string | null,"window_start"?: string | null
                   }
                   Relationships: [
                     {
@@ -325,6 +325,7 @@ isOneToOne: false
 "profile_id": string,
 "requested_at": string,
 "result_count": number | null,
+"retry_after": string | null,
 "started_at": string | null,
 "status": string,
 "strategy_id": string | null,
@@ -374,6 +375,7 @@ isOneToOne: false
 "profile_id": string,
 "requested_at": string,
 "result_count": number | null,
+"retry_after": string | null,
 "started_at": string | null,
 "status": string,
 "strategy_id": string | null,

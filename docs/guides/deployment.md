@@ -12,7 +12,7 @@
    alter role kiwoom_worker with login password '<별도 생성한 역할 비밀번호>';
    ```
 
-4. Authentication 설정에서 공개 회원가입을 끄고, 관리자가 단일 운영자 계정을 생성합니다. Site URL을 배포할 웹 도메인으로 지정합니다.
+4. Authentication 설정에서 공개 회원가입을 끄고, 관리자가 단일 운영자 계정을 생성합니다. Site URL을 배포할 웹 도메인으로 지정합니다. 비밀번호 최소 길이를 **12자 이상**으로 올립니다(`supabase/config.toml`의 로컬 설정과 같은 값). 문자 종류 규칙은 걸지 않습니다. 길이가 추측 난이도를 결정하고, 종류 규칙은 예측 가능한 치환을 유도합니다. MFA는 아직 적용하지 않았습니다.
 5. 워커가 사용할 각 별칭을 그 별칭을 소유하는 계정에 등록합니다. 별칭 등록은 운영자 단계이며, 클라이언트에는 쓰기 경로가 없습니다. 등록하지 않은 별칭의 프로필은 웹에서 만들 수 없고, 등록되지 않은 별칭으로는 워커가 아무 작업도 가져가지 않습니다.
 
    ```sql
@@ -71,6 +71,18 @@
    sudo systemctl enable --now kiwoom-worker
    sudo systemctl status kiwoom-worker
    ```
+
+   유닛은 권한을 전부 떨어뜨리고 시스콜을 `@system-service`로 제한합니다. 이 제한은 호스트에서만 실제로 확인할 수 있으므로, 기동 후 다음을 함께 봅니다.
+
+   ```bash
+   sudo systemd-analyze verify /etc/systemd/system/kiwoom-worker.service
+   sudo systemd-analyze security kiwoom-worker.service
+   journalctl -u kiwoom-worker | grep -i 'operation not permitted\|SIGSYS'
+   ```
+
+   `SIGSYS`나 `Operation not permitted`가 보이면 차단된 시스콜을 확인해 `SystemCallFilter`에 해당 집합을 더합니다. 필터를 통째로 지우지는 않습니다.
+
+   중지 제한 시간은 `TimeoutStopSec=180s`입니다. 중지 신호를 받으면 진행 중인 실행을 끝낸 뒤 종료하므로, 실행 예산(`KIWOOM_WORKER_RUN_TIMEOUT_S`, 기본 120초)보다 길어야 합니다. 실행 예산을 늘리면 이 값도 함께 늘립니다.
 
 6. 로그에서 키·토큰·DB 비밀번호가 나타나지 않는지 확인합니다.
 
