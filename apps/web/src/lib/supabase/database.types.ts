@@ -143,6 +143,20 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
+                },"market_closures": {
+                  Row: {
+                    "closed_on": string,"created_at": string,"note": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "closed_on": string,"created_at"?: string,"note"?: string | null
+                  }
+                  Update: {
+                    "closed_on"?: string,"created_at"?: string,"note"?: string | null
+                  }
+                  Relationships: [
+
+                  ]
                 },"run_results": {
                   Row: {
                     "change_rate": number | null,"code": string,"diff": string,"instrument_type": string,"matched_condition_ids": (string)[],"name": string | null,"price": number | null,"run_id": string,"user_id": string

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getRun } from "@/lib/data/runs";
-import { resultSummary, marketPhaseLabel, windowExceeded, droppedCodes } from "@/lib/display/run";
+import { resultSummary, marketPhaseLabel, windowExceeded, droppedCodes, tradingDataCaveat } from "@/lib/display/run";
 import { formatKst } from "@/lib/display/time";
 import { runErrorMessage } from "@/lib/display/errors";
 import { strategyDefinitionSchema } from "@/lib/strategy/schema";
@@ -16,7 +16,7 @@ export default async function RunPage({ params }: { params: Promise<{ runId: str
   const { runId } = await params;
   const data = await getRun(runId);
   if (!data) notFound();
-  const { run, version, refs, results, snapshots, comparedRun, previousCodes } = data;
+  const { run, version, refs, results, snapshots, comparedRun, previousCodes, market } = data;
   const definition = strategyDefinitionSchema.safeParse(version?.definition);
   const dropped = droppedCodes(previousCodes, results.map(r => r.code));
   return <section className="space-y-6">
@@ -29,7 +29,7 @@ export default async function RunPage({ params }: { params: Promise<{ runId: str
     {run.kind === "search" && <>
       <p>수집 구간: {run.window_start ? formatKst(run.window_start) : "—"} ~ {run.window_end ? formatKst(run.window_end) : "—"}</p>
       <p>장 구분: {marketPhaseLabel(run.market_phase)}</p>
-      {run.market_phase !== null && run.market_phase !== "regular" && <p role="alert">장 마감 이후 기준일 수 있음</p>}
+      {tradingDataCaveat(run.market_phase, market) && <p role="alert">{tradingDataCaveat(run.market_phase, market)}</p>}
       {run.window_start && run.window_end && windowExceeded(run.window_start, run.window_end) && <p role="alert">수집 구간이 15초를 초과했습니다. 조건식별 수집 시각이 다를 수 있습니다.</p>}
       <p className="rounded border p-3">추출된 종목은 조건 조합의 결과일 뿐, 매수 추천이나 검증된 신호가 아닙니다.</p>
     </>}

@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { createServerClient } from "@/lib/supabase/server";
+import { kstDate } from "@/lib/display/time";
 import type { Database, Json } from "@/lib/supabase/database.types";
 import type { RunCsvRow } from "@/lib/csv";
 
@@ -76,5 +77,22 @@ export async function getRun(runId: string) {
     diff: result.diff === "new" ? "new" : "kept", price: result.price,
     changeRate: result.change_rate === null ? null : String(result.change_rate),
   }));
-  return { run, results: results.data, snapshots: snapshots.data, version: version.data, refs, comparedRun: comparedRun.data, previousCodes: previousResults.data.map(r => r.code), csvRows };
+  // The clock cannot say whether the exchange was open, so the operator's
+  // closure calendar answers it. A year with no rows is uncovered, and the
+  // display treats that as unknown rather than as a trading day.
+  const tradingDate = kstDate(run.window_start ?? run.requested_at);
+  // Without a date there is nothing to look up, and not knowing is reported as
+  // not confirmed rather than as a trading day.
+  const market = { isClosure: false, calendarCoversYear: false };
+  if (tradingDate !== null) {
+    const year = tradingDate.slice(0, 4);
+    const [closure, coverage] = await Promise.all([
+      supabase.from("market_closures").select("closed_on").eq("closed_on", tradingDate).maybeSingle(),
+      supabase.from("market_closures").select("closed_on").gte("closed_on", `${year}-01-01`).lte("closed_on", `${year}-12-31`).limit(1),
+    ]);
+    if (closure.error || coverage.error) throw new Error("휴장일 달력을 불러오지 못했습니다.");
+    market.isClosure = closure.data !== null;
+    market.calendarCoversYear = coverage.data.length > 0;
+  }
+  return { run, results: results.data, snapshots: snapshots.data, version: version.data, refs, comparedRun: comparedRun.data, previousCodes: previousResults.data.map(r => r.code), csvRows, market };
 }
