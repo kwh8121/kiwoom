@@ -371,6 +371,9 @@ isOneToOne: false
         isOneToOne: true
         isSetofReturn: false
       } },
+"mfa_satisfied":
+{ Args: Record<PropertyKey, never>; Returns: boolean
+                           },
 "request_run":
 { Args: { "p_idempotency_key": string,"p_kind": string,"p_profile_id": string,"p_strategy_id": string }; Returns: {
               "attempt": number,
