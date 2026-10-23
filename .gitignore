@@ -3,3 +3,13 @@
 .worktrees/
 __pycache__/
 *.py[cod]
+.superpowers/
+node_modules/
+.next/
+.venv/
+.env*
+!.env.example
+apps/worker/profiles.toml
+supabase/.temp/
+playwright-report/
+test-results/

@@ -1,0 +1,220 @@
+{
+  "cases": [
+    {
+      "name": "and",
+      "expr": {
+        "type": "and",
+        "children": [
+          {"type": "condition", "conditionId": "A"},
+          {"type": "condition", "conditionId": "B"}
+        ]
+      },
+      "sets": {
+        "A": ["001", "002"],
+        "B": ["002", "003"],
+        "C": ["003", "0010F0"],
+        "D": []
+      },
+      "expected": {
+        "codes": ["002"],
+        "matches": {"002": ["A", "B"]},
+        "excluded": []
+      }
+    },
+    {
+      "name": "or",
+      "expr": {
+        "type": "or",
+        "children": [
+          {"type": "condition", "conditionId": "A"},
+          {"type": "condition", "conditionId": "B"}
+        ]
+      },
+      "sets": {
+        "A": ["001", "002"],
+        "B": ["002", "003"],
+        "C": ["003", "0010F0"],
+        "D": []
+      },
+      "expected": {
+        "codes": ["001", "002", "003"],
+        "matches": {
+          "001": ["A"],
+          "002": ["A", "B"],
+          "003": ["B"]
+        },
+        "excluded": []
+      }
+    },
+    {
+      "name": "exclude",
+      "expr": {
+        "type": "exclude",
+        "base": {"type": "condition", "conditionId": "A"},
+        "subtract": [
+          {"type": "condition", "conditionId": "B"}
+        ]
+      },
+      "sets": {
+        "A": ["001", "002"],
+        "B": ["002", "003"],
+        "C": ["003", "0010F0"],
+        "D": []
+      },
+      "expected": {
+        "codes": ["001"],
+        "matches": {"001": ["A"]},
+        "excluded": ["002"]
+      }
+    },
+    {
+      "name": "exclude_multi",
+      "expr": {
+        "type": "exclude",
+        "base": {"type": "condition", "conditionId": "A"},
+        "subtract": [
+          {"type": "condition", "conditionId": "B"},
+          {"type": "condition", "conditionId": "C"}
+        ]
+      },
+      "sets": {
+        "A": ["001", "002"],
+        "B": ["002", "003"],
+        "C": ["003", "0010F0"],
+        "D": []
+      },
+      "expected": {
+        "codes": ["001"],
+        "matches": {"001": ["A"]},
+        "excluded": ["002"]
+      }
+    },
+    {
+      "name": "nested",
+      "expr": {
+        "type": "and",
+        "children": [
+          {"type": "condition", "conditionId": "A"},
+          {
+            "type": "or",
+            "children": [
+              {"type": "condition", "conditionId": "B"},
+              {"type": "condition", "conditionId": "C"}
+            ]
+          }
+        ]
+      },
+      "sets": {
+        "A": ["001", "002"],
+        "B": ["002", "003"],
+        "C": ["003", "0010F0"],
+        "D": []
+      },
+      "expected": {
+        "codes": ["002"],
+        "matches": {"002": ["A", "B"]},
+        "excluded": []
+      }
+    },
+    {
+      "name": "empty_set",
+      "expr": {
+        "type": "and",
+        "children": [
+          {"type": "condition", "conditionId": "A"},
+          {"type": "condition", "conditionId": "D"}
+        ]
+      },
+      "sets": {
+        "A": ["001", "002"],
+        "B": ["002", "003"],
+        "C": ["003", "0010F0"],
+        "D": []
+      },
+      "expected": {
+        "codes": [],
+        "matches": {},
+        "excluded": []
+      }
+    },
+    {
+      "name": "duplicate_leaf",
+      "expr": {
+        "type": "or",
+        "children": [
+          {"type": "condition", "conditionId": "A"},
+          {"type": "condition", "conditionId": "A"}
+        ]
+      },
+      "sets": {
+        "A": ["001", "002"],
+        "B": ["002", "003"],
+        "C": ["003", "0010F0"],
+        "D": []
+      },
+      "expected": {
+        "codes": ["001", "002"],
+        "matches": {
+          "001": ["A"],
+          "002": ["A"]
+        },
+        "excluded": []
+      }
+    },
+    {
+      "name": "alnum_sort",
+      "expr": {
+        "type": "or",
+        "children": [
+          {"type": "condition", "conditionId": "C"},
+          {"type": "condition", "conditionId": "A"}
+        ]
+      },
+      "sets": {
+        "A": ["001", "002"],
+        "B": ["002", "003"],
+        "C": ["003", "0010F0"],
+        "D": []
+      },
+      "expected": {
+        "codes": ["001", "0010F0", "002", "003"],
+        "matches": {
+          "001": ["A"],
+          "0010F0": ["C"],
+          "002": ["A"],
+          "003": ["C"]
+        },
+        "excluded": []
+      }
+    },
+    {
+      "name": "nested_exclude_reintroduced",
+      "expr": {
+        "type": "or",
+        "children": [
+          {
+            "type": "exclude",
+            "base": {"type": "condition", "conditionId": "E"},
+            "subtract": [
+              {"type": "condition", "conditionId": "F"}
+            ]
+          },
+          {"type": "condition", "conditionId": "G"}
+        ]
+      },
+      "sets": {
+        "E": ["001", "002", "003"],
+        "F": ["002", "003"],
+        "G": ["002"]
+      },
+      "expected": {
+        "codes": ["001", "002"],
+        "matches": {
+          "001": ["E"],
+          "002": ["E", "F", "G"]
+        },
+        "excluded": ["003"]
+      }
+    }
+  ]
+}

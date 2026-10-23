@@ -1,0 +1,30 @@
+[Unit]
+Description=Kiwoom condition-search worker
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=kiwoom
+Group=kiwoom
+WorkingDirectory=/opt/kiwoom
+EnvironmentFile=/etc/kiwoom-worker.env
+Environment=UV_CACHE_DIR=/tmp/uv-cache
+ExecStart=/usr/local/bin/uv run --project /opt/kiwoom/apps/worker --frozen kiwoom-worker
+Restart=always
+RestartSec=5
+UMask=0077
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+LockPersonality=true
+MemoryDenyWriteExecute=true
+
+[Install]
+WantedBy=multi-user.target
