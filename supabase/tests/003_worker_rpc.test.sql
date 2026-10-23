@@ -61,7 +61,7 @@ set local role authenticated;
 select set_config('test.run',(public.request_run('search','20000000-0000-0000-0000-000000000001','30000000-0000-0000-0000-000000000001',gen_random_uuid())).id::text,true);
 set local role kiwoom_worker;
 select pg_temp.claim('w1',array['demo-a'],60);
-select ok(worker.complete_search_run(current_setting('test.run')::uuid,current_setting('test.owner'),jsonb_set(current_setting('test.payload')::jsonb,'{results}','[]')),'empty result succeeds');
+select ok(worker.complete_search_run(current_setting('test.run')::uuid,current_setting('test.owner'),jsonb_set(jsonb_set(current_setting('test.payload')::jsonb,'{snapshots,1,members}','[]'),'{results}','[]')),'a search whose conditions share nothing succeeds with no results');
 reset role;
 select is((select result_count from public.runs where id=current_setting('test.run')::uuid),0,'zero count recorded');
 set local role authenticated;

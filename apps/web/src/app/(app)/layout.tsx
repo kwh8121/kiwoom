@@ -3,11 +3,15 @@ import { redirect } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { createServerClient } from "@/lib/supabase/server";
 import { signOut } from "@/app/login/actions";
+import { secondFactorPending } from "@/lib/auth/mfa";
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createServerClient();
   const { data, error } = await supabase.auth.getClaims();
   if (error || !data?.claims) redirect("/login");
+  // The row policies refuse to fill these screens until the second factor is
+  // presented, so send the person to the challenge instead of empty pages.
+  if (await secondFactorPending()) redirect("/mfa");
   return (
     <>
       <header className="border-b">
@@ -15,6 +19,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
           <Link href="/profiles">프로필</Link>
           <Link href="/strategies">전략</Link>
           <Link href="/runs">실행 이력</Link>
+          <Link href="/security">보안</Link>
           <form action={signOut} className="ml-auto"><Button variant="outline" type="submit">로그아웃</Button></form>
         </nav>
       </header>

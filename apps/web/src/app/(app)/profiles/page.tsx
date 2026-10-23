@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
-import { getProfiles, syncSummary } from "@/lib/data/profiles";
+import { getProfiles, syncRemovalWarning, syncSummary } from "@/lib/data/profiles";
 import { formatKst } from "@/lib/display/time";
 import { runErrorMessage } from "@/lib/display/errors";
 import { workerStatus } from "@/lib/display/worker";
@@ -26,6 +26,7 @@ export default async function ProfilesPage() {
         {profile.latestSync && <div className="text-sm">
           <p>최근 동기화: {formatKst(profile.latestSync.requested_at)} ({profile.latestSync.status})</p>
           <p>{syncSummary(profile.latestSync.sync_summary)}</p>
+          {syncRemovalWarning(profile.latestSync.sync_summary) && <p role="alert" className="text-destructive">{syncRemovalWarning(profile.latestSync.sync_summary)}</p>}
           {profile.latestSync.error_code && <p>{runErrorMessage(profile.latestSync.error_code)}</p>}
         </div>}
         <SyncButton profileId={profile.id} refreshPage={index === 0} />
