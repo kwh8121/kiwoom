@@ -54,21 +54,36 @@ class WorkerDb(Protocol):
 
 
 class PostgresWorkerDb:
-    def __init__(self, connection: AsyncConnection[Any]) -> None:
+    def __init__(self, connection: AsyncConnection[Any], liveness: AsyncConnection[Any]) -> None:
         self._connection = connection
+        self._liveness = liveness
 
     @classmethod
     async def connect(cls, url: str) -> PostgresWorkerDb:
         connection = await AsyncConnection.connect(url, autocommit=True)
-        return cls(connection)
+        # Settling a run writes snapshots, results and the profile's error
+        # fields. psycopg serializes statements per connection, so sharing one
+        # would make the heartbeat and the lease extension wait for that write
+        # to finish -- and the lease can expire while the work it covers is
+        # still being stored. Liveness gets a connection of its own.
+        try:
+            liveness = await AsyncConnection.connect(url, autocommit=True)
+        except BaseException:
+            await connection.close()
+            raise
+        return cls(connection, liveness)
 
     async def close(self) -> None:
-        await self._connection.close()
+        try:
+            await self._liveness.close()
+        finally:
+            await self._connection.close()
 
     async def heartbeat(self, worker_id: str, aliases: list[str], version: str) -> None:
         await self._fetch_one(
             "select worker.heartbeat(%s, %s, %s)",
             (worker_id, aliases, version),
+            liveness=True,
         )
 
     async def claim(self, worker_id: str, aliases: list[str], lease_seconds: int) -> ClaimedRun | None:
@@ -117,6 +132,7 @@ class PostgresWorkerDb:
         result = await self._fetch_scalar(
             "select worker.extend_lease(%s::uuid, %s, %s)",
             (run_id, lease_owner, lease_seconds),
+            liveness=True,
         )
         return bool(result)
 
@@ -165,13 +181,18 @@ class PostgresWorkerDb:
         except (RaiseException, DataError, IntegrityError) as exc:
             raise SettlementRejected(operation, exc) from exc
 
-    async def _fetch_one(self, query: str, params: tuple[object, ...]) -> tuple[object, ...] | None:
-        async with self._connection.cursor() as cursor:
+    async def _fetch_one(
+        self, query: str, params: tuple[object, ...], *, liveness: bool = False
+    ) -> tuple[object, ...] | None:
+        connection = self._liveness if liveness else self._connection
+        async with connection.cursor() as cursor:
             await cursor.execute(query, params)
             return await cursor.fetchone()
 
-    async def _fetch_scalar(self, query: str, params: tuple[object, ...]) -> Any:
-        row = await self._fetch_one(query, params)
+    async def _fetch_scalar(
+        self, query: str, params: tuple[object, ...], *, liveness: bool = False
+    ) -> Any:
+        row = await self._fetch_one(query, params, liveness=liveness)
         if row is None:
             return None
         return row[0]
