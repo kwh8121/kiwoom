@@ -96,6 +96,14 @@ async def _logout_worker_role() -> None:
 
 
 async def _delete_test_user(user_id: str) -> None:
+    """Remove one disposable user and, by cascade, everything it owns.
+
+    Every public table cascades from auth.users, but the strategy_versions
+    immutability trigger refuses the cascade, so it is disabled for the delete
+    and restored afterwards. Each test calls this: without it the local
+    database accumulates the rows of every run, and a test that looks for the
+    run of a profile can pick up a leftover instead.
+    """
     async with (
         await AsyncConnection.connect(ADMIN_URL, autocommit=True) as admin,
         admin.cursor() as cursor,
@@ -114,6 +122,7 @@ async def worker_role_login() -> None:
         yield
     finally:
         await _logout_worker_role()
+
 
 
 @pytest.mark.asyncio
@@ -198,7 +207,7 @@ async def test_heartbeat_is_not_blocked_by_a_slow_settlement() -> None:
     it is being settled. The database covers that case by rechecking expiry
     after its writes and rolling the settlement back.
     """
-    _user_id, profile_id, _first, _second, run_id = await _create_queued_search()
+    user_id, profile_id, _first, _second, run_id = await _create_queued_search()
     db = await PostgresWorkerDb.connect(WORKER_URL)
     blocker = await AsyncConnection.connect(ADMIN_URL)
     try:
@@ -227,3 +236,4 @@ async def test_heartbeat_is_not_blocked_by_a_slow_settlement() -> None:
     finally:
         await blocker.close()
         await db.close()
+        await _delete_test_user(user_id)

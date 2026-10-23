@@ -13,11 +13,11 @@ insert into auth.users(id, email) values ('10000000-0000-0000-0000-000000000001'
 insert into public.broker_alias_owners(alias, user_id) values ('demo-a', '10000000-0000-0000-0000-000000000001');
 insert into public.broker_profiles(id, user_id, alias, mode) values
   ('20000000-0000-0000-0000-000000000001', '10000000-0000-0000-0000-000000000001', 'demo-a', 'demo');
-insert into public.runs(user_id, kind, profile_id, status, idempotency_key) values
-  ('10000000-0000-0000-0000-000000000001', 'sync', '20000000-0000-0000-0000-000000000001', 'queued',
-   '40000000-0000-0000-0000-000000000001');
+insert into public.runs(id, user_id, kind, profile_id, status, idempotency_key) values
+  ('50000000-0000-0000-0000-000000000001', '10000000-0000-0000-0000-000000000001', 'sync',
+   '20000000-0000-0000-0000-000000000001', 'queued', '40000000-0000-0000-0000-000000000001');
 
-select set_config('test.run', (select id from public.runs limit 1)::text, true);
+select set_config('test.run', '50000000-0000-0000-0000-000000000001', true);
 
 select cmp_ok(worker.retry_backoff(1), '<', worker.retry_backoff(2), 'each attempt waits longer than the last');
 select is(worker.retry_backoff(99), interval '60 seconds', 'the wait is capped');

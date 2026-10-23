@@ -23,20 +23,20 @@ insert into public.broker_profiles (id, user_id, alias, mode) values
   ('20000000-0000-0000-0000-000000000002', '10000000-0000-0000-0000-000000000002', 'demo-b', 'demo');
 insert into public.strategy_versions (id, user_id, strategy_id, version, definition, condition_refs) values
   ('50000000-0000-0000-0000-000000000001', '10000000-0000-0000-0000-000000000001', '30000000-0000-0000-0000-000000000001', 1, '{}', '[]');
-insert into public.runs (user_id, kind, profile_id, status, idempotency_key) values
-  ('10000000-0000-0000-0000-000000000001', 'sync', '20000000-0000-0000-0000-000000000001', 'queued', '40000000-0000-0000-0000-000000000001');
+insert into public.runs (id, user_id, kind, profile_id, status, idempotency_key) values
+  ('50000000-0000-0000-0000-00000000000a', '10000000-0000-0000-0000-000000000001', 'sync', '20000000-0000-0000-0000-000000000001', 'queued', '40000000-0000-0000-0000-000000000001');
 insert into public.conditions (id, user_id, profile_id, seq, name) values
   ('40000000-0000-0000-0000-000000000001', '10000000-0000-0000-0000-000000000001', '20000000-0000-0000-0000-000000000001', '1', 'original');
 -- Give every RLS table a row owned by A so B's read isolation can be asserted
 -- per table. A policy regression on a table with no fixture row is invisible.
 insert into public.condition_snapshots (id, user_id, run_id, condition_id, seq, name) values
-  ('60000000-0000-0000-0000-000000000001', '10000000-0000-0000-0000-000000000001', (select id from public.runs limit 1), '40000000-0000-0000-0000-000000000001', '1', 'original');
+  ('60000000-0000-0000-0000-000000000001', '10000000-0000-0000-0000-000000000001', '50000000-0000-0000-0000-00000000000a', '40000000-0000-0000-0000-000000000001', '1', 'original');
 insert into public.condition_snapshot_members (user_id, snapshot_id, code, raw_code, instrument_type) values
   ('10000000-0000-0000-0000-000000000001', '60000000-0000-0000-0000-000000000001', '005930', 'A005930', 'stock');
 insert into public.run_results (user_id, run_id, code, instrument_type, diff) values
-  ('10000000-0000-0000-0000-000000000001', (select id from public.runs limit 1), '005930', 'stock', 'new');
+  ('10000000-0000-0000-0000-000000000001', '50000000-0000-0000-0000-00000000000a', '005930', 'stock', 'new');
 insert into public.condition_sync_events (user_id, profile_id, run_id, event, seq) values
-  ('10000000-0000-0000-0000-000000000001', '20000000-0000-0000-0000-000000000001', (select id from public.runs limit 1), 'added', '1');
+  ('10000000-0000-0000-0000-000000000001', '20000000-0000-0000-0000-000000000001', '50000000-0000-0000-0000-00000000000a', 'added', '1');
 
 set local role authenticated;
 select set_config('request.jwt.claims', '{"sub":"10000000-0000-0000-0000-000000000002","role":"authenticated"}', true);
