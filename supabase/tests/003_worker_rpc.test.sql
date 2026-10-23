@@ -117,6 +117,9 @@ select is(worker.fail_run(current_setting('test.run')::uuid,'w1','RATE_LIMITED',
 reset role;
 select ok((select not is_complete and page_count=1 and row_count=4 and error_code='RATE_LIMITED' from public.condition_snapshots where run_id=current_setting('test.run')::uuid),'partial snapshot is incomplete with counts');
 select is((select count(*) from public.condition_snapshot_members m join public.condition_snapshots s on s.id=m.snapshot_id where s.run_id=current_setting('test.run')::uuid),0::bigint,'partial payload never stores members');
+-- A requeued run waits out its retry backoff before it can be claimed again.
+-- Standing in for the wall clock so the lease-expiry cases below stay focused.
+update public.runs set retry_after=null where id=current_setting('test.run')::uuid;
 set local role kiwoom_worker;
 select worker.claim_next_run('w1',array['demo-a'],60);
 reset role;
