@@ -72,6 +72,18 @@
    sudo systemctl status kiwoom-worker
    ```
 
+   유닛은 권한을 전부 떨어뜨리고 시스콜을 `@system-service`로 제한합니다. 이 제한은 호스트에서만 실제로 확인할 수 있으므로, 기동 후 다음을 함께 봅니다.
+
+   ```bash
+   sudo systemd-analyze verify /etc/systemd/system/kiwoom-worker.service
+   sudo systemd-analyze security kiwoom-worker.service
+   journalctl -u kiwoom-worker | grep -i 'operation not permitted\|SIGSYS'
+   ```
+
+   `SIGSYS`나 `Operation not permitted`가 보이면 차단된 시스콜을 확인해 `SystemCallFilter`에 해당 집합을 더합니다. 필터를 통째로 지우지는 않습니다.
+
+   중지 제한 시간은 `TimeoutStopSec=180s`입니다. 중지 신호를 받으면 진행 중인 실행을 끝낸 뒤 종료하므로, 실행 예산(`KIWOOM_WORKER_RUN_TIMEOUT_S`, 기본 120초)보다 길어야 합니다. 실행 예산을 늘리면 이 값도 함께 늘립니다.
+
 6. 로그에서 키·토큰·DB 비밀번호가 나타나지 않는지 확인합니다.
 
 `deploy/worker/kiwoom-worker.service`는 `ProtectSystem=strict`, `ProtectHome=true`, `NoNewPrivileges=true`, 전용 사용자와 사설 임시 디렉터리를 사용합니다. unit은 서비스 전용 파일시스템 쓰기 경로를 추가하지 않습니다.

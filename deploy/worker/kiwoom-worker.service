@@ -13,18 +13,36 @@ Environment=UV_CACHE_DIR=/tmp/uv-cache
 ExecStart=/usr/local/bin/uv run --project /opt/kiwoom/apps/worker --frozen kiwoom-worker
 Restart=always
 RestartSec=5
+# A stop lets the run in flight finish, and the run budget
+# (KIWOOM_WORKER_RUN_TIMEOUT_S, 120s by default) is longer than systemd's 90
+# second default. Without this, a restart during a long search is killed
+# partway through instead of being allowed to settle.
+TimeoutStopSec=180s
 UMask=0077
 NoNewPrivileges=true
 ProtectSystem=strict
 ProtectHome=true
 PrivateTmp=true
 PrivateDevices=true
+ProtectProc=invisible
+ProtectClock=true
+ProtectHostname=true
 ProtectKernelTunables=true
 ProtectKernelModules=true
+ProtectKernelLogs=true
 ProtectControlGroups=true
 RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+RestrictNamespaces=true
+RestrictSUIDSGID=true
+RestrictRealtime=true
 LockPersonality=true
 MemoryDenyWriteExecute=true
+# The worker opens outbound sockets and reads its config; it needs no
+# capabilities, and no syscalls beyond the ordinary service set.
+CapabilityBoundingSet=
+AmbientCapabilities=
+SystemCallArchitectures=native
+SystemCallFilter=@system-service
 
 [Install]
 WantedBy=multi-user.target
