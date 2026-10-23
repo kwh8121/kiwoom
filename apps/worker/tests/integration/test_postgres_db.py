@@ -157,7 +157,7 @@ async def test_postgres_worker_db_claim_and_complete_search() -> None:
             "results": [{"code": "005930", "matched_condition_ids": [first_condition_id, second_condition_id]}],
             "excluded_codes": [],
         }
-        assert await db.complete_search(run_id, "integration-worker", payload) is True
+        assert await db.complete_search(run_id, claimed.lease_owner, payload) is True
         async with (
             await AsyncConnection.connect(ADMIN_URL, autocommit=True) as admin,
             admin.cursor() as cursor,
@@ -176,7 +176,7 @@ async def test_postgres_worker_db_fail_retryable_requeues() -> None:
     try:
         claimed = await db.claim("integration-worker", [f"it-{profile_id}"], 60)
         assert claimed is not None and claimed.run_id == run_id
-        result = await db.fail(run_id, "integration-worker", RunFailure("RATE_LIMITED", True, "retry", []))
+        result = await db.fail(run_id, claimed.lease_owner, RunFailure("RATE_LIMITED", True, "retry", []))
         assert result == "queued"
     finally:
         await db.close()

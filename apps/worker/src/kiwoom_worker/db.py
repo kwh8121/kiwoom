@@ -26,6 +26,9 @@ class SettlementRejected(Exception):
 
 @dataclass(frozen=True)
 class ClaimedRun:
+    # Issued by the claim and distinct per claim. Two processes can share a
+    # configured worker id, so only this value identifies the lease holder.
+    lease_owner: str
     run_id: str
     kind: str
     attempt: int
@@ -41,13 +44,13 @@ class WorkerDb(Protocol):
 
     async def claim(self, worker_id: str, aliases: list[str], lease_seconds: int) -> ClaimedRun | None: ...
 
-    async def extend_lease(self, run_id: str, worker_id: str, lease_seconds: int) -> bool: ...
+    async def extend_lease(self, run_id: str, lease_owner: str, lease_seconds: int) -> bool: ...
 
-    async def complete_search(self, run_id: str, worker_id: str, payload: dict[str, object]) -> bool: ...
+    async def complete_search(self, run_id: str, lease_owner: str, payload: dict[str, object]) -> bool: ...
 
-    async def complete_sync(self, run_id: str, worker_id: str, items: list[dict[str, str]]) -> dict[str, object] | None: ...
+    async def complete_sync(self, run_id: str, lease_owner: str, items: list[dict[str, str]]) -> dict[str, object] | None: ...
 
-    async def fail(self, run_id: str, worker_id: str, failure: RunFailure) -> str | None: ...
+    async def fail(self, run_id: str, lease_owner: str, failure: RunFailure) -> str | None: ...
 
 
 class PostgresWorkerDb:
@@ -99,6 +102,7 @@ class PostgresWorkerDb:
             raise TypeError("worker.claim_next_run definition payload must be an object")
 
         return ClaimedRun(
+            lease_owner=str(payload["lease_owner"]),
             run_id=str(payload["run_id"]),
             kind=str(payload["kind"]),
             attempt=int(payload["attempt"]),
@@ -109,26 +113,26 @@ class PostgresWorkerDb:
             condition_refs=condition_refs,
         )
 
-    async def extend_lease(self, run_id: str, worker_id: str, lease_seconds: int) -> bool:
+    async def extend_lease(self, run_id: str, lease_owner: str, lease_seconds: int) -> bool:
         result = await self._fetch_scalar(
             "select worker.extend_lease(%s::uuid, %s, %s)",
-            (run_id, worker_id, lease_seconds),
+            (run_id, lease_owner, lease_seconds),
         )
         return bool(result)
 
-    async def complete_search(self, run_id: str, worker_id: str, payload: dict[str, object]) -> bool:
+    async def complete_search(self, run_id: str, lease_owner: str, payload: dict[str, object]) -> bool:
         result = await self._settle(
             "complete_search_run",
             "select worker.complete_search_run(%s::uuid, %s, %s)",
-            (run_id, worker_id, Jsonb(payload)),
+            (run_id, lease_owner, Jsonb(payload)),
         )
         return bool(result)
 
-    async def complete_sync(self, run_id: str, worker_id: str, items: list[dict[str, str]]) -> dict[str, object] | None:
+    async def complete_sync(self, run_id: str, lease_owner: str, items: list[dict[str, str]]) -> dict[str, object] | None:
         result = await self._settle(
             "complete_sync_run",
             "select worker.complete_sync_run(%s::uuid, %s, %s)",
-            (run_id, worker_id, Jsonb(items)),
+            (run_id, lease_owner, Jsonb(items)),
         )
         if result in (None, False):
             return None
@@ -136,13 +140,13 @@ class PostgresWorkerDb:
             raise TypeError("worker.complete_sync_run returned non-object payload")
         return result
 
-    async def fail(self, run_id: str, worker_id: str, failure: RunFailure) -> str | None:
+    async def fail(self, run_id: str, lease_owner: str, failure: RunFailure) -> str | None:
         result = await self._settle(
             "fail_run",
             "select worker.fail_run(%s::uuid, %s, %s, %s, %s, %s)",
             (
                 run_id,
-                worker_id,
+                lease_owner,
                 failure.code,
                 failure.message,
                 failure.retryable,

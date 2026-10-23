@@ -50,8 +50,9 @@ def _search_definition(profile_id: str) -> dict[str, object]:
     }
 
 
-def _claimed_search(mode: str = "demo") -> ClaimedRun:
+def _claimed_search(mode: str = "demo", lease_owner: str = "worker-1:lease") -> ClaimedRun:
     return ClaimedRun(
+        lease_owner=lease_owner,
         run_id="run-search-1",
         kind="search",
         attempt=1,
@@ -63,8 +64,9 @@ def _claimed_search(mode: str = "demo") -> ClaimedRun:
     )
 
 
-def _claimed_sync(mode: str = "demo") -> ClaimedRun:
+def _claimed_sync(mode: str = "demo", lease_owner: str = "worker-1:lease") -> ClaimedRun:
     return ClaimedRun(
+        lease_owner=lease_owner,
         run_id="run-sync-1",
         kind="sync",
         attempt=1,
@@ -376,7 +378,7 @@ async def test_sync_job_completes_with_items() -> None:
     assert db.completed_sync == [
         (
             "run-sync-1",
-            "worker-1",
+            "worker-1:lease",
             [{"seq": "0", "name": "기본종목"}, {"seq": "1", "name": "전일고가돌파"}],
         )
     ]
@@ -539,3 +541,42 @@ async def test_shutdown_cancellation_is_not_mistaken_for_lease_loss() -> None:
 
     assert db.completed_search == []
     assert db.failed == []
+
+
+@pytest.mark.asyncio
+async def test_settlement_uses_the_lease_owner_the_claim_issued() -> None:
+    """Two processes can share a worker id, so the id cannot identify the holder.
+
+    The claim hands back a lease owner of its own, and every call that asserts
+    ownership has to echo that value instead of the configured worker id.
+    """
+    clock = FakeClock(datetime(2026, 10, 18, 0, 0, tzinfo=UTC))
+    db = FakeDb(deque([_claimed_search(lease_owner="worker-1:11111111-1111-4111-8111-111111111111")]))
+    opener = _open_session_for(SearchSession(_search_result(clock=clock), delay_s=2.5, clock=clock))
+
+    handled = await process_one(db, _settings(lease_seconds=6), _profiles(), opener, clock)
+
+    assert handled is True
+    assert db.completed_search[0][1] == "worker-1:11111111-1111-4111-8111-111111111111"
+    assert db.leases, "the keepalive did not run during this search"
+    assert {owner for _run, owner, _lease in db.leases} == {
+        "worker-1:11111111-1111-4111-8111-111111111111"
+    }
+    # The heartbeat reports the process, so it keeps using the configured id.
+    assert db.claim_calls[0][0] == "worker-1"
+
+
+@pytest.mark.asyncio
+async def test_failure_is_reported_under_the_lease_owner() -> None:
+    clock = FakeClock(datetime(2026, 10, 18, 0, 0, tzinfo=UTC))
+    db = FakeDb(deque([_claimed_search(lease_owner="worker-1:fenced")]))
+
+    class FailingSession(SearchSession):
+        async def search(self, seq: str) -> SearchResult:
+            raise ResponseTimeout("slow")
+
+    opener = _open_session_for(FailingSession(_search_result(clock=clock)))
+
+    await process_one(db, _settings(), _profiles(), opener, clock)
+
+    assert db.failed[0][1] == "worker-1:fenced"

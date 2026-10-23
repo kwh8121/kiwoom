@@ -23,8 +23,10 @@ select cmp_ok(worker.retry_backoff(1), '<', worker.retry_backoff(2), 'each attem
 select is(worker.retry_backoff(99), interval '60 seconds', 'the wait is capped');
 
 set local role kiwoom_worker;
-select worker.claim_next_run('w1', array['demo-a'], 60);
-select is(worker.fail_run(current_setting('test.run')::uuid, 'w1', 'RATE_LIMITED', 'Retry later', true, '[]'),
+-- Settlement is fenced to the lease the claim issued, not to the worker id.
+select set_config('test.owner',
+  worker.claim_next_run('w1', array['demo-a'], 60)->>'lease_owner', true);
+select is(worker.fail_run(current_setting('test.run')::uuid, current_setting('test.owner'), 'RATE_LIMITED', 'Retry later', true, '[]'),
   'queued', 'a retryable failure requeues the run');
 select is(worker.claim_next_run('w1', array['demo-a'], 60), null::jsonb,
   'a requeued run is not reclaimed before its backoff elapses');
