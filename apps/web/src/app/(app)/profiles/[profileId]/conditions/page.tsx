@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { z } from "zod";
 import { Badge } from "@/components/ui/badge";
 import { getConditions } from "@/lib/data/conditions";
-import { syncSummary } from "@/lib/data/profiles";
+import { syncRemovalWarning, syncSummary } from "@/lib/data/profiles";
 import { formatKst } from "@/lib/display/time";
 import { runErrorMessage } from "@/lib/display/errors";
 import { SyncButton } from "../../sync-button";
@@ -27,6 +27,7 @@ export default async function ConditionsPage({ params }: { params: Promise<{ pro
       {data.runs.map((run) => <article key={run.id} className="space-y-2 rounded border p-3">
         <p>{formatKst(run.requested_at)} ({run.status})</p>
         <p>{syncSummary(run.sync_summary)}</p>
+        {syncRemovalWarning(run.sync_summary) && <p role="alert" className="text-destructive">{syncRemovalWarning(run.sync_summary)}</p>}
         {run.error_code && <p role="alert">{runErrorMessage(run.error_code)}</p>}
         <ul className="space-y-1 text-sm">{data.events.filter((event) => event.run_id === run.id).map((event) => <li key={event.id}>
           {eventLabels[event.event] ?? "변경"} · seq {event.seq} · {event.old_name ?? "없음"} → {event.new_name ?? "없음"}
