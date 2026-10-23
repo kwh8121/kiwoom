@@ -19,7 +19,12 @@ export async function createProfile(_prev: ProfileActionState, formData: FormDat
   const { data, error: authError } = await supabase.auth.getClaims();
   if (authError || !data?.claims?.sub) return { error: "로그인이 필요합니다." };
   const { error } = await supabase.from("broker_profiles").insert({ ...parsed.data, display_name: parsed.data.display_name || null, user_id: data.claims.sub });
-  if (error) return { error: "프로필을 만들지 못했습니다. 중복 별칭인지 확인해 주세요." };
+  // The action inserts only client-owned columns, so a policy denial here means
+  // the alias is not registered to this account. That is an operator step, and
+  // pointing the user at a duplicate name would send them the wrong way.
+  if (error?.code === "42501") return { error: "등록되지 않은 별칭입니다. 운영자가 이 계정에 별칭을 등록해야 프로필을 만들 수 있습니다." };
+  if (error?.code === "23505") return { error: "이미 사용 중인 별칭입니다. 다른 별칭을 입력해 주세요." };
+  if (error) return { error: "프로필을 만들지 못했습니다. 잠시 후 다시 시도해 주세요." };
   revalidatePath("/profiles");
   return { success: "프로필을 등록했습니다." };
 }

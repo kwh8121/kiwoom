@@ -5,7 +5,21 @@ export type Database = {
 
   "public": {
           Tables: {
-            "broker_profiles": {
+            "broker_alias_owners": {
+                  Row: {
+                    "alias": string,"created_at": string,"user_id": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "alias": string,"created_at"?: string,"user_id": string
+                  }
+                  Update: {
+                    "alias"?: string,"created_at"?: string,"user_id"?: string
+                  }
+                  Relationships: [
+
+                  ]
+                },"broker_profiles": {
                   Row: {
                     "alias": string,"created_at": string,"display_name": string | null,"id": string,"last_error_code": string | null,"last_error_message": string | null,"last_ok_at": string | null,"mode": string,"user_id": string
                   }
@@ -275,6 +289,20 @@ isOneToOne: false
       referencedRelation: "broker_profiles"
       referencedColumns: ["id"]
     }
+                  ]
+                },"my_worker_heartbeats": {
+                  Row: {
+                    "aliases": (string)[] | null,"seen_at": string | null,"worker_id": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                           "aliases"?: never,"seen_at"?: string | null,"worker_id"?: string | null
+                         }
+                        Update: {
+                           "aliases"?: never,"seen_at"?: string | null,"worker_id"?: string | null
+                         }
+                        Relationships: [
+
                   ]
                 }
           }

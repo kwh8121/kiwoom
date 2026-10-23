@@ -33,6 +33,11 @@ async def _create_queued_search() -> tuple[str, str, str, str, str]:
             "insert into auth.users(id,email) values (%s,%s)",
             (user_id, f"{user_id}@example.invalid"),
         )
+        # claim_next_run only resolves an alias registered to the profile owner.
+        await cursor.execute(
+            "insert into public.broker_alias_owners(alias,user_id) values (%s,%s)",
+            (f"it-{profile_id}", user_id),
+        )
         await cursor.execute(
             "insert into public.broker_profiles(id,user_id,alias,mode) values (%s,%s,%s,'demo')",
             (profile_id, user_id, f"it-{profile_id}"),

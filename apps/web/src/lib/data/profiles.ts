@@ -14,7 +14,9 @@ export async function getProfiles() {
   const supabase = await createServerClient();
   const [profiles, heartbeats] = await Promise.all([
     supabase.from("broker_profiles").select("*").order("created_at"),
-    supabase.from("worker_heartbeats").select("aliases, seen_at"),
+    // The view narrows a shared worker's alias roster to the caller's own
+    // aliases, which is all reachability needs.
+    supabase.from("my_worker_heartbeats").select("aliases, seen_at"),
   ]);
   if (profiles.error || heartbeats.error) throw new Error("프로필과 워커 상태를 불러오지 못했습니다.");
 
@@ -31,5 +33,10 @@ export async function getProfiles() {
   }
 
   const items = profiles.data.map((profile) => ({ ...profile, latestSync: latestByProfile.get(profile.id) ?? null }));
-  return { profiles: items, heartbeats: heartbeats.data };
+  // A view cannot declare its columns non-null, so the row type admits nulls the
+  // query never produces. Drop an uninterpretable row instead of reading it as a
+  // worker whose last heartbeat is unknown.
+  const reachability = heartbeats.data.flatMap(({ aliases, seen_at }) =>
+    aliases && seen_at ? [{ aliases, seen_at }] : []);
+  return { profiles: items, heartbeats: reachability };
 }

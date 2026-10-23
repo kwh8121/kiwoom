@@ -8,6 +8,13 @@ select count(*) from public.runs;
 insert into auth.users (id, email) values
   ('10000000-0000-0000-0000-000000000001', 'a@example.invalid'),
   ('10000000-0000-0000-0000-000000000002', 'b@example.invalid');
+-- A profile may only use an alias registered to its owner, so the aliases the
+-- client-side insert assertions below use must be registered first.
+insert into public.broker_alias_owners (alias, user_id) values
+  ('demo-a', '10000000-0000-0000-0000-000000000001'),
+  ('demo-b', '10000000-0000-0000-0000-000000000002'),
+  ('demo-b2', '10000000-0000-0000-0000-000000000002'),
+  ('demo-b3', '10000000-0000-0000-0000-000000000002');
 insert into public.broker_profiles (id, user_id, alias, mode, display_name) values
   ('20000000-0000-0000-0000-000000000001', '10000000-0000-0000-0000-000000000001', 'demo-a', 'demo', 'A demo');
 insert into public.strategies (id, user_id, profile_id, name) values

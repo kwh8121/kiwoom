@@ -9,6 +9,9 @@ grant kiwoom_worker to postgres;
 grant usage on schema extensions to kiwoom_worker;
 
 insert into auth.users(id,email) values ('10000000-0000-0000-0000-000000000001','worker@example.invalid');
+-- claim_next_run resolves a run only when the alias is registered to the owner.
+insert into public.broker_alias_owners(alias,user_id) values
+ ('demo-a','10000000-0000-0000-0000-000000000001');
 insert into public.broker_profiles(id,user_id,alias,mode) values
  ('20000000-0000-0000-0000-000000000001','10000000-0000-0000-0000-000000000001','demo-a','demo');
 insert into public.conditions(id,user_id,profile_id,seq,name) values
@@ -100,6 +103,7 @@ select throws_ok($$select worker.complete_search_run(current_setting('test.run')
 select throws_ok($$select worker.complete_search_run(current_setting('test.run')::uuid,'w1',jsonb_set(current_setting('test.payload')::jsonb,'{snapshots,0,is_complete}','false'))$$,'P0001','PAYLOAD_INVALID','incomplete snapshot cannot succeed');
 reset role;
 insert into auth.users(id,email) values ('10000000-0000-0000-0000-000000000002','worker-other@example.invalid');
+insert into public.broker_alias_owners(alias,user_id) values ('demo-other','10000000-0000-0000-0000-000000000002');
 insert into public.broker_profiles(id,user_id,alias,mode) values ('20000000-0000-0000-0000-000000000002','10000000-0000-0000-0000-000000000002','demo-other','demo');
 insert into public.conditions(id,user_id,profile_id,seq,name) values ('40000000-0000-0000-0000-000000000003','10000000-0000-0000-0000-000000000002','20000000-0000-0000-0000-000000000002','0','A');
 set local role kiwoom_worker;

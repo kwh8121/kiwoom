@@ -186,6 +186,11 @@ export default async function globalSetup() {
     if (error) throw new Error(`Could not delete disposable local E2E user (status ${error.status}, code ${error.code})`);
   };
   try {
+    // A profile may only use an alias registered to its owner, and registration
+    // is an operator step with no client write path, so it runs as the admin.
+    // The grant references the user, so deleting the user removes it.
+    const grant = await admin.from("broker_alias_owners").insert({ alias: process.env.E2E_ALIAS!, user_id: userId });
+    if (grant.error) throw new Error("Could not register the disposable E2E alias");
     // Profile insertion uses the test user's session, not service-role table access.
     const user = createClient(status.API_URL, status.ANON_KEY, { auth: { persistSession: false, autoRefreshToken: false } });
     const login = await user.auth.signInWithPassword({ email: process.env.E2E_EMAIL!, password: process.env.E2E_PASSWORD! });
